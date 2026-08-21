@@ -196,10 +196,11 @@ call?")
 
 ## 9. Visual identity
 
-Defined in `src/app/globals.css`, and **shared with the Yeni Müşterim landing
-project**. The colour values are the same in both sites and are meant to stay
-that way: change one, change the other. A single shared source that both sites
-install is planned; until it exists the two files are kept in step by hand.
+Defined in `src/app/globals.css` and `src/app/layout.tsx`, and **shared with the
+Yeni Müşterim landing project**. Colours, corner radii and typeface are the same
+in both sites and are meant to stay that way: change one, change the other. A
+single shared source that both sites install is planned; until it exists the two
+are kept in step by hand.
 
 Sharing with that project is not the same as drifting toward the operator's
 brand. Redesign's own visual language (warm near-black ground, terracotta
@@ -229,17 +230,19 @@ utility on a LeadHanger surface is a mistake, not a variation.
 **Geometry.** A strict 4px radius scale: 4 / 8 / 12 / 16 / 24. Content measure
 caps at `max-w-5xl`.
 
-**Type.** Inter. Headlines at 700 with tight tracking (-0.02em to -0.035em).
-Section labels uppercase, 12px, 700, 0.09em tracking. Body at 15 to 18px with
+**Type.** Nunito Sans, shared with the Yeni Müşterim project along with the
+colour and geometry tokens. Four weights: 400 body, 500 and 600 for labels and
+subheadings, 700 for headlines. Headlines carry tight tracking (-0.02em to
+-0.035em). Section labels uppercase at 12px, 700, 0.09em. Body 15 to 18px with
 generous leading.
 
-Typeface is **not** shared: Yeni Müşterim loads Nunito Sans, because that is the
-typeface of the app it describes. Only the colour and geometry tokens are common
-to both.
+The font declaration in `src/app/layout.tsx` is meant to stay identical to the
+one in that project, weights and subsets included.
 
-Section labels are the one stylesheet rule that legitimately differs, and the
-reason is language. Turkish cannot use `uppercase` there, because `i` becomes a
-dotted `İ` and collides with the dotless `ı`. English has no such problem.
+Section labels are now the only stylesheet rule that differs between the two
+sites, and the reason is language rather than design. Turkish cannot use
+`uppercase` there, because `i` becomes a dotted `İ` and collides with the
+dotless `ı`. English has no such problem.
 
 **One dark section per page, maximum.** Inverse surface earns the visual break
 only where the strongest content sits. Two dark sections and neither reads as

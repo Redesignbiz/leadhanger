@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 /**
- * Inter. The codebase this was seeded from loaded Nunito Sans because that was
- * the typeface of the mobile app it described; nothing carries that constraint
- * here, and Inter is the safer read for a US B2B audience at small sizes.
+ * Nunito Sans, matching the Yeni Müşterim landing project. The two sites share
+ * their typeface as well as their colour and geometry tokens, so this
+ * declaration is meant to stay identical to the one in that project.
  *
- * `latin-ext` stays in the subset list for one reason: the footer prints
- * Istanbul, and the dotted capital I in "İstanbul" is outside plain `latin`.
+ * The four weights are the ones this site actually uses: 400 for body, 500,
+ * 600 for labels and subheadings, 700 for headlines. Nothing here goes heavier.
+ *
+ * `latin-ext` is not needed by the current English copy, which has no accented
+ * characters. It stays because the other project needs it and these two
+ * declarations are kept in step, and because it costs little if a Turkish place
+ * name is ever set with its proper diacritics.
  */
-const inter = Inter({
+const nunitoSans = Nunito_Sans({
   variable: "--font-sans",
   subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -57,7 +63,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${inter.variable} h-full antialiased`}
+      className={`${nunitoSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-surface text-ink font-[family-name:var(--font-sans)]">
         {children}
