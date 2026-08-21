@@ -196,15 +196,31 @@ call?")
 
 ## 9. Visual identity
 
-LeadHanger's own system, defined in `src/app/globals.css`. It is not derived
-from the operator's visual language and must not drift toward it.
+Defined in `src/app/globals.css`, and **shared with the Yeni Müşterim landing
+project**. The colour values are the same in both sites and are meant to stay
+that way: change one, change the other. A single shared source that both sites
+install is planned; until it exists the two files are kept in step by hand.
 
-**Ground and ink.** Cool neutral surfaces, near-black ink. Surface ladder from
-`#f7f8fc` up through five tonal steps; ink `#14161f` with a muted companion.
+Sharing with that project is not the same as drifting toward the operator's
+brand. Redesign's own visual language (warm near-black ground, terracotta
+accent, 2px radius, its wordmark treatment) still does not apply here, per
+section 1.
 
-**One accent that carries.** Primary `#1a45d0`, a deep confident blue, with a
-fixed tonal companion for chips and icon plates. Secondary accent `#0a6b4f`, a
-green used only for a positive state, never decoratively.
+**Ground and ink.** Surface ladder from `#faf8ff` up through five tonal steps,
+ink `#191b23` with a muted companion at `#424654`.
+
+**One accent that carries.** Primary `#0056c9`, with `#d9e2ff` as its fixed
+tonal companion for chips and icon plates.
+
+**One deliberate divergence.** The secondary accent is green (`#0a6b4f`), not
+the burnt orange the other project uses. On this site the accent marks two
+positive states, the "Consent captured" chip and a callback that came back in
+four minutes. In orange both read as a warning, which inverts what they say.
+
+**Two additions, not divergences.** `inverse-surface-high` and
+`inverse-ink-muted` exist here and not there, because this site has a dark
+section and that one does not. The muted value is borrowed from the shared
+palette; the divider is the only value on the page not taken from it.
 
 **No shadows.** This is the load-bearing rule. Depth is a 1px border plus tonal
 layering, which is why no shadow scale exists in the tokens. A `shadow-*`
@@ -216,6 +232,14 @@ caps at `max-w-5xl`.
 **Type.** Inter. Headlines at 700 with tight tracking (-0.02em to -0.035em).
 Section labels uppercase, 12px, 700, 0.09em tracking. Body at 15 to 18px with
 generous leading.
+
+Typeface is **not** shared: Yeni Müşterim loads Nunito Sans, because that is the
+typeface of the app it describes. Only the colour and geometry tokens are common
+to both.
+
+Section labels are the one stylesheet rule that legitimately differs, and the
+reason is language. Turkish cannot use `uppercase` there, because `i` becomes a
+dotted `İ` and collides with the dotless `ı`. English has no such problem.
 
 **One dark section per page, maximum.** Inverse surface earns the visual break
 only where the strongest content sits. Two dark sections and neither reads as

@@ -1,52 +1,71 @@
 @import "tailwindcss";
 
 /*
- * LeadHanger design tokens.
+ * Design tokens, shared with the Yeni Müşterim landing project.
  *
- * The structure (surface ladder, ink pair, outline pair, one primary with a
- * fixed tonal companion) is inherited from the Clear Professional system this
- * codebase started on, because it is a coherent, accessible, documented scale.
- * The values are not: the previous palette was a client's brand blue on a
- * violet-tinted ground. These are LeadHanger's own, on a cool neutral ground.
+ * The colour values below are copied from that project's globals.css and must
+ * stay identical to it. If one of them changes here, it changes there too. A
+ * proper shared source (one small repo both sites install) is planned but not
+ * built yet, so today the two files are kept in step by hand.
  *
- * Load-bearing rule, kept on purpose: NO SHADOWS. Depth comes from a 1px
- * border and tonal layering only, which is why no shadow scale is defined
- * here. A `shadow-*` utility anywhere in this codebase is a mistake, not a
- * variation.
- *
- * When real LeadHanger brand assets arrive, `--color-primary` and its three
- * companions are the only values that need to change.
+ * Load-bearing rule, inherited with the values: NO SHADOWS. Depth comes from a
+ * 1px border and tonal layering only, which is why no shadow scale is defined
+ * here. A `shadow-*` utility in this codebase is a mistake, not a variation.
  */
 @theme {
-  --color-surface: #f7f8fc;
+  --color-surface: #faf8ff;
   --color-surface-lowest: #ffffff;
-  --color-surface-low: #f1f3f9;
-  --color-surface-container: #e9ecf5;
-  --color-surface-high: #e2e6f0;
-  --color-surface-highest: #dbdfeb;
+  --color-surface-low: #f2f3fe;
+  --color-surface-container: #ecedf9;
+  --color-surface-high: #e6e7f3;
+  --color-surface-highest: #e1e2ed;
 
-  --color-ink: #14161f;
-  --color-ink-muted: #474d5f;
+  --color-ink: #191b23;
+  --color-ink-muted: #424654;
 
-  --color-outline: #6b7285;
-  --color-outline-variant: #c6cbda;
+  --color-outline: #727786;
+  --color-outline-variant: #c2c6d7;
 
-  --color-primary: #1a45d0;
-  --color-primary-bright: #3765ef;
-  --color-primary-fixed: #dde4ff;
-  --color-primary-fixed-dim: #b6c5ff;
-  --color-on-primary-fixed: #001341;
+  --color-primary: #0056c9;
+  --color-primary-bright: #1b6ef3;
+  --color-primary-fixed: #d9e2ff;
+  --color-primary-fixed-dim: #b0c6ff;
+  --color-on-primary-fixed: #001945;
 
-  --color-inverse-surface: #14161f;
-  --color-inverse-surface-high: #232733;
-  --color-inverse-ink: #eef0f8;
-  --color-inverse-ink-muted: #a9b0c4;
+  --color-inverse-surface: #2e3039;
+  --color-inverse-ink: #eff0fb;
 
+  /*
+   * These two have no counterpart in Yeni Müşterim, because that site has no
+   * dark section and never needed them. This one does, for the Results panel.
+   *
+   * `inverse-ink-muted` is not a new colour: it is Yeni Müşterim's
+   * `outline-variant` (#c2c6d7), which lands at roughly 8:1 against the
+   * inverse surface and so is safe for body text.
+   *
+   * `inverse-surface-high` is the only value on this page not taken from that
+   * project. It is one step lighter than `inverse-surface` in the same hue,
+   * because in this system a divider sits away from its surface in the
+   * direction of contrast: darker than the ground in light mode, lighter than
+   * it in dark.
+   */
+  --color-inverse-surface-high: #3f414b;
+  --color-inverse-ink-muted: #c2c6d7;
+
+  /*
+   * Accent stays green rather than adopting Yeni Müşterim's #9f3e00, which is a
+   * burnt orange. On this site the accent marks two positive states: the
+   * "Consent captured" chip and the callback that came back in four minutes.
+   * In orange both read as a warning, which inverts what they say.
+   *
+   * Yeni Müşterim's three `danger` tokens are not copied either, because
+   * nothing here uses them. Add them if a page ever needs an error state.
+   */
   --color-accent: #0a6b4f;
   --color-accent-fixed: #c6f0dd;
   --color-on-accent-fixed: #00251a;
 
-  /* Strict 4px geometric scale. */
+  /* Strict 4px geometric scale. Identical in both projects. */
   --radius-sm: 4px;
   --radius-DEFAULT: 8px;
   --radius-md: 12px;
@@ -72,10 +91,13 @@ body {
 }
 
 /*
- * Section labels. The Turkish original banned `uppercase` outright, because
- * `i` uppercases to a dotted `I` and collides with the dotless `ı`. This site
- * is English-only (`<html lang="en">`), so small caps are back on the table and
- * are the idiom US buyers expect above a section heading.
+ * Section labels. This is the one rule that legitimately differs between the
+ * two projects, and the reason is language, not taste.
+ *
+ * Yeni Müşterim bans `uppercase` outright: in Turkish, `i` uppercases to a
+ * dotted `I` and collides with the dotless `ı`. This site is English-only
+ * (`<html lang="en">`), so small caps are back on the table and are the idiom
+ * US readers expect above a section heading.
  */
 .eyebrow {
   text-transform: uppercase;
