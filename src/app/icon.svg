@@ -1,0 +1,17 @@
+<!--
+  Favicon. Next.js reads icons from `app/`, not from `public/`, so this is a
+  separate file from public/images/leadhanger-mark.svg on purpose.
+
+  It is NOT a copy of that file: at 16px the three-way fan collapses into mush,
+  so this version drops the nodes and thickens the strokes. When the real brand
+  mark lands, both files need redrawing, not a `cp`.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="7" fill="#1a45d0"/>
+  <g fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round">
+    <path d="M11 16C16 16 17 8 23 8"/>
+    <path d="M11 16h12"/>
+    <path d="M11 16C16 16 17 24 23 24"/>
+  </g>
+  <circle cx="9" cy="16" r="3.2" fill="#ffffff"/>
+</svg>

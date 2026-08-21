@@ -1,0 +1,17 @@
+<!--
+  Placeholder brand mark. One inbound lead, fanned out to three dealers.
+
+  This is a stand-in: no LeadHanger logo file exists in any project archive
+  (RedesignBiz/assets/Product/ is empty). It lives in this file rather than
+  inline in Logo.tsx so that replacing it is a file swap and no component
+  needs touching. Swap this and src/app/icon.svg together.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <path d="M9 16C15 16 16.5 6.5 22.5 6.5" stroke="#1a45d0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M9 16h13.5" stroke="#1a45d0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M9 16C15 16 16.5 25.5 22.5 25.5" stroke="#1a45d0" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="6" cy="16" r="3.6" fill="#1a45d0"/>
+  <circle cx="25.6" cy="6.5" r="2.9" fill="#b6c5ff"/>
+  <circle cx="25.6" cy="16" r="2.9" fill="#b6c5ff"/>
+  <circle cx="25.6" cy="25.5" r="2.9" fill="#b6c5ff"/>
+</svg>

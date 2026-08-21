@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/*
+ * LeadHanger design tokens.
+ *
+ * The structure (surface ladder, ink pair, outline pair, one primary with a
+ * fixed tonal companion) is inherited from the Clear Professional system this
+ * codebase started on, because it is a coherent, accessible, documented scale.
+ * The values are not: the previous palette was a client's brand blue on a
+ * violet-tinted ground. These are LeadHanger's own, on a cool neutral ground.
+ *
+ * Load-bearing rule, kept on purpose: NO SHADOWS. Depth comes from a 1px
+ * border and tonal layering only, which is why no shadow scale is defined
+ * here. A `shadow-*` utility anywhere in this codebase is a mistake, not a
+ * variation.
+ *
+ * When real LeadHanger brand assets arrive, `--color-primary` and its three
+ * companions are the only values that need to change.
+ */
+@theme {
+  --color-surface: #f7f8fc;
+  --color-surface-lowest: #ffffff;
+  --color-surface-low: #f1f3f9;
+  --color-surface-container: #e9ecf5;
+  --color-surface-high: #e2e6f0;
+  --color-surface-highest: #dbdfeb;
+
+  --color-ink: #14161f;
+  --color-ink-muted: #474d5f;
+
+  --color-outline: #6b7285;
+  --color-outline-variant: #c6cbda;
+
+  --color-primary: #1a45d0;
+  --color-primary-bright: #3765ef;
+  --color-primary-fixed: #dde4ff;
+  --color-primary-fixed-dim: #b6c5ff;
+  --color-on-primary-fixed: #001341;
+
+  --color-inverse-surface: #14161f;
+  --color-inverse-surface-high: #232733;
+  --color-inverse-ink: #eef0f8;
+  --color-inverse-ink-muted: #a9b0c4;
+
+  --color-accent: #0a6b4f;
+  --color-accent-fixed: #c6f0dd;
+  --color-on-accent-fixed: #00251a;
+
+  /* Strict 4px geometric scale. */
+  --radius-sm: 4px;
+  --radius-DEFAULT: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* So the sticky header never clips an anchor target. */
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+/*
+ * Section labels. The Turkish original banned `uppercase` outright, because
+ * `i` uppercases to a dotted `I` and collides with the dotless `ı`. This site
+ * is English-only (`<html lang="en">`), so small caps are back on the table and
+ * are the idiom US buyers expect above a section heading.
+ */
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 700;
+  font-size: 12px;
+}
