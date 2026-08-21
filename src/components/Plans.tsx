@@ -9,6 +9,13 @@ import { site } from "@/lib/site";
  *
  * No prices on purpose. Setup runs to three and ten weeks on the upper tiers,
  * which means every deal is scoped before it is quoted.
+ *
+ * Two layouts, one data source. Three columns of real sentences cannot compress
+ * to a phone width: a scrollable table there showed one column with the text
+ * sliced mid-word, and scrolling sideways carried the feature name off screen,
+ * so a reader could not tell what a value referred to. Below `lg` the same rows
+ * stack into one card per tier instead. `rows` feeds both, so the two can never
+ * disagree.
  */
 const tiers = ["Lite", "Pro", "Custom"] as const;
 
@@ -120,13 +127,51 @@ export function Plans() {
         lead="Start on a standard setup, or have the whole flow built around your catalogue and your CRM. Pricing depends on network size and integration scope, so it is quoted after a scoping call rather than listed here."
       />
 
-      {/*
-        The table scrolls inside its own container. Three columns of real
-        sentences cannot compress to a phone width, and letting the page body
-        scroll sideways instead would break every other section.
-      */}
-      <div className="mt-12 overflow-x-auto rounded-lg border border-outline-variant">
-        <table className="w-full min-w-[46rem] border-collapse bg-surface-lowest text-left">
+      {/* Phone and tablet: one card per tier. */}
+      <div className="mt-10 space-y-6 lg:hidden">
+        {tiers.map((tier, tierIndex) => (
+          <div
+            key={tier}
+            className="overflow-hidden rounded-lg border border-outline-variant bg-surface-lowest"
+          >
+            <div className="border-b border-outline-variant bg-surface-low px-5 py-4">
+              <h3 className="text-[18px] font-bold tracking-[-0.015em] text-ink">
+                {tier}
+              </h3>
+              {/* Setup time reads as the tier's headline promise, so it sits
+                  in the card header rather than in the list below. */}
+              <p className="mt-0.5 text-[13px] text-ink-muted">
+                <span className="font-semibold">{rows[0].feature}:</span>{" "}
+                {rows[0].values[tierIndex]}
+              </p>
+            </div>
+
+            <dl className="divide-y divide-outline-variant">
+              {/* Setup time is already in the card header, so it is skipped here. */}
+              {rows.slice(1).map((row) => (
+                <div key={row.feature} className="px-5 py-3.5">
+                  <dt className="text-[13px] font-semibold text-ink-muted">
+                    {row.feature}
+                  </dt>
+                  <dd
+                    className={`mt-1 text-[15px] leading-6 ${
+                      row.values[tierIndex] === "None"
+                        ? "text-outline"
+                        : "text-ink"
+                    }`}
+                  >
+                    {row.values[tierIndex]}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: the comparison as a comparison. */}
+      <div className="mt-12 hidden overflow-x-auto rounded-lg border border-outline-variant lg:block">
+        <table className="w-full border-collapse bg-surface-lowest text-left">
           <caption className="sr-only">
             LeadHanger service levels compared across setup, branding,
             qualification, routing, integration and reporting.
@@ -135,7 +180,7 @@ export function Plans() {
             <tr className="border-b border-outline-variant bg-surface-low">
               <th
                 scope="col"
-                className="w-[15rem] px-5 py-4 text-[13px] font-bold text-ink-muted"
+                className="w-[14rem] px-5 py-4 text-[13px] font-bold text-ink-muted"
               >
                 Feature
               </th>

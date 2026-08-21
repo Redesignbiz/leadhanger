@@ -49,6 +49,12 @@ It renders through satori, which supports flexbox but **not** grid, and only a
 subset of CSS. If a change to that file produces a blank or broken card, an
 unsupported property is the first thing to check.
 
+No custom font is loaded, so the card uses satori's bundled face and the weights
+are approximate rather than Inter's. That was a deliberate trade: loading a font
+would add a network fetch at build time for a 1200×630 image nobody reads
+closely. If the card ever needs to match the site's typography exactly, that is
+the thing to change.
+
 ## Conventions
 
 - SVG for anything flat: marks, icons, logos. PNG when transparency is needed,

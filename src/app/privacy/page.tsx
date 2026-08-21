@@ -86,7 +86,7 @@ const sections = [
   {
     heading: "Changes",
     paragraphs: [
-      "If this notice changes, the effective date below changes with it. Material changes will be described here rather than made quietly.",
+      "If this notice changes, the effective date at the top of this page changes with it. Material changes will be described here rather than made quietly.",
     ],
   },
 ];

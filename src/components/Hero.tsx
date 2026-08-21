@@ -96,9 +96,12 @@ export function Hero() {
       <div className="mx-auto w-full max-w-5xl">
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
           <div>
-            <p className="eyebrow inline-flex items-center gap-2 rounded-full border border-primary-fixed-dim bg-primary-fixed px-3 py-1.5 text-on-primary-fixed">
-              <span className="size-1.5 rounded-full bg-primary" aria-hidden />
-              For brands that sell through a network
+            <p className="eyebrow inline-flex items-start gap-2 rounded-full border border-primary-fixed-dim bg-primary-fixed px-3.5 py-1.5 text-on-primary-fixed">
+              <span
+                className="mt-[5px] size-1.5 shrink-0 rounded-full bg-primary"
+                aria-hidden
+              />
+              For brands with a dealer network
             </p>
 
             <h1 className="mt-6 text-[34px] font-bold leading-[1.1] tracking-[-0.035em] text-ink sm:text-[48px]">
@@ -138,9 +141,14 @@ export function Hero() {
           and room to breathe in the Results section; repeating them at full
           size in both places just reads as padding.
         */}
-        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-outline-variant pt-7">
+        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-outline-variant pt-7 sm:flex sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3">
           {site.metrics.map((metric) => (
-            <p key={metric.short} className="flex items-baseline gap-2">
+            // Stacked on phones: side by side, the label wraps under the
+            // number with a hanging indent and the grid reads ragged.
+            <p
+              key={metric.short}
+              className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2"
+            >
               <span className="text-[19px] font-bold tracking-[-0.02em] text-primary tabular-nums">
                 {metric.value}
               </span>
