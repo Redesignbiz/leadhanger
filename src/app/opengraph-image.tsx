@@ -25,7 +25,7 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#14161f",
+          background: "#0b101b",
           padding: "72px 80px",
         }}
       >
@@ -35,12 +35,12 @@ export default function Image() {
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: 10,
-                background: "#3765ef",
+                borderRadius: 4,
+                background: "#144ee4",
                 display: "flex",
               }}
             />
-            <div style={{ fontSize: 34, fontWeight: 700, color: "#eef0f8" }}>
+            <div style={{ fontSize: 34, fontWeight: 700, color: "#f5f6f8" }}>
               {site.name}
             </div>
           </div>
@@ -52,7 +52,7 @@ export default function Image() {
               fontWeight: 700,
               lineHeight: 1.1,
               letterSpacing: "-0.03em",
-              color: "#ffffff",
+              color: "#f5f6f8",
               maxWidth: 900,
               display: "flex",
             }}
@@ -65,7 +65,7 @@ export default function Image() {
               marginTop: 28,
               fontSize: 28,
               lineHeight: 1.45,
-              color: "#a9b0c4",
+              color: "#c0d3ea",
               maxWidth: 820,
               display: "flex",
             }}
@@ -81,10 +81,10 @@ export default function Image() {
               key={metric.short}
               style={{ display: "flex", flexDirection: "column" }}
             >
-              <div style={{ fontSize: 40, fontWeight: 700, color: "#b6c5ff" }}>
+              <div style={{ fontSize: 40, fontWeight: 700, color: "#85c8ff" }}>
                 {metric.value}
               </div>
-              <div style={{ marginTop: 6, fontSize: 20, color: "#a9b0c4" }}>
+              <div style={{ marginTop: 6, fontSize: 20, color: "#c0d3ea" }}>
                 {metric.short}
               </div>
             </div>

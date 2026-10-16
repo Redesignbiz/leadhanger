@@ -1,82 +1,112 @@
 @import "tailwindcss";
 
 /*
- * Design tokens, shared with the Yeni Müşterim landing project.
+ * LeadHanger design tokens, on the corporate palette.
  *
- * The colour values below are copied from that project's globals.css and must
- * stay identical to it. If one of them changes here, it changes there too. A
- * proper shared source (one small repo both sites install) is planned but not
- * built yet, so today the two files are kept in step by hand.
+ * Every value below without a note is a corporate value, copied verbatim. The
+ * few that are not (marked "derived") fill a role the corporate set has no
+ * value for, and each says why. Do not add to that list casually: the next
+ * person to touch this file should be able to trust that an unmarked hex is
+ * the brand's.
  *
- * Load-bearing rule, inherited with the values: NO SHADOWS. Depth comes from a
- * 1px border and tonal layering only, which is why no shadow scale is defined
- * here. A `shadow-*` utility in this codebase is a mistake, not a variation.
+ * Two rules are load-bearing:
+ *
+ * 1. NO SHADOWS. Depth comes from tonal layering, 1px rules, and exactly one
+ *    radial wash behind the hero. A `shadow-*` utility here is a mistake.
+ *
+ * 2. `blue` (#144EE4) is a fill, never type. On the ground it is 2.9:1, so any
+ *    blue text uses `blue-pale` (10.6:1) or `blue-bright` (5.4:1) instead.
+ *
+ * Contrast was checked against the ground each value actually sits on.
  */
 @theme {
-  --color-surface: #faf8ff;
-  --color-surface-lowest: #ffffff;
-  --color-surface-low: #f2f3fe;
-  --color-surface-container: #ecedf9;
-  --color-surface-high: #e6e7f3;
-  --color-surface-highest: #e1e2ed;
-
-  --color-ink: #191b23;
-  --color-ink-muted: #424654;
-
-  --color-outline: #727786;
-  --color-outline-variant: #c2c6d7;
-
-  --color-primary: #0056c9;
-  --color-primary-bright: #1b6ef3;
-  --color-primary-fixed: #d9e2ff;
-  --color-primary-fixed-dim: #b0c6ff;
-  --color-on-primary-fixed: #001945;
-
-  --color-inverse-surface: #2e3039;
-  --color-inverse-ink: #eff0fb;
+  /* One face, Inter, loaded in layout.tsx under `--ff-sans`. */
+  --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
 
   /*
-   * These two have no counterpart in Yeni Müşterim, because that site has no
-   * dark section and never needed them. This one does, for the Results panel.
-   *
-   * `inverse-ink-muted` is not a new colour: it is Yeni Müşterim's
-   * `outline-variant` (#c2c6d7), which lands at roughly 8:1 against the
-   * inverse surface and so is safe for body text.
-   *
-   * `inverse-surface-high` is the only value on this page not taken from that
-   * project. It is one step lighter than `inverse-surface` in the same hue,
-   * because in this system a divider sits away from its surface in the
-   * direction of contrast: darker than the ground in light mode, lighter than
-   * it in dark.
+   * Ground layers, darkest first. On a dark ground, raised means lighter.
+   * `ground-deep` sits below the page rather than on it, and is used for the
+   * footer only.
    */
-  --color-inverse-surface-high: #3f414b;
-  --color-inverse-ink-muted: #c2c6d7;
+  --color-ground-deep: #080b12;
+  --color-ground: #0b101b;
+  --color-panel: #151a24;
+  --color-panel-high: #21262f;
+  /* Derived: the panel with a blue cast, for the one card a section points at. */
+  --color-panel-blue: #121e3d;
+
+  /* Hairlines. `line` is the default rule, `line-strong` marks a live edge. */
+  --color-line: #282e3b;
+  /* Derived: one step brighter than `line`; the palette has a single border. */
+  --color-line-strong: #3a4253;
 
   /*
-   * Accent stays green rather than adopting Yeni Müşterim's #9f3e00, which is a
-   * burnt orange. On this site the accent marks two positive states: the
-   * "Consent captured" chip and the callback that came back in four minutes.
-   * In orange both read as a warning, which inverts what they say.
-   *
-   * Yeni Müşterim's three `danger` tokens are not copied either, because
-   * nothing here uses them. Add them if a page ever needs an error state.
+   * Ink. `ink-muted` is the corporate secondary text and lands at 12.4:1 on
+   * the ground, so it is safe for paragraphs.
    */
-  --color-accent: #0a6b4f;
-  --color-accent-fixed: #c6f0dd;
-  --color-on-accent-fixed: #00251a;
+  --color-ink: #f5f6f8;
+  --color-ink-muted: #c0d3ea;
+  /*
+   * Derived: labels and metadata need a third, quieter step the palette does
+   * not have. 6.1:1 on the ground, 4.8:1 on `panel-high`, so it stays legible
+   * on every surface it can land on. Never paragraphs.
+   */
+  --color-ink-dim: #8792a6;
 
-  /* Strict 4px geometric scale. Identical in both projects. */
-  --radius-sm: 4px;
-  --radius-DEFAULT: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --color-blue: #144ee4;
+  --color-blue-bright: #3686fe;
+  --color-blue-light: #579ee4;
+  --color-blue-pale: #85c8ff;
+  /*
+   * Derived: the hover state for a white-on-blue button. It goes darker, not
+   * brighter, because white on `blue-bright` is 3.5:1 and fails; this is 8.1:1.
+   */
+  --color-blue-hover: #0f42c4;
+
+  /*
+   * Derived: the ground of the Results section. Full `blue` across a whole
+   * section was too bright against the dark page, so the section sits on this
+   * deeper step of the same hue, with `blue` itself kept for buttons and small
+   * fills.
+   */
+  --color-blue-deep: #11389e;
+
+  /*
+   * Ink on `blue-deep`. `on-blue` is the corporate primary text at 9.3:1; the
+   * muted step is derived and lands at 8.1:1. The rule is a translucent ink
+   * rather than a blue, so it reads as a hairline rather than a stripe.
+   */
+  --color-on-blue: #f5f6f8;
+  --color-on-blue-muted: #dce8fa;
+  --color-on-blue-line: color-mix(in oklab, #f5f6f8 14%, transparent);
+
+  /*
+   * States. Not part of the corporate palette, kept from the previous system:
+   * they mark outcomes (consent captured, a lead gone cold), and a blue palette
+   * has no way to say "good" or "lost". The `-lift` variants are text-safe.
+   */
+  --color-sage: #78b082;
+  --color-sage-lift: #9ed4a8;
+  --color-rose: #c5598e;
+  --color-rose-lift: #e888b4;
+
+  /*
+   * Geometry: panels are close to square, and the only fully round things on
+   * the page are buttons and chips. That tension is deliberate — softening the
+   * panels removes it and the page goes generic.
+   */
+  --radius-sm: 2px;
+  --radius-DEFAULT: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
 }
 
 html {
   scroll-behavior: smooth;
   /* So the sticky header never clips an anchor target. */
   scroll-padding-top: 5rem;
+  background: var(--color-ground);
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -86,22 +116,457 @@ html {
 }
 
 body {
-  background: var(--color-surface);
+  background: var(--color-ground);
   color: var(--color-ink);
 }
 
+::selection {
+  background: var(--color-blue);
+  color: var(--color-on-blue);
+}
+
 /*
- * Section labels. This is the one rule that legitimately differs between the
- * two projects, and the reason is language, not taste.
+ * Micro-labels: eyebrows, step counters, table headers, anything that names a
+ * thing rather than saying something. Uppercased, in the body face.
  *
- * Yeni Müşterim bans `uppercase` outright: in Turkish, `i` uppercases to a
- * dotted `I` and collides with the dotless `ı`. This site is English-only
- * (`<html lang="en">`), so small caps are back on the table and are the idiom
- * US readers expect above a section heading.
+ * Caps are safe because this site is English-only (`<html lang="en">`); in
+ * Turkish a dotted `i` uppercases into a collision with the dotless `ı`. The
+ * open tracking is what keeps Inter caps at this size from reading as shouting.
  */
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  font-weight: 700;
-  font-size: 12px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/*
+ * The hero wash. One radial gradient, sitting behind the content, standing in
+ * for the elevation the no-shadow rule refuses. It is a background, not a
+ * layer: nothing is positioned against it.
+ */
+.hero-wash {
+  background-image:
+    radial-gradient(
+      62rem 38rem at 18% -12%,
+      color-mix(in oklab, var(--color-blue) 26%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      40rem 26rem at 92% 8%,
+      color-mix(in oklab, var(--color-blue) 12%, transparent),
+      transparent 60%
+    );
+}
+
+/*
+ * The ruled ground. A 1px grid at the measure's own rhythm, held at a few
+ * percent so it reads as paper texture rather than as a grid the layout is
+ * supposed to be snapped to.
+ */
+.ruled {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: 0.34;
+}
+
+/* `details` markers are removed per-element in Faq; Safari needs this too. */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/*
+ * Film grain over the whole document.
+ *
+ * Large flat areas of a near-black ground band visibly on 8-bit displays, and
+ * this page has a lot of them. A few percent of noise breaks the bands up and
+ * is the cheapest texture available: one generated tile, no image request, no
+ * layout cost. It sits above the sticky header on purpose — grain that stopped
+ * at the header would draw a line across the top of the page — and takes no
+ * pointer events, so nothing under it changes behaviour.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+}
+
+/* ------------------------------------------------------------------ motion */
+
+/*
+ * Everything below is additive: the page is complete and correct with all of it
+ * switched off. Each block is gated on `prefers-reduced-motion: no-preference`,
+ * and the scroll-driven reveals are additionally gated on `@supports`, so a
+ * browser without scroll timelines renders the content plainly visible rather
+ * than stuck at `opacity: 0`. That direction of defaulting is the whole trick —
+ * hiding first and revealing with script is what breaks.
+ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /*
+     * `reveal` on a block, `reveal-stack` on a parent whose children should
+     * arrive one after another. The stagger is written as overlapping scroll
+     * ranges rather than as delays, because with a scroll timeline the reader's
+     * scrolling is the clock: `animation-delay` has no time to count.
+     */
+    .reveal,
+    .reveal-stack > * {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 2% entry 42%;
+    }
+
+    .reveal-stack > *:nth-child(2) {
+      animation-range: entry 6% entry 46%;
+    }
+    .reveal-stack > *:nth-child(3) {
+      animation-range: entry 10% entry 50%;
+    }
+    .reveal-stack > *:nth-child(4) {
+      animation-range: entry 14% entry 54%;
+    }
+    .reveal-stack > *:nth-child(5) {
+      animation-range: entry 18% entry 58%;
+    }
+    .reveal-stack > *:nth-child(6) {
+      animation-range: entry 22% entry 62%;
+    }
+    .reveal-stack > *:nth-child(n + 7) {
+      animation-range: entry 26% entry 66%;
+    }
+  }
+
+  /*
+   * The wash drifts. Very slowly, and only ever by a few percent of its own
+   * size: enough that the ground is not quite the same twice, not enough to
+   * notice while reading. Scaling and translating the layer is cheap; animating
+   * the gradient's own colour stops would not be.
+   */
+  .hero-wash {
+    animation: wash-drift 26s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  @keyframes wash-drift {
+    from {
+      transform: translate3d(-1.5%, -1%, 0) scale(1.04);
+    }
+    to {
+      transform: translate3d(2%, 1.5%, 0) scale(1.1);
+    }
+  }
+}
+
+/*
+ * The lead card's arrival sequence: one pass, on load, in the order the lead
+ * actually moves through the product. Header, then the qualifying answers one
+ * at a time, then the routing block, then the callback time.
+ *
+ * It is timed rather than scroll-driven because the card is above the fold —
+ * there is no scroll to drive it — and it runs once, because a hero that keeps
+ * re-animating is a hero nobody can read.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  /*
+   * The hero's own copy. Above the fold there is no scroll to drive a reveal,
+   * so this one is on a timer, and it leads the lead card by a beat: the claim
+   * arrives, then the evidence for it.
+   */
+  .intro > * {
+    animation: rise-in 700ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  }
+  .intro > *:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .intro > *:nth-child(2) {
+    animation-delay: 140ms;
+  }
+  .intro > *:nth-child(3) {
+    animation-delay: 220ms;
+  }
+  .intro > *:nth-child(4) {
+    animation-delay: 300ms;
+  }
+
+  .lead-seq > * {
+    animation: rise-in 620ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  }
+  .lead-seq > *:nth-child(1) {
+    animation-delay: 160ms;
+  }
+  .lead-seq > *:nth-child(2) {
+    animation-delay: 260ms;
+  }
+  .lead-seq > *:nth-child(3) {
+    animation-delay: 620ms;
+  }
+
+  .lead-seq > dl > * {
+    animation: rise-in 460ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  }
+  .lead-seq > dl > *:nth-child(1) {
+    animation-delay: 300ms;
+  }
+  .lead-seq > dl > *:nth-child(2) {
+    animation-delay: 380ms;
+  }
+  .lead-seq > dl > *:nth-child(3) {
+    animation-delay: 460ms;
+  }
+  .lead-seq > dl > *:nth-child(4) {
+    animation-delay: 540ms;
+  }
+
+  /* The consent chip ticks in after the answers it summarises. */
+  .seq-chip {
+    animation: chip-in 520ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
+    animation-delay: 700ms;
+  }
+
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: scale(0.86);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /*
+   * The callback lands last and flashes once. This is the page's central claim
+   * — four minutes from routed to ringing — so it is the one element allowed to
+   * announce itself.
+   */
+  .seq-callback {
+    animation: callback-land 900ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+    animation-delay: 1150ms;
+  }
+
+  @keyframes callback-land {
+    0% {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    40% {
+      opacity: 1;
+      transform: none;
+      color: var(--color-blue-pale);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/*
+ * The routing track: a line with four stops and a pulse running along it.
+ *
+ * Drawn in CSS rather than as an SVG so it can turn from a horizontal track
+ * into a vertical one at phone width without a second copy of the artwork. The
+ * pulse is a gradient segment translated across a clipped rail — no motion
+ * path, no SMIL, nothing that needs a polyfill.
+ */
+.route-rail {
+  position: absolute;
+  overflow: hidden;
+  /* Fades out before the end, so the track reads as continuing rather than as
+     stopping short of the last stop. */
+  background: linear-gradient(
+    var(--route-axis, 90deg),
+    var(--color-line) 0 82%,
+    transparent
+  );
+}
+
+.route-rail-y {
+  --route-axis: 180deg;
+}
+
+/*
+ * The pulse is exactly the size of its rail, and the bright band lives inside
+ * its gradient rather than in its box. That is what makes the sweep exact at
+ * any rail length: translating the element by 100% of itself carries the band
+ * from just off one end to just off the other, whatever the rail measures. A
+ * narrow box translated by some multiple of its own width cannot do that — the
+ * multiple only lands correctly at one specific rail size.
+ */
+.route-pulse {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0 42%,
+    var(--color-blue-pale) 50%,
+    transparent 58% 100%
+  );
+}
+
+.route-pulse-y {
+  background: linear-gradient(
+    180deg,
+    transparent 0 42%,
+    var(--color-blue-pale) 50%,
+    transparent 58% 100%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .route-pulse {
+    animation: route-run 5.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  /* Same run, turned through ninety degrees for the stacked layout. */
+  .route-pulse-y {
+    animation-name: route-run-vertical;
+  }
+}
+
+@keyframes route-run {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes route-run-vertical {
+  from {
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/*
+ * Typing indicator, for the conversation mockup. Three dots on one keyframe at
+ * staggered delays — the only loop on the page that runs regardless of scroll,
+ * because a conversation that has visibly stopped mid-thought is worse than no
+ * conversation at all.
+ */
+.typing > span {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--color-ink-dim);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .typing > span {
+    animation: typing-bob 1.3s ease-in-out infinite;
+  }
+  .typing > span:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+  .typing > span:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+
+  @keyframes typing-bob {
+    0%,
+    64%,
+    100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    32% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+}
+
+/*
+ * Bars grow out of the baseline as the dashboard mockup scrolls into view.
+ *
+ * `width` is animated rather than `scaleX`, because these bars carry a 4px
+ * rounded data-end and scaling would squash that radius into an ellipse as the
+ * bar grew. Five bars animating width inside one small card is not a layout
+ * cost worth optimising away.
+ *
+ * The `from` keyframe is the only one declared: the implicit `to` is the
+ * element's own computed width, so each bar's length stays in the markup where
+ * it belongs instead of being duplicated into a keyframe.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .bar-grow {
+      animation: bar-grow cubic-bezier(0.2, 0.7, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 55%;
+    }
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    width: 0;
+  }
+}
+
+/*
+ * Counting figures.
+ *
+ * The number lives in `--to` on the element and is rendered through a counter,
+ * so with no animation at all the final value still prints — that is the
+ * fallback, and it needs no second copy of the number in the markup.
+ *
+ * The animation interpolates a registered integer property from zero up to that
+ * value. It is gated on scroll timelines rather than on `@property` because
+ * every engine that shipped `animation-timeline: view()` had registered
+ * properties years earlier, and testing for `@property` directly is not
+ * reliably supported itself.
+ */
+@property --tally {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.tally {
+  --tally: var(--to);
+  counter-reset: tally var(--tally);
+}
+
+.tally::after {
+  content: counter(tally);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .tally {
+      animation: tally-run cubic-bezier(0.15, 0.8, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 58%;
+    }
+
+    @keyframes tally-run {
+      from {
+        --tally: 0;
+      }
+    }
+  }
 }

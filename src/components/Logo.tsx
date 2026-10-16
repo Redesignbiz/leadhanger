@@ -2,31 +2,37 @@ import Image from "next/image";
 import { site } from "@/lib/site";
 
 /**
- * Mark from a file, wordmark in HTML.
+ * The brand logo, mark and wordmark together.
  *
- * The wordmark is deliberately NOT part of the SVG: text inside an SVG renders
- * with whatever font the viewer happens to have, so the name would drift away
- * from the rest of the page. Setting it in HTML keeps it on the site's own
- * typeface at every size.
+ * The file served here is `leadhanger-logo-on-dark.svg`, a recolour of the
+ * supplied master (`leadhanger-logo.svg`, still in the same folder). It has to
+ * be a separate file rather than a filter or a `currentColor` swap, because the
+ * mark is two-tone and the wordmark is drawn as paths: the master paints the
+ * name in #161A25, which is invisible on this page's ground, and its two blues
+ * do not match the corporate set. The recolour maps those three fills onto
+ * corporate values (ink, blue-pale, blue-bright) and changes nothing else.
+ *
+ * Both files carry their own letterforms rather than setting the name in HTML,
+ * so the wordmark never depends on the page's webfont having loaded. That also
+ * means it does NOT follow the ink token: if `--color-ink` moves, the SVG has to
+ * be redrawn, not restyled.
  *
  * `unoptimized`: Next's image optimizer refuses SVG by default on security
  * grounds, and the request 400s without this flag.
+ *
+ * Height is fixed and width follows it, because the file's own 140×30 ratio is
+ * the only correct one.
  */
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
-      <Image
-        src="/images/leadhanger-mark.svg"
-        alt=""
-        width={32}
-        height={32}
-        unoptimized
-        priority
-        className="size-7"
-      />
-      <span className="text-[19px] font-bold tracking-[-0.02em] text-ink">
-        {site.name}
-      </span>
-    </span>
+    <Image
+      src="/images/leadhanger-logo-on-dark.svg"
+      alt={site.name}
+      width={140}
+      height={30}
+      unoptimized
+      priority
+      className={`h-7 w-auto ${className}`}
+    />
   );
 }

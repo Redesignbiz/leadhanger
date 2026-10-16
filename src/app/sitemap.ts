@@ -9,6 +9,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${site.url}/our-solution`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${site.url}/privacy`,
       // The notice's own effective date, from the same constant the page prints.
       lastModified: new Date(site.privacyUpdatedAt),

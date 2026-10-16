@@ -19,7 +19,7 @@ export const site = {
   url: 'https://www.leadhanger.com',
 
   /** Shown in the nav and repeated in the closing section. */
-  cta: 'Book a demo',
+  cta: 'Book an Intro',
 
   contact: {
     /**
@@ -86,6 +86,6 @@ export const site = {
   },
 
   /** TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md. */
-  privacyUpdatedAt: '2026-08-21',
-  privacyUpdatedLabel: 'August 21, 2026',
+  privacyUpdatedAt: '2026-10-04',
+  privacyUpdatedLabel: 'October 4, 2026',
 } as const;

@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
-import { Nunito_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 /**
- * Nunito Sans, matching the Yeni Müşterim landing project. The two sites share
- * their typeface as well as their colour and geometry tokens, so this
- * declaration is meant to stay identical to the one in that project.
+ * Inter, the corporate typeface, for everything: headlines, body, labels and
+ * figures. Figures that need to align use `tabular-nums` rather than a second
+ * monospaced face.
  *
- * The four weights are the ones this site actually uses: 400 for body, 500,
- * 600 for labels and subheadings, 700 for headlines. Nothing here goes heavier.
+ * Inter is a variable font, so no `weight` is declared and the whole range
+ * ships in one file.
+ * Source: node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md
  *
- * `latin-ext` is not needed by the current English copy, which has no accented
- * characters. It stays because the other project needs it and these two
- * declarations are kept in step, and because it costs little if a Turkish place
- * name is ever set with its proper diacritics.
+ * `latin-ext` is not needed by the English copy today; an Istanbul street name
+ * set with its own diacritics would need it.
  */
-const nunitoSans = Nunito_Sans({
-  variable: "--font-sans",
+const inter = Inter({
+  variable: "--ff-sans",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -63,9 +61,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${nunitoSans.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-surface text-ink font-[family-name:var(--font-sans)]">
+      <body className="bg-ground text-ink flex min-h-full flex-col font-sans">
         {children}
       </body>
     </html>

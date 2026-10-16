@@ -19,7 +19,9 @@ export const metadata: Metadata = {
  * become false the moment someone changes that:
  *   1. No cookies are set and no analytics script is loaded. Adding Vercel
  *      Analytics, GA, a chat widget or a pixel makes the "no tracking" section
- *      wrong and, in several US states, makes a consent banner necessary.
+ *      wrong and, in several US states, makes a consent banner necessary. The
+ *      one exception is the product video, and only after a visitor presses
+ *      play (see components/Video.tsx); the notice says so.
  *   2. There is no form on the site. Contact happens by email. Adding a form
  *      means naming what it collects and where the submissions are stored.
  */
@@ -42,6 +44,7 @@ const sections = [
     heading: "What we do not do",
     paragraphs: [
       "This website sets no cookies, loads no analytics or advertising scripts, and runs no tracking pixels. There is nothing here that follows you to another site, and no profile is built from your visit.",
+      "The one exception is the product video on the home page. Nothing is loaded from YouTube until you press play. When you do, the video player loads from YouTube's privacy-enhanced domain (youtube-nocookie.com), and YouTube's own privacy policy applies to what it collects from then on.",
       "We do not sell personal information, and we do not share it for cross-context behavioral advertising.",
     ],
   },
@@ -96,52 +99,67 @@ export default function Privacy() {
     <>
       <Header />
 
-      <main className="flex-1 px-4 py-14 sm:px-6 sm:py-20">
-        <article className="mx-auto w-full max-w-3xl">
-          <p className="eyebrow text-primary">Legal</p>
-          <h1 className="mt-3 text-3xl font-bold leading-tight tracking-[-0.03em] text-ink sm:text-4xl">
-            Privacy Notice
-          </h1>
-          <p className="mt-4 text-[14px] text-outline">
-            Effective {site.privacyUpdatedLabel}
-          </p>
+      {/*
+        Long-form legal copy, held to the same measure and the same side rules
+        as every section on the home page, so /privacy reads as part of the site
+        rather than as a document someone linked to. The measure inside is
+        narrower than the rules, because a 1150px line length is unreadable and
+        a privacy notice is the one page here that is genuinely read.
+      */}
+      <main className="flex-1">
+        <div className="border-line mx-auto w-full max-w-6xl lg:border-x">
+          <div className="px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
+            <article className="w-full max-w-2xl">
+              <div className="flex items-center gap-4 sm:gap-6">
+                <span className="eyebrow text-blue-pale shrink-0">Legal</span>
+                <span className="bg-line h-px flex-1" aria-hidden />
+              </div>
 
-          <div className="mt-10 space-y-10">
-            {sections.map((section) => (
-              <section key={section.heading}>
-                <h2 className="text-[19px] font-bold tracking-[-0.015em] text-ink">
-                  {section.heading}
-                </h2>
-                {section.paragraphs.map((paragraph) => (
-                  <p
-                    key={paragraph.slice(0, 40)}
-                    className="mt-4 text-[16px] leading-7 text-ink-muted"
-                  >
-                    {paragraph}
-                  </p>
+              <h1 className="text-ink mt-8 text-[30px] leading-[1.1] font-bold tracking-[-0.03em] sm:text-[40px]">
+                Privacy Notice
+              </h1>
+              <p className="text-ink-dim mt-4 text-[12.5px]">
+                Effective {site.privacyUpdatedLabel}
+              </p>
+
+              <div className="mt-12 space-y-10">
+                {sections.map((section) => (
+                  <section key={section.heading}>
+                    <h2 className="text-ink text-[19px] leading-snug font-bold tracking-[-0.015em]">
+                      {section.heading}
+                    </h2>
+                    {section.paragraphs.map((paragraph) => (
+                      <p
+                        key={paragraph.slice(0, 40)}
+                        className="text-ink-muted mt-4 text-[15.5px] leading-[1.75]"
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </section>
                 ))}
-              </section>
-            ))}
-          </div>
+              </div>
 
-          <div className="mt-12 rounded-lg border border-outline-variant bg-surface-low p-6">
-            <h2 className="text-[17px] font-bold tracking-[-0.01em] text-ink">
-              Contact
-            </h2>
-            <p className="mt-3 text-[15px] leading-7 text-ink-muted">
-              {site.company.legalName}
-              <br />
-              {site.offices.map((office) => office.city).join(" · ")}
-              <br />
-              <a
-                href={`mailto:${site.contact.privacy}`}
-                className="font-semibold text-primary underline underline-offset-4 transition-colors hover:text-primary-bright"
-              >
-                {site.contact.privacy}
-              </a>
-            </p>
+              <div className="border-line bg-panel mt-14 rounded-lg border p-6">
+                <h2 className="text-ink text-[17px] font-bold tracking-[-0.015em]">
+                  Contact
+                </h2>
+                <p className="text-ink-muted mt-3 text-[15px] leading-[1.7]">
+                  {site.company.legalName}
+                  <br />
+                  {site.offices.map((office) => office.city).join(" · ")}
+                  <br />
+                  <a
+                    href={`mailto:${site.contact.privacy}`}
+                    className="text-blue-pale decoration-blue/60 hover:decoration-blue-pale font-semibold underline underline-offset-[5px] transition-colors"
+                  >
+                    {site.contact.privacy}
+                  </a>
+                </p>
+              </div>
+            </article>
           </div>
-        </article>
+        </div>
       </main>
 
       <Footer />
