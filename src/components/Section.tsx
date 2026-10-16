@@ -40,25 +40,14 @@ export function Section({
 }
 
 /**
- * The section header: a label, a rule that runs the full measure, and an index
- * on the far right.
- *
- * The rule is the point. It ties the label to the section's own width, repeats
- * at every section, and is the horizontal answer to the vertical rules on the
- * measure. The index numbers are `aria-hidden` — they are a reading aid on the
- * page, not information, and a screen reader announcing "zero three" before
- * every heading is noise.
+ * The section header: the heading and, optionally, a lead under it. There is
+ * no label row above it — the headings carry each section on their own.
  */
 export function SectionHeading({
-  eyebrow,
-  index,
   title,
   lead,
   tone = "dark",
 }: {
-  eyebrow: string;
-  /** Two-digit section marker, e.g. "03". Decorative. */
-  index?: string;
   title: ReactNode;
   lead?: ReactNode;
   /** `blue` is for a section that sits on the full blue ground. */
@@ -68,29 +57,7 @@ export function SectionHeading({
 
   return (
     <div className="reveal">
-      <div className="flex items-center gap-4 sm:gap-6">
-        <span
-          className={`eyebrow shrink-0 ${onBlue ? "text-on-blue" : "text-blue-pale"}`}
-        >
-          {eyebrow}
-        </span>
-        <span
-          className={`h-px flex-1 ${onBlue ? "bg-on-blue-line" : "bg-line"}`}
-          aria-hidden
-        />
-        {index && (
-          <span
-            className={`eyebrow shrink-0 tabular-nums ${
-              onBlue ? "text-on-blue-muted" : "text-ink-dim"
-            }`}
-            aria-hidden
-          >
-            {index}
-          </span>
-        )}
-      </div>
-
-      <div className="mt-8 max-w-3xl">
+      <div className="max-w-3xl">
         <h2
           className={`text-[28px] leading-[1.12] font-bold tracking-[-0.025em] text-balance sm:text-[38px] ${
             onBlue ? "text-on-blue" : "text-ink"

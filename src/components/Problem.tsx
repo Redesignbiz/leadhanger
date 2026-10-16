@@ -1,11 +1,71 @@
+import type { CSSProperties } from "react";
 import { Highlight, Section, SectionHeading } from "./Section";
-import { Tally } from "./Tally";
 
 /**
  * The five failure points, as published on the corporate site, with spelling
  * and punctuation corrected. Order is the order a lead is lost in: money spent
  * to bring the visitor, the visitor leaving, no help, no handoff, gone.
  */
+/**
+ * How far each box sits below the first, from `lg`: an easing decline, small
+ * steps at first and larger ones later, the way a lead drains away.
+ */
+const DROPS = [0, 24, 64, 120, 188];
+
+/**
+ * The decline, drawn through the top centre of each box. One smooth curve
+ * through the five stops (Catmull-Rom, turned into cubic Béziers), from the
+ * content's left edge, carried on past the last stop down to its right edge. The box is 1000 units wide and
+ * as tall in units as it is in pixels, so the drops above are used as they
+ * are; only the width stretches, and the stroke does not stretch with it.
+ */
+function LossCurve() {
+  const pts = DROPS.map((y, i) => ({ x: ((i + 0.5) / 5) * 1000, y: y + 1 }));
+  const all = [{ x: 0, y: -4 }, ...pts, { x: 1000, y: 262 }];
+  let d = `M ${all[0].x} ${all[0].y}`;
+  for (let i = 0; i < all.length - 1; i++) {
+    const p0 = all[Math.max(i - 1, 0)];
+    const p1 = all[i];
+    const p2 = all[i + 1];
+    const p3 = all[Math.min(i + 2, all.length - 1)];
+    const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
+    const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+    d += ` C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${p2.x} ${p2.y}`;
+  }
+
+  return (
+    <>
+      <svg
+        viewBox="0 0 1000 300"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute inset-x-0 top-0 hidden h-[300px] w-full overflow-visible lg:block"
+        fill="none"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id="decline-fade" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stopColor="var(--color-blue-pale)" />
+            <stop offset="1" stopColor="var(--color-blue-pale)" stopOpacity="0.1" />
+          </linearGradient>
+        </defs>
+        <path
+          d={d}
+          pathLength={1}
+          className="decline-curve"
+          stroke="url(#decline-fade)"
+          strokeWidth="1.5"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+      {/* Stacked: the same line, straight, down the left. */}
+      <span
+        className="loss-track-y pointer-events-none absolute top-6 bottom-6 left-[5px] w-px lg:hidden"
+        aria-hidden
+      />
+    </>
+  );
+}
+
 const failures = [
   {
     title: "High costs in digital marketing",
@@ -29,145 +89,59 @@ const failures = [
   },
 ];
 
-/**
- * The broken state, drawn as the thing it actually is: a shared mailbox.
- *
- * This is the hero's lead card with everything taken out of it. Same panel,
- * same rules, same metadata — and no owner, no routing, no outcome, no
- * second timestamp. The two are meant to be recognised as the same kind of
- * object so the difference between them reads as the product rather than as a
- * change of illustration style.
- *
- * Nothing here animates except the unread count, which climbs. That is the one
- * thing this inbox does.
- *
- * Illustrative, like the hero card: no real mailbox is depicted. Replace with a
- * real capture if one is ever cleared for use (see docs/images.md).
- */
-function DeadInbox() {
-  const messages = [
-    { subject: "Website enquiry — 235/55R19", state: "Unopened", age: "5d" },
-    { subject: "Website enquiry — HVAC quote", state: "Unopened", age: "4d" },
-    { subject: "Contact form submission", state: "Opened", age: "4d" },
-    { subject: "Website enquiry — (no subject)", state: "Unopened", age: "2d" },
-  ];
-
-  return (
-    <div className="border-line bg-panel rounded-lg border">
-      <div className="border-line flex items-center justify-between gap-3 border-b px-5 py-4">
-        <span className="eyebrow text-ink-dim">Shared inbox · leads@</span>
-        <span className="text-rose-lift text-[11px] tabular-nums">
-          <Tally value="47" /> unread
-        </span>
-      </div>
-
-      <ul className="divide-line divide-y">
-        {messages.map((message) => (
-          <li
-            key={message.subject}
-            className="flex items-center gap-4 px-5 py-3"
-          >
-            <span
-              className={`size-1.5 shrink-0 rounded-full ${
-                message.state === "Unopened" ? "bg-rose" : "bg-line-strong"
-              }`}
-              aria-hidden
-            />
-            <span className="text-ink-muted min-w-0 flex-1 truncate text-[13.5px]">
-              {message.subject}
-            </span>
-            <span className="text-ink-dim shrink-0 text-[11px]">
-              {message.state}
-            </span>
-            <span className="text-rose-lift w-7 shrink-0 text-right text-[11px] tabular-nums">
-              {message.age}
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      {/*
-        The footer is where the hero card carries its routing block. Here the
-        same space carries the three things that are missing, which is the whole
-        comparison in one line.
-      */}
-      <div className="border-line flex flex-wrap gap-x-6 gap-y-2 border-t px-5 py-4">
-        {["No owner", "No priority", "No outcome"].map((gap) => (
-          <span
-            key={gap}
-            className="text-ink-dim inline-flex items-center gap-2 text-[12px]"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              className="text-rose size-3"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              aria-hidden
-            >
-              <path d="M6 6l12 12M18 6 6 18" />
-            </svg>
-            {gap}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function Problem() {
   return (
     <Section id="problem">
       <SectionHeading
-        eyebrow="The gap"
-        index="01"
         title={
           <>
             Why is <Highlight>lead management</Highlight> broken?
           </>
         }
-        lead="You invest in traffic, but lose the leads."
       />
 
-      <div className="reveal mt-12 max-w-2xl">
-        <DeadInbox />
-      </div>
-
       {/*
-        Five rows rather than columns: five does not divide into a grid without
-        leaving a ragged last row, and a numbered list is what this is. On wide
-        screens the title takes a fixed column so the five bodies align.
-
-        Rose is the page's loss colour and it runs through this whole section —
-        the inbox above, and these five counters.
+        The five failures are one chain, each step losing what the step before
+        it paid for, so they sit on one curve: a decline. From `lg` the five
+        boxes step down across the measure, each a little further than the
+        last, and a pale blue line runs through the stop on top of
+        each box, fading as it goes and running on off the right edge, where
+        the lead is gone. Below `lg` the boxes stack and the line runs down the
+        left.
       */}
-      <ol className="reveal-stack border-line divide-line mt-14 divide-y border-t">
-        {failures.map((failure, index) => (
-          <li
-            key={failure.title}
-            className="grid gap-x-8 gap-y-3 py-7 lg:grid-cols-[3rem_18rem_1fr] lg:py-8"
-          >
-            <span
-              className="text-rose-lift text-[12px] tracking-[0.1em] tabular-nums lg:pt-1.5"
-              aria-hidden
+      <div className="decline relative mt-12">
+        <LossCurve />
+        <ol className="relative grid gap-4 lg:grid-cols-5 lg:gap-4">
+          {failures.map((failure, index) => (
+            <li
+              key={failure.title}
+              className="decline-step relative pl-7 lg:pl-0"
+              style={{ "--drop": `${DROPS[index]}px`, "--i": index } as CSSProperties}
             >
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3 className="text-ink text-[19px] leading-snug font-bold tracking-[-0.015em]">
-              {failure.title}
-            </h3>
-            <p className="text-ink-muted text-[15px] leading-[1.6] lg:pt-0.5">
-              {failure.body}
-            </p>
-          </li>
-        ))}
-      </ol>
-
-      <p className="reveal border-rose text-ink mt-14 max-w-3xl border-l-2 pl-6 text-[20px] leading-[1.4] font-medium tracking-[-0.02em] text-balance sm:pl-8 sm:text-[24px]">
-        By the time a dealer follows up, the customer has already bought
-        elsewhere, often from a competitor with a more responsive local dealer.
-      </p>
+              {/* The stop on the curve. */}
+              <span
+                className="border-blue-pale bg-ground absolute top-5 left-0 z-10 block size-[11px] rounded-full border-[1.5px] lg:top-[var(--drop)] lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
+                style={{ opacity: 1 - index * 0.14 }}
+                aria-hidden
+              />
+              <div className="border-line bg-panel h-full rounded-lg border p-5 lg:mt-[var(--drop)] lg:h-auto">
+                <span
+                  className="text-blue-pale text-[12px] tracking-[0.1em] tabular-nums"
+                  aria-hidden
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="text-ink mt-2 text-[16px] leading-snug font-bold tracking-[-0.015em] text-balance">
+                  {failure.title}
+                </h3>
+                <p className="text-ink-muted mt-3 text-[14px] leading-[1.6]">
+                  {failure.body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </Section>
   );
 }

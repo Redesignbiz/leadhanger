@@ -12,6 +12,7 @@ is decided in code, so the table below is the map.
 | `src/app/icon.png` | Favicon | supplied, see caveat |
 | — | Social share card | generated, see below |
 | — | Hero visual | drawn in markup, see below |
+| `public/images/industries/*.webp` | `src/components/Industries.tsx`, one per card | Unsplash, see below |
 
 ## Logo and favicon
 
@@ -50,6 +51,24 @@ Real material that could replace it:
 - The live dashboard runs at `app.leadhanger.com`, source in
   `Redesign-Team/Lead-Hanger/dashboard-app`. Screens can be captured from it,
   though anything client-identifying has to come out first.
+
+## Industry photos
+
+Six Unsplash photos, one per industry card, resized to 1200px wide and saved as
+WebP (15–80 KB each). The originals are in `industries/` at the project root;
+that folder is source material, not served, and is not imported anywhere.
+
+| File | Unsplash original |
+|---|---|
+| `tires.webp` | Robert Laursoo, `WHPOFFzY9gU` |
+| `hvac.webp` | alpha innotec, `VsjNRXO_c2w` |
+| `kitchen-bath.webp` | Aaron Huber, `G7sE2S4Lab4` |
+| `insurance.webp` | Igor Lolatto, `TdwYsTmA2Bc` |
+| `batteries.webp` | Wesley Tingey, `E4Oz0TZUDe8` |
+| `appliances.webp` | Josh Lemmon, `0t6fkXvg9hs` |
+
+The Unsplash licence does not require credit. Two photos show a brand: the
+heat pumps carry the alpha innotec mark and the battery is an Energizer.
 
 ## Social share card
 

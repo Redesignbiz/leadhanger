@@ -4,7 +4,6 @@ import { Logo } from "./Logo";
 
 const sections = [
   { label: "How it works", href: "/#how-it-works" },
-  { label: "Platform", href: "/#platform" },
   { label: "Results", href: "/#results" },
 ];
 

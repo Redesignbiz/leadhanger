@@ -4,7 +4,6 @@ import { Logo } from "./Logo";
 
 const nav = [
   { label: "How it works", href: "/#how-it-works" },
-  { label: "Platform", href: "/#platform" },
   { label: "Results", href: "/#results" },
   { label: "Our solution", href: "/our-solution" },
 ];
@@ -41,7 +40,7 @@ export function Header() {
           <nav className="hidden items-center gap-8 lg:flex">
             {nav.map((item) => {
               const className =
-                "text-ink-muted hover:text-ink text-[13.5px] font-medium transition-colors";
+                "text-ink-muted hover:text-ink text-[16px] font-medium transition-colors";
 
               // A "/#section" link is an anchor and must stay a plain `a`; a
               // bare path is a real route and gets `Link`, for the prefetch.
@@ -60,7 +59,7 @@ export function Header() {
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a
             href="/#demo"
-            className="bg-blue hover:bg-blue-hover shrink-0 rounded-full px-4 py-2 text-[13.5px] font-semibold text-white transition-colors sm:px-5"
+            className="bg-blue hover:bg-blue-hover shrink-0 rounded-full px-4 py-2 text-[14.5px] font-semibold text-white transition-colors sm:px-5"
           >
             {site.cta}
           </a>

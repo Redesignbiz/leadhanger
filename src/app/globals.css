@@ -160,6 +160,52 @@ body {
 }
 
 /*
+ * The partner box's backdrop (PartnerCta.tsx, via MapBackdrop). The grid is the ruled ground's
+ * rhythm halved, in the on-blue hairline, with one soft light in the top-right
+ * corner. A mask fades the whole backdrop out towards the left, so the
+ * headline sits on clean blue and the texture gathers where the box is empty.
+ */
+.partner-backdrop {
+  background-image: radial-gradient(
+    36rem 22rem at 92% 0%,
+    color-mix(in oklab, var(--color-blue-bright) 30%, transparent),
+    transparent 70%
+  );
+  mask-image: linear-gradient(90deg, transparent 8%, #000 62%);
+}
+
+/* On a phone the headline spans the box, so the texture retreats to the
+   bottom-right corner instead of the right half. */
+@media (max-width: 639px) {
+  .partner-backdrop {
+    mask-image: linear-gradient(150deg, transparent 45%, #000 95%);
+  }
+}
+
+/*
+ * The proof section's version: clear at the top, where the cover and the
+ * headline sit, and building towards the bottom, with the light low on the
+ * left, so the texture gathers under the figures.
+ */
+.proof-backdrop {
+  background-image: radial-gradient(
+    48rem 28rem at 12% 100%,
+    color-mix(in oklab, var(--color-blue-bright) 26%, transparent),
+    transparent 70%
+  );
+  mask-image: linear-gradient(180deg, transparent 12%, #000 80%);
+}
+
+/* The grid in both backdrops (MapBackdrop.tsx). */
+.map-grid {
+  background-image:
+    linear-gradient(to right, var(--color-on-blue-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-on-blue-line) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.6;
+}
+
+/*
  * The ruled ground. A 1px grid at the measure's own rhythm, held at a few
  * percent so it reads as paper texture rather than as a grid the layout is
  * supposed to be snapped to.
@@ -168,8 +214,86 @@ body {
   background-image:
     linear-gradient(to right, var(--color-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
-  background-size: 72px 72px;
+  background-size: var(--measure-cell) var(--measure-cell);
+  background-position: var(--measure-x) 0;
   opacity: 0.34;
+}
+
+/*
+ * The measure grid. Every page grid is cut from the measure itself rather
+ * than from a fixed pixel size: the content width (the measure minus its side
+ * padding) divided into an even number of cells, with the first line on the
+ * content's left edge. So a line always falls on the content edges, on the
+ * centre, and on every column boundary of a two- or four-column row, at any
+ * viewport width.
+ *
+ * From `lg` the count (22) is also chosen so the measure's own side rules
+ * land on a line: at full width the cell is 48px, exactly the 3rem side
+ * padding, so the rule sits one cell outside the content edge. Between 64rem
+ * and 72rem, where the measure is narrower than its maximum, the padding stays
+ * 3rem while the cell shrinks a little, so the side rules can sit up to ~3px
+ * off a line; the content edges and columns stay exact.
+ *
+ * Set on a full-width `@container` section; `cqw` here is that section's
+ * width. Numbers mirror Section.tsx: px-5, sm:px-8, lg:px-12 inside a
+ * max-w-6xl measure.
+ */
+.measure-grid {
+  --measure-w: calc(100cqw - 2.5rem);
+  --measure-x: 1.25rem;
+  --measure-cell: calc(var(--measure-w) / 6);
+}
+@media (min-width: 40rem) {
+  .measure-grid {
+    --measure-w: calc(100cqw - 4rem);
+    --measure-x: 2rem;
+    --measure-cell: calc(var(--measure-w) / 10);
+  }
+}
+@media (min-width: 64rem) {
+  .measure-grid {
+    --measure-w: calc(min(100cqw, 72rem) - 6rem);
+    --measure-x: calc((100cqw - min(100cqw, 72rem)) / 2 + 3rem);
+    --measure-cell: calc(var(--measure-w) / 22);
+  }
+}
+
+/*
+ * The proof section's grid, cut from the figures row it sits behind (Results
+ * .tsx). Its container is the row itself, so the cell is the row's width over
+ * twice the measure grid's count: half the page grid's cell, on the same
+ * lines, including the measure's side rules (24px at full width). The layer reaches far past the row in every direction and is clipped
+ * by the section, so its origin, and therefore a line, sits exactly on the
+ * row's top rule and left edge. It fades out upwards, so the cover and the
+ * headline sit on clean blue.
+ */
+.proof-grid {
+  --cell: calc(100cqw / 12);
+  position: absolute;
+  inset: calc(-40 * var(--cell)) calc(-64 * var(--cell)) calc(-12 * var(--cell));
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--color-on-blue-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-on-blue-line) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  background-position: calc(64 * var(--cell)) calc(40 * var(--cell));
+  opacity: 0.6;
+  mask-image: linear-gradient(
+    180deg,
+    transparent calc(40 * var(--cell) - 34rem),
+    #000 calc(40 * var(--cell) - 2rem)
+  );
+}
+@media (min-width: 40rem) {
+  .proof-grid {
+    --cell: calc(100cqw / 20);
+  }
+}
+@media (min-width: 64rem) {
+  .proof-grid {
+    --cell: calc(100cqw / 44);
+  }
 }
 
 /* `details` markers are removed per-element in Faq; Safari needs this too. */
@@ -317,7 +441,7 @@ body::after {
 
 /*
  * The hero story (HeroStory.tsx): three chapters on a loop, timed by the
- * underline of the current tab.
+ * an invisible element in the current tab.
  *
  * Same rule as the rest of this file, applied hard: everything below the
  * motion gate only ever animates FROM somewhere TO the state the markup
@@ -330,6 +454,24 @@ body::after {
  * choreographed as a sequence and the sequence is easier to read in one place
  * next to the content it moves.
  */
+/* A soft patch of plain ground behind the steps and caption, so the page
+   grid fades out behind the text instead of running through it. */
+.story-band::before {
+  content: "";
+  position: absolute;
+  inset: -2rem -6rem;
+  z-index: -1;
+  background: radial-gradient(
+    closest-side,
+    var(--color-ground) 55%,
+    transparent
+  );
+  pointer-events: none;
+}
+.story-band {
+  isolation: isolate;
+}
+
 .story-scene {
   opacity: 0;
   visibility: hidden;
@@ -394,8 +536,7 @@ body::after {
   transform: scaleX(0);
 }
 
-.story-progress.is-current,
-.story-progress.is-done {
+.story-progress.is-current {
   transform: none;
 }
 
@@ -445,11 +586,39 @@ body::after {
   .story[data-chapter="0"] .story-visitor-dot {
     animation: story-enter 1100ms cubic-bezier(0.22, 0.7, 0.28, 1) 500ms both;
   }
+  /* In chapter 1 the visitor walks into the site at centre stage, then
+     crosses to their seat at the chat while the camera pans. */
+  .story[data-chapter="0"] .story-visitor {
+    animation: story-to-seat 3500ms linear both;
+  }
 
 
 
   .story-progress.is-current {
     animation: story-progress var(--chapter-ms) linear both;
+  }
+
+  .story-caption {
+    animation: rise-in 500ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  }
+
+  /*
+   * A fresh stage (a restart, or a tab click) fades in rather than cutting.
+   * `backwards`, not `both`: a fill that held after the fade-in would pin the
+   * stage's opacity, and the fade-out before the closing card would cut.
+   */
+  .story-stage {
+    animation: story-fade 500ms ease backwards;
+  }
+
+  /* The closing card rises in, and its clock holds while it is in use. */
+  /* It waits for the story's last frame to finish fading out first. */
+  .story-cta-in {
+    animation: rise-in 600ms cubic-bezier(0.22, 0.7, 0.28, 1) 550ms both;
+  }
+  .story-cta:hover .story-progress,
+  .story-cta:focus-within .story-progress {
+    animation-play-state: paused;
   }
 
   /* One switch stops the clock and the scene together. */
@@ -552,6 +721,17 @@ body::after {
   }
 }
 
+@keyframes story-to-seat {
+  0%,
+  68% {
+    left: var(--center-x);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  100% {
+    left: var(--seat-x);
+  }
+}
+
 @keyframes story-enter {
   from {
     opacity: 0;
@@ -566,6 +746,71 @@ body::after {
   from {
     transform: scaleX(0);
   }
+}
+
+/*
+ * The decline arriving with the scroll (Problem.tsx). Each box drops into
+ * place along the curve, from up and to the left, one after another, while
+ * the curve draws itself through them.
+ *
+ * From `lg` every box and the curve run on one shared timeline, the whole
+ * decline's passage through the viewport (`--decline`), with each box's
+ * range offset by its index, so they arrive in order even though they enter
+ * the viewport together. Stacked, each box simply uses its own entry.
+ */
+.decline-curve {
+  stroke-dasharray: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .decline-step {
+      animation: decline-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 55%;
+    }
+
+    @media (min-width: 64rem) {
+      .decline {
+        view-timeline-name: --decline;
+      }
+      .decline-step {
+        animation-timeline: --decline;
+        animation-range: cover calc(6% + var(--i) * 5%) cover calc(18% + var(--i) * 5%);
+      }
+      .decline-curve {
+        animation: decline-draw linear both;
+        animation-timeline: --decline;
+        animation-range: cover 4% cover 42%;
+      }
+    }
+  }
+}
+
+@keyframes decline-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-28px, -20px, 0);
+  }
+}
+
+@keyframes decline-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/*
+ * The decline track (Problem.tsx), stacked layout: the same pale blue as the
+ * curve it stands in for, fading out along its length, so the chain of
+ * failures reads as a lead draining away from the first step to the last.
+ */
+.loss-track-y {
+  background: linear-gradient(
+    180deg,
+    var(--color-blue-pale) 0%,
+    color-mix(in oklab, var(--color-blue-pale) 15%, transparent) 100%
+  );
 }
 
 /*
@@ -620,32 +865,124 @@ body::after {
   );
 }
 
+.route-icon {
+  color: var(--color-ink-dim);
+  transform-origin: 50% 100%;
+}
+
+/*
+ * The pulse rests on each stop, then moves on. One 10s cycle: in from off the
+ * start, a rest on each of the four stops, out past the last one along the
+ * fading tail. A rest is 16% of the cycle, a move 6%.
+ *
+ * Translating the pulse by `t` puts the band's centre at 50% + t of the rail,
+ * so the band sits on stop `i` at t = stop position − 50%. Across, the stops
+ * start each of four columns with a 2rem gutter, at i × (25% + 0.5rem). Down,
+ * the items are of uneven height, so the stops are taken as quarters; the band
+ * is wide enough that it still reads as resting on each one.
+ *
+ * Each icon lights for its stop's rest: same keyframes, delayed by its index
+ * times one rest-and-move (2.2s), so the pulse and the icons share one clock.
+ */
 @media (prefers-reduced-motion: no-preference) {
   .route-pulse {
-    animation: route-run 5.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    animation: route-run 10s infinite;
   }
 
-  /* Same run, turned through ninety degrees for the stacked layout. */
   .route-pulse-y {
     animation-name: route-run-vertical;
+  }
+
+  .route-icon {
+    animation: route-icon 10s calc(var(--i, 0) * 2.2s) infinite both;
   }
 }
 
 @keyframes route-run {
-  from {
+  0% {
     transform: translate3d(-100%, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  to {
+  6%,
+  22% {
+    transform: translate3d(-50%, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  28%,
+  44% {
+    transform: translate3d(calc(-25% + 0.5rem), 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  50%,
+  66% {
+    transform: translate3d(1rem, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  72%,
+  88% {
+    transform: translate3d(calc(25% + 1.5rem), 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  94%,
+  100% {
     transform: translate3d(100%, 0, 0);
   }
 }
 
 @keyframes route-run-vertical {
-  from {
+  0% {
     transform: translate3d(0, -100%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  to {
+  6%,
+  22% {
+    transform: translate3d(0, -50%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  28%,
+  44% {
+    transform: translate3d(0, -25%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  50%,
+  66% {
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  72%,
+  88% {
+    transform: translate3d(0, 25%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  94%,
+  100% {
     transform: translate3d(0, 100%, 0);
+  }
+}
+
+/*
+ * The lit icon also grows, and eases in and out of it with a slight
+ * overshoot on the way up, so the change in size reads as one continuous
+ * motion rather than a swap. It scales from its bottom edge, so it rises off
+ * the line instead of spreading into it.
+ */
+@keyframes route-icon {
+  0%,
+  4% {
+    color: var(--color-ink-dim);
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  9%,
+  20% {
+    color: var(--color-blue-pale);
+    transform: scale(1.4);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  25%,
+  100% {
+    color: var(--color-ink-dim);
+    transform: scale(1);
   }
 }
 

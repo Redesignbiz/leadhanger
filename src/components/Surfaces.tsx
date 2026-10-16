@@ -188,8 +188,6 @@ export function Surfaces() {
   return (
     <Section id="platform">
       <SectionHeading
-        eyebrow="The platform"
-        index="03"
         title="Three surfaces, one handoff"
         lead="The brand side and the dealer side are the same system, which is the only way response time becomes a number anyone can act on."
       />

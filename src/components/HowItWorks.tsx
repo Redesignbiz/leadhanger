@@ -1,4 +1,5 @@
 import { RouteLine, type RouteStep } from "./RouteLine";
+import { BrowserIcon, ChartIcon, ChatIcon, StoreIcon } from "./StageIcons";
 import { Highlight, Section, SectionHeading } from "./Section";
 
 /**
@@ -9,12 +10,14 @@ import { Highlight, Section, SectionHeading } from "./Section";
 const steps: RouteStep[] = [
   {
     title: "Visitor arrives at your brand's website",
+    icon: <BrowserIcon className="size-full" />,
     points: [
       "One line of script puts the chat interface on your existing site. No replatforming, no new page.",
     ],
   },
   {
     title: "Engage, qualify & get consent",
+    icon: <ChatIcon className="size-full" />,
     points: [
       "Engage with website visitors through pre-designed, dynamic conversation paths before assigning them to a dealer.",
       "Obtain GDPR/KVKK-compliant consent before sharing data.",
@@ -22,6 +25,7 @@ const steps: RouteStep[] = [
   },
   {
     title: "Smart matching & handoff",
+    icon: <StoreIcon className="size-full" />,
     points: [
       "Match leads to the right dealer based on location, expertise and availability.",
       "Instant transfer to dealers, ensuring fast response times and higher conversions.",
@@ -29,6 +33,7 @@ const steps: RouteStep[] = [
   },
   {
     title: "Track, optimize & engage",
+    icon: <ChartIcon className="size-full" />,
     points: [
       "Know where each lead goes and how it performs.",
       "Ensure no high-intent lead is lost in the process. With LeadHanger, website visitors don't just browse. They become real sales opportunities.",
@@ -40,8 +45,6 @@ export function HowItWorks() {
   return (
     <Section id="how-it-works">
       <SectionHeading
-        eyebrow="How it works"
-        index="02"
         title={
           <>
             How <Highlight>LeadHanger</Highlight> fixes it

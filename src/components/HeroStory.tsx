@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { STREETS } from "@/lib/streets";
+import { HeroCta } from "./HeroCta";
+import { BotIcon, PersonIcon, StoreIcon } from "./StageIcons";
 
 /**
  * The hero itself: one visitor becoming one dealer's customer, told in
  * three chapters that play on a loop.
  *
  * Modelled on the Mosey hero — a scene that builds itself under the page's
- * claim, and chapter tabs whose underline doubles as the timer. The visitor
+ * claim, and chapter tabs that follow it, one framed at a time. The visitor
  * is the one constant: they stay at the centre of the frame and the world moves
  * around them. They arrive on the brand's site and the camera follows them
  * into a chat; dealers appear around them and one matches; that dealer comes
@@ -15,9 +18,10 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
  *
  * How it stays honest:
  *
- *   - The tab underline IS the clock. Each chapter advances on the bar's own
- *     `animationend`, and pausing (off screen, tab hidden) pauses every
- *     animation in the story at once, so the bar and the scene cannot drift.
+ *   - An invisible element in the current tab IS the clock. Each chapter
+ *     advances on its `animationend`, and pausing (off screen, tab hidden)
+ *     pauses every animation in the story at once, so the clock and the scene
+ *     cannot drift.
  *   - Every animation lives behind `prefers-reduced-motion: no-preference` and
  *     defaults to its finished state. With motion off nothing advances on its
  *     own: each chapter shows complete, and the tabs still switch.
@@ -38,7 +42,6 @@ type Anchor = "center" | "left" | "right";
 
 type Dealer = {
   p: Point;
-  initials: string;
   name: string;
   note: string;
   d: number;
@@ -49,9 +52,16 @@ type Layout = {
   id: string;
   W: number;
   H: number;
-  /** Where the visitor stands, and where they step aside to in chapter 3. */
+  /**
+   * Where the visitor stands: centre stage on the map, to the left of the
+   * bot for the chat in chapter 1, and stepped aside for the dealer in
+   * chapter 3.
+   */
   center: Point;
+  chatSeat: Point;
   side: Point;
+  /** The bot's avatar, facing the visitor across the chat. */
+  bot: Point;
   /** Avatar and map-badge sizes, in viewBox units. */
   avatar: number;
   dealer: number;
@@ -66,8 +76,7 @@ type Layout = {
   site: Point;
   chat: Point[];
   consent: Point;
-  /** The lead card: filling in beside the chat, then in the dealer's hands. Wide layout only. */
-  profile?: Point;
+  /** The lead card, in the dealer's hands in chapter 3. Wide layout only. */
   received?: Point;
   dealers: Dealer[];
   streets: string[];
@@ -82,7 +91,6 @@ type Layout = {
 
 const BR: Dealer = {
   p: { x: 0, y: 0 },
-  initials: "BR",
   name: "Bay Ridge Tire & Auto",
   note: "2.1 mi · in stock",
   d: 3300,
@@ -94,25 +102,27 @@ const compact: Layout = {
   W: 440,
   H: 400,
   center: { x: 220, y: 190 },
+  chatSeat: { x: 70, y: 190 },
   side: { x: 140, y: 190 },
+  bot: { x: 370, y: 190 },
   avatar: 52,
   dealer: 34,
   type: "text-[clamp(10px,2.6cqw,15px)]",
   pan: 440,
   site: { x: 120, y: 110 },
   chat: [
-    { x: 200, y: 62 },
-    { x: 246, y: 98 },
-    { x: 186, y: 148 },
-    { x: 256, y: 190 },
-    { x: 186, y: 236 },
-    { x: 246, y: 276 },
+    { x: 332, y: 70 },
+    { x: 108, y: 112 },
+    { x: 332, y: 154 },
+    { x: 108, y: 196 },
+    { x: 332, y: 238 },
+    { x: 108, y: 280 },
   ],
-  consent: { x: 220, y: 336 },
+  consent: { x: 220, y: 340 },
   dealers: [
-    { p: { x: 100, y: 150 }, initials: "FH", name: "Fort Hamilton Tires", note: "No stock", d: 2200 },
-    { p: { x: 348, y: 66 }, initials: "PS", name: "Park Slope Auto", note: "8.4 mi", d: 2500 },
-    { p: { x: 84, y: 264 }, initials: "SP", name: "Sunset Park Auto", note: "6.3 mi", d: 2800 },
+    { p: { x: 100, y: 150 }, name: "Fort Hamilton Tires", note: "No stock", d: 2200 },
+    { p: { x: 348, y: 66 }, name: "Park Slope Auto", note: "8.4 mi", d: 2500 },
+    { p: { x: 84, y: 264 }, name: "Sunset Park Auto", note: "6.3 mi", d: 2800 },
     { ...BR, p: { x: 348, y: 258 } },
   ],
   streets: [
@@ -130,46 +140,42 @@ const compact: Layout = {
 };
 
 /*
- * The wide layout keeps the visitor dead centre and uses the extra width for
- * things that belong at the edges: the arrow trailing back to the site, the
- * lead card filling in on the right, a wider map with more dealers on it, and
- * the lead card again in chapter 3, now on the dealer's side.
+ * The wide layout uses the extra width for things that belong at the edges:
+ * the arrow trailing back to the site, a chat with room between its two
+ * sides, a wider map with more dealers on it, and the lead card in chapter
+ * 3, on the dealer's side.
  */
 const wide: Layout = {
   id: "wide",
   W: 960,
   H: 400,
   center: { x: 480, y: 195 },
+  chatSeat: { x: 300, y: 195 },
   side: { x: 220, y: 195 },
+  bot: { x: 660, y: 195 },
   avatar: 68,
   dealer: 44,
   type: "text-[clamp(12px,1.5cqw,17px)]",
   pan: 640,
   site: { x: 380, y: 115 },
   chat: [
-    { x: 440, y: 60 },
-    { x: 530, y: 100 },
-    { x: 420, y: 150 },
-    { x: 530, y: 195 },
-    { x: 420, y: 245 },
-    { x: 530, y: 290 },
+    { x: 614, y: 70 },
+    { x: 346, y: 112 },
+    { x: 614, y: 154 },
+    { x: 346, y: 196 },
+    { x: 614, y: 238 },
+    { x: 346, y: 280 },
   ],
-  consent: { x: 480, y: 350 },
-  profile: { x: 700, y: 195 },
+  consent: { x: 480, y: 345 },
   dealers: [
-    { p: { x: 160, y: 100 }, initials: "FH", name: "Fort Hamilton Tires", note: "No stock", d: 2100 },
-    { p: { x: 110, y: 290 }, initials: "GA", name: "Gravesend Auto", note: "9.1 mi", d: 2300 },
-    { p: { x: 320, y: 300 }, initials: "SP", name: "Sunset Park Auto", note: "6.3 mi", d: 2500 },
-    { p: { x: 690, y: 80 }, initials: "PS", name: "Park Slope Auto", note: "8.4 mi", d: 2700 },
-    { p: { x: 850, y: 260 }, initials: "DB", name: "Dyker Beach Tires", note: "Closed today", d: 2900 },
+    { p: { x: 160, y: 100 }, name: "Fort Hamilton Tires", note: "No stock", d: 2100 },
+    { p: { x: 110, y: 290 }, name: "Gravesend Auto", note: "9.1 mi", d: 2300 },
+    { p: { x: 320, y: 300 }, name: "Sunset Park Auto", note: "6.3 mi", d: 2500 },
+    { p: { x: 690, y: 80 }, name: "Park Slope Auto", note: "8.4 mi", d: 2700 },
+    { p: { x: 850, y: 260 }, name: "Dyker Beach Tires", note: "Closed today", d: 2900 },
     { ...BR, p: { x: 650, y: 290 } },
   ],
-  streets: [
-    "M -10 132 C 260 100 660 178 970 134",
-    "M 262 -10 C 288 120 232 262 282 410",
-    "M 742 -10 C 718 140 780 262 748 410",
-    "M -10 338 C 300 302 660 372 970 322",
-  ],
+  streets: STREETS.paths,
   scan: 520,
   qualified: { x: 480, y: 258 },
   dealerSpot: { x: 560, y: 195 },
@@ -180,11 +186,31 @@ const wide: Layout = {
   received: { x: 664, y: 195 },
 };
 
-/** The chapters, and how long each runs before the next one starts. */
+/** How long the closing card holds the stage before the story restarts. */
+const CTA_MS = 5000;
+
+/**
+ * The chapters, how long each runs before the next one starts, and the one
+ * line under the tabs that says what the scene is showing. The animation
+ * plays without sound, so the line is its narration; it describes only what
+ * is on stage and quotes no figure that is not published.
+ */
 const chapters = [
-  { tab: "Engage", ms: 8500 },
-  { tab: "Qualify", ms: 7000 },
-  { tab: "Connect", ms: 7500 },
+  {
+    tab: "Engage",
+    ms: 8500,
+    caption: "A visitor on your site answers a few questions in a chat.",
+  },
+  {
+    tab: "Qualify",
+    ms: 7000,
+    caption: "LeadHanger checks nearby dealers for distance, fitment and stock, and finds the one that matches.",
+  },
+  {
+    tab: "Connect",
+    ms: 7500,
+    caption: "That dealer receives the full lead and calls the visitor back.",
+  },
 ];
 
 const chat: { text: string; from: "bot" | "visitor"; d: number }[] = [
@@ -300,14 +326,14 @@ function Phone({ className = "size-3" }: { className?: string }) {
   );
 }
 
-function Badge({ initials, match = false }: { initials: string; match?: boolean }) {
+function Badge({ match = false }: { match?: boolean }) {
   return (
     <span
-      className={`story-badge flex aspect-square w-full items-center justify-center rounded-sm text-[0.85em] font-bold ${
+      className={`story-badge flex aspect-square w-full items-center justify-center rounded-sm ${
         match ? "bg-blue text-white" : "bg-panel-high text-ink-muted"
       }`}
     >
-      {initials}
+      <StoreIcon className="w-[53%]" />
     </span>
   );
 }
@@ -322,14 +348,14 @@ function Chip({ icon, children }: { icon: ReactNode; children: ReactNode }) {
 }
 
 /**
- * The lead record. In chapter 1 it fills in answer by answer (`filling`); in
- * chapter 3 it arrives complete, on the dealer's side of the hand-over.
+ * The lead record, as it arrives on the dealer's side of the hand-over in
+ * chapter 3: the visitor's answers from the chat, with consent attached.
  */
-function LeadCard({ title, filling = false }: { title: string; filling?: boolean }) {
-  const rows: [string, string, number][] = [
-    ["Size", "4 × 235/55R19", 4250],
-    ["Area", "Brooklyn 11209", 5150],
-    ["Timing", "This week", 6050],
+function LeadCard({ title }: { title: string }) {
+  const rows: [string, string][] = [
+    ["Size", "4 × 235/55R19"],
+    ["Area", "Brooklyn 11209"],
+    ["Timing", "This week"],
   ];
 
   return (
@@ -341,20 +367,15 @@ function LeadCard({ title, filling = false }: { title: string; filling?: boolean
         <span className="text-ink-dim text-[0.8em]">brand.com/tires</span>
       </div>
       <dl className="divide-line divide-y text-[0.88em]">
-        {rows.map(([label, value, d]) => (
+        {rows.map(([label, value]) => (
           <div key={label} className="flex items-baseline gap-[0.8em] px-[1.15em] py-[0.55em]">
             <dt className="text-ink-dim w-[4.6em] shrink-0 text-[0.92em]">{label}</dt>
-            <dd className={`text-ink font-medium ${filling ? "s-fade" : ""}`} style={delay(d)}>
-              {value}
-            </dd>
+            <dd className="text-ink font-medium">{value}</dd>
           </div>
         ))}
         <div className="flex items-baseline gap-[0.8em] px-[1.15em] py-[0.55em]">
           <dt className="text-ink-dim w-[4.6em] shrink-0 text-[0.92em]">Consent</dt>
-          <dd
-            className={`text-sage-lift inline-flex items-center gap-[0.4em] font-medium ${filling ? "s-pop" : ""}`}
-            style={delay(6550)}
-          >
+          <dd className="text-sage-lift inline-flex items-center gap-[0.4em] font-medium">
             <Check className="size-[0.9em]" />
             Captured
           </dd>
@@ -369,12 +390,10 @@ function LeadCard({ title, filling = false }: { title: string; filling?: boolean
 function Engage({ L }: { L: Layout }) {
   const { site, center, pan, W, H } = L;
   const track = W + pan;
-  const arrow = sCurve(
-    { x: site.x + 210, y: center.y },
-    { x: center.x + pan - L.avatar / 2 - 28, y: center.y },
-    pan / 22,
-  );
-  const tip = { x: center.x + pan - L.avatar / 2 - 28, y: center.y };
+  // The arrow runs out of the site and ends just short of the visitor's seat
+  // at the chat, which is where they walk to while the camera pans.
+  const tip = { x: L.chatSeat.x + pan - L.avatar / 2 - 18, y: center.y };
+  const arrow = sCurve({ x: site.x + 210, y: center.y }, tip, pan / 22);
 
   return (
     <>
@@ -398,14 +417,20 @@ function Engage({ L }: { L: Layout }) {
           <svg viewBox={`0 0 ${track} ${H}`} className="absolute inset-0 size-full">
             <defs>
               <mask id={`story-arrow-${L.id}`} maskUnits="userSpaceOnUse">
+                {/*
+                  The reveal runs a little past the tip, with flat ends.
+                  Before it starts, the dash is a zero-length point at the
+                  far end of this path; a square cap would paint that point
+                  as a 20px square and uncover the arrowhead early.
+                */}
                 <path
-                  d={arrow.d}
+                  d={`${arrow.d} h 12`}
                   pathLength={1}
                   className="s-draw"
                   fill="none"
                   stroke="white"
                   strokeWidth="20"
-                  strokeLinecap="square"
+                  strokeLinecap="butt"
                   style={delay(1700)}
                 />
               </mask>
@@ -485,12 +510,19 @@ function Engage({ L }: { L: Layout }) {
         </Piece>
       ))}
 
-      {/* What the answers add up to: a lead record, filling in as they arrive. */}
-      {L.profile && (
-        <Piece L={L} p={L.profile} anchor="left" d={3300}>
-          <LeadCard title="New lead" filling />
-        </Piece>
-      )}
+      {/*
+        The other side of the conversation. The bot sits across from the
+        visitor, its questions on its side and the visitor's answers on theirs,
+        so the exchange reads as a dialogue rather than a ring of labels.
+      */}
+      <div className="absolute" style={{ ...at(L, L.bot), width: pct(L.avatar, L.W) }}>
+        <span
+          className="s-pop bg-blue flex aspect-square w-full items-center justify-center rounded-full text-white"
+          style={delay(3300)}
+        >
+          <BotIcon className="w-[48%]" />
+        </span>
+      </div>
 
       <Piece L={L} p={L.consent} d={6400}>
         <Chip icon={<Check className="size-[0.9em]" />}>Consent captured</Chip>
@@ -543,7 +575,7 @@ function Qualify({ L }: { L: Layout }) {
         >
           <div className="s-pop" style={delay(300 + index * 120)}>
             <div className={dealer.match ? "s-match" : "s-dim"} style={delay(dealer.d)}>
-              <Badge initials={dealer.initials} match={dealer.match} />
+              <Badge match={dealer.match} />
             </div>
           </div>
           <div
@@ -623,7 +655,7 @@ function Connect({ L }: { L: Layout }) {
           } as CSSProperties
         }
       >
-        <Badge initials={match.initials} match />
+        <Badge match />
         {/* The call: it appears once the lead has arrived, then rings. */}
         <span className="s-pop absolute -top-[0.6em] -right-[0.6em]" style={delay(2100)}>
           <span
@@ -670,7 +702,7 @@ function Connect({ L }: { L: Layout }) {
 const scenes = [Engage, Qualify, Connect];
 
 function Stage({ L, chapter, className }: { L: Layout; chapter: number; className: string }) {
-  const visitor = chapter === 2 ? L.side : L.center;
+  const visitor = [L.chatSeat, L.center, L.side][chapter];
 
   return (
     <div
@@ -693,10 +725,17 @@ function Stage({ L, chapter, className }: { L: Layout; chapter: number; classNam
         {/* The visitor: the one thing on stage in every chapter. */}
         <div
           className="story-visitor absolute"
-          style={{ ...at(L, visitor), width: pct(L.avatar, L.W) }}
+          style={
+            {
+              ...at(L, visitor),
+              width: pct(L.avatar, L.W),
+              "--center-x": pct(L.center.x, L.W),
+              "--seat-x": pct(L.chatSeat.x, L.W),
+            } as CSSProperties
+          }
         >
-          <span className="story-visitor-dot border-blue-pale bg-panel-blue text-ink flex aspect-square w-full items-center justify-center rounded-full border-[1.5px] text-[1.1em] font-semibold">
-            MR
+          <span className="story-visitor-dot border-blue-pale bg-panel-blue text-ink flex aspect-square w-full items-center justify-center rounded-full border-[1.5px]">
+            <PersonIcon className="w-[48%]" />
           </span>
         </div>
       </div>
@@ -706,6 +745,8 @@ function Stage({ L, chapter, className }: { L: Layout; chapter: number; classNam
 
 export function HeroStory() {
   const [chapter, setChapter] = useState(0);
+  /** Bumped on every tab click, so a click replays its scene from the start. */
+  const [run, setRun] = useState(0);
   const [onScreen, setOnScreen] = useState(true);
   const [pageShown, setPageShown] = useState(true);
   const root = useRef<HTMLDivElement>(null);
@@ -728,6 +769,9 @@ export function HeroStory() {
   }, []);
 
   const paused = !onScreen || !pageShown;
+  /** After the three chapters, the ask takes the stage; then the story restarts. */
+  const ending = chapter === chapters.length;
+  const scene = ending ? chapters.length - 1 : chapter;
 
   return (
     <div
@@ -743,52 +787,112 @@ export function HeroStory() {
         dealer calls them back four minutes after being notified.
       </p>
 
-      <Stage
-        L={compact}
-        chapter={chapter}
-        className="w-[min(100%,40rem,max(20rem,calc((100svh-27rem)*1.1)))] lg:hidden"
-      />
-      <Stage
-        L={wide}
-        chapter={chapter}
-        className="hidden w-[min(100%,calc((100svh-27rem)*2.4))] lg:block"
-      />
+      {/*
+        The stage, and over it the closing card. When the story ends, the last
+        frame fades out completely and only then does the card rise in, centred on the same
+        area, so the ask appears where the story was rather than below it.
+      */}
+      <div className="relative">
+        <div
+          key={run}
+          className={`story-stage transition-opacity duration-500 ease-out ${ending ? "opacity-0" : ""}`}
+        >
+          <Stage
+            L={compact}
+            chapter={scene}
+            className="w-[min(100%,40rem,max(20rem,calc((100svh-28rem)*1.1)))] lg:hidden"
+          />
+          <Stage
+            L={wide}
+            chapter={scene}
+            className="hidden w-[min(100%,calc((100svh-28rem)*2.4))] lg:block"
+          />
+        </div>
 
-      <div className="border-line mx-auto mt-6 grid max-w-[40rem] grid-cols-3 border-t">
-        {chapters.map((c, index) => (
-          <button
-            key={c.tab}
-            type="button"
-            onClick={() => setChapter(index)}
-            aria-pressed={index === chapter}
-            className={`relative pt-3 text-center text-[12px] font-medium transition-colors sm:text-[13px] ${
-              index === chapter ? "text-ink font-semibold" : "text-ink-dim hover:text-ink-muted"
-            }`}
-          >
-            <span className="absolute inset-x-0 -top-px h-px overflow-hidden" aria-hidden>
+        {ending && (
+          <div className="story-cta-in absolute inset-0 flex items-center justify-center">
+            <HeroCta
+              clock={
+                <span
+                  className="story-progress is-current absolute inset-0 -z-10 opacity-0"
+                  style={{ "--chapter-ms": `${CTA_MS}ms` } as CSSProperties}
+                  onAnimationEnd={(event) => {
+                    if (event.target !== event.currentTarget) return;
+                    // Restart on a fresh stage. Reusing the old one would
+                    // cross-fade the last scene out as the first fades in,
+                    // and slide the visitor back across, so a frame of the
+                    // ending showed between the card and the opening.
+                    setChapter(0);
+                    setRun((n) => n + 1);
+                  }}
+                  aria-hidden
+                />
+              }
+            />
+          </div>
+        )}
+      </div>
+
+      {/*
+        Three steps, one per chapter, and the caption under them. The band
+        sits on a soft patch of plain ground that hides the page grid behind
+        the text. Only the current step is framed, as a pill that hugs its
+        label; the others are plain text. The clock is still here but never shown: an
+        invisible element inside the current step runs for the chapter's
+        length, and when it ends the story moves on.
+      */}
+      <div className="story-band relative mx-auto mt-8 max-w-[44rem] pt-2 pb-1 sm:mt-10">
+      <div className="flex items-center justify-center gap-1 sm:gap-6">
+        {chapters.map((c, index) => {
+          const current = index === chapter;
+          return (
+            <button
+              key={c.tab}
+              type="button"
+              onClick={() => {
+                setChapter(index);
+                setRun((n) => n + 1);
+              }}
+              aria-pressed={current}
+              className={`relative cursor-pointer rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-colors duration-300 sm:px-4 sm:text-[12.5px] ${
+                current
+                  ? "border-blue-pale/50 bg-panel-blue/60 text-ink"
+                  : "text-ink-dim hover:border-line-strong hover:text-ink border-transparent"
+              }`}
+            >
               <span
-                className={`story-progress bg-blue-pale block h-full ${
-                  index === chapter ? "is-current" : index < chapter ? "is-done" : ""
+                key={current ? run : undefined}
+                className={`story-progress absolute inset-0 opacity-0 ${
+                  current ? "is-current" : ""
                 }`}
                 style={{ "--chapter-ms": `${c.ms}ms` } as CSSProperties}
                 onAnimationEnd={(event) => {
                   if (event.target !== event.currentTarget) return;
-                  setChapter((current) => (current + 1) % chapters.length);
+                  setChapter((now) => now + 1);
                 }}
+                aria-hidden
               />
-            </span>
-            {/* Only the current step takes the accent; the others recede whole. */}
-            <span
-              className={`mr-2 tabular-nums transition-colors ${
-                index === chapter ? "text-blue-pale" : ""
-              }`}
-              aria-hidden
-            >
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            {c.tab}
-          </button>
-        ))}
+              <span
+                className={`relative mr-1.5 tabular-nums transition-colors ${
+                  current ? "text-blue-pale" : ""
+                }`}
+                aria-hidden
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="relative">{c.tab}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Keyed by chapter, so the line replays its entrance on every change. */}
+      <p
+        key={chapter}
+        className="story-caption text-ink mx-auto mt-6 min-h-[3em] max-w-[34rem] text-center text-[16px] leading-[1.5] text-balance sm:mt-8 sm:text-[18px]"
+      >
+        {ending ? "" : chapters[chapter].caption}
+      </p>
       </div>
     </div>
   );

@@ -358,7 +358,7 @@ export function ServiceLevels() {
 
             The subject names the tier, so an enquiry arrives already routed.
             There is no form on this site and no endpoint to post one to — the
-            reasoning is in Demo.tsx.
+            reasoning is in PartnerCta.tsx.
           */}
           <a
             href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(
