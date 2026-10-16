@@ -276,20 +276,10 @@ body::after {
 }
 
 /*
- * The lead card's arrival sequence: one pass, on load, in the order the lead
- * actually moves through the product. Header, then the qualifying answers one
- * at a time, then the routing block, then the callback time.
- *
- * It is timed rather than scroll-driven because the card is above the fold —
- * there is no scroll to drive it — and it runs once, because a hero that keeps
- * re-animating is a hero nobody can read.
+ * The hero's claim. Above the fold there is no scroll to drive a reveal, so
+ * it arrives on a timer, headline first, a beat ahead of the story under it.
  */
 @media (prefers-reduced-motion: no-preference) {
-  /*
-   * The hero's own copy. Above the fold there is no scroll to drive a reveal,
-   * so this one is on a timer, and it leads the lead card by a beat: the claim
-   * arrives, then the evidence for it.
-   */
   .intro > * {
     animation: rise-in 700ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
   }
@@ -297,85 +287,284 @@ body::after {
     animation-delay: 60ms;
   }
   .intro > *:nth-child(2) {
-    animation-delay: 140ms;
-  }
-  .intro > *:nth-child(3) {
-    animation-delay: 220ms;
-  }
-  .intro > *:nth-child(4) {
-    animation-delay: 300ms;
-  }
-
-  .lead-seq > * {
-    animation: rise-in 620ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
-  }
-  .lead-seq > *:nth-child(1) {
     animation-delay: 160ms;
   }
-  .lead-seq > *:nth-child(2) {
-    animation-delay: 260ms;
+}
+
+/*
+ * The "Explore more" chevron under the hero nudges downward, slowly, as a hint
+ * rather than a call. It stops on hover so it is still while being aimed at.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .explore-bob {
+    animation: explore-bob 2.4s ease-in-out infinite;
   }
-  .lead-seq > *:nth-child(3) {
-    animation-delay: 620ms;
+  .group:hover .explore-bob {
+    animation-play-state: paused;
   }
 
-  .lead-seq > dl > * {
-    animation: rise-in 460ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
-  }
-  .lead-seq > dl > *:nth-child(1) {
-    animation-delay: 300ms;
-  }
-  .lead-seq > dl > *:nth-child(2) {
-    animation-delay: 380ms;
-  }
-  .lead-seq > dl > *:nth-child(3) {
-    animation-delay: 460ms;
-  }
-  .lead-seq > dl > *:nth-child(4) {
-    animation-delay: 540ms;
-  }
-
-  /* The consent chip ticks in after the answers it summarises. */
-  .seq-chip {
-    animation: chip-in 520ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
-    animation-delay: 700ms;
-  }
-
-  @keyframes chip-in {
-    from {
-      opacity: 0;
-      transform: scale(0.86);
+  @keyframes explore-bob {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
     }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  /*
-   * The callback lands last and flashes once. This is the page's central claim
-   * — four minutes from routed to ringing — so it is the one element allowed to
-   * announce itself.
-   */
-  .seq-callback {
-    animation: callback-land 900ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
-    animation-delay: 1150ms;
-  }
-
-  @keyframes callback-land {
-    0% {
-      opacity: 0;
+    30% {
       transform: translateY(4px);
     }
-    40% {
-      opacity: 1;
-      transform: none;
-      color: var(--color-blue-pale);
-    }
-    100% {
-      opacity: 1;
-      transform: none;
-    }
+  }
+}
+
+/*
+ * The hero story (HeroStory.tsx): three chapters on a loop, timed by the
+ * underline of the current tab.
+ *
+ * Same rule as the rest of this file, applied hard: everything below the
+ * motion gate only ever animates FROM somewhere TO the state the markup
+ * already shows. With motion off, each chapter is its own finished frame —
+ * the camera already panned, the match already made, the call already landed.
+ * The few pieces that only exist in motion (the travelling dot, the search
+ * ring) default to invisible.
+ *
+ * Timing lives in the markup as `--d` on each piece, because the chapters are
+ * choreographed as a sequence and the sequence is easier to read in one place
+ * next to the content it moves.
+ */
+.story-scene {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 400ms ease,
+    visibility 0s linear 400ms;
+}
+
+.story-scene.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 400ms ease 120ms,
+    visibility 0s;
+}
+
+/* The camera's frame softens at the edges, so the site slides out of view
+   rather than being cut off by the stage. */
+.story-frame {
+  mask-image: linear-gradient(90deg, transparent, #000 12% 88%, transparent);
+}
+
+/* `--pan` is set per layout: the share of the track the camera travels. */
+.s-pan {
+  transform: translateX(var(--pan, -50%));
+}
+
+/* With `pathLength="1"`, one dash the length of the whole line. */
+.s-draw {
+  stroke-dasharray: 1;
+}
+
+/* A dash of zero length with a round cap is a dot; the offset walks it. */
+.s-travel {
+  stroke-dasharray: 0 2;
+  stroke-dashoffset: -1;
+  opacity: 0;
+}
+
+.s-scan {
+  opacity: 0;
+}
+
+.s-scan,
+.s-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.s-dim {
+  opacity: 0.38;
+}
+
+/* The matched dealer gets a ring of its own. An outline, not a shadow. */
+.s-match .story-badge {
+  outline: 1.5px solid var(--color-blue-pale);
+  outline-offset: 3px;
+}
+
+.story-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.story-progress.is-current,
+.story-progress.is-done {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .story-scene.is-active .s-pop {
+    animation: chip-in 520ms cubic-bezier(0.2, 1.4, 0.4, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-rise {
+    animation: rise-in 520ms cubic-bezier(0.22, 0.7, 0.28, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-fade {
+    animation: story-fade 600ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-draw {
+    animation: story-draw 800ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-travel {
+    animation: story-travel 900ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-pan {
+    animation: story-pan 1100ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-pulse {
+    animation: story-pulse 600ms ease-in-out var(--d, 0ms) 2 both;
+  }
+  .story-scene.is-active .s-scan {
+    animation: story-scan 1900ms cubic-bezier(0.2, 0.7, 0.3, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-dim {
+    animation: story-dim 500ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-match .story-badge {
+    animation: story-match 600ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-move {
+    animation: story-move 900ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-ring {
+    animation: story-ring 700ms ease-in-out var(--d, 0ms) 3 both;
+  }
+
+  /* The visitor walks in from the left at the top of every loop, and steps
+     aside in the last chapter to make room for the dealer. */
+  .story-visitor {
+    transition: left 900ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .story[data-chapter="0"] .story-visitor-dot {
+    animation: story-enter 1100ms cubic-bezier(0.22, 0.7, 0.28, 1) 500ms both;
+  }
+
+
+
+  .story-progress.is-current {
+    animation: story-progress var(--chapter-ms) linear both;
+  }
+
+  /* One switch stops the clock and the scene together. */
+  .story[data-paused] * {
+    animation-play-state: paused !important;
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+}
+
+@keyframes story-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes story-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes story-travel {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  12%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+
+@keyframes story-pan {
+  from {
+    transform: translateX(0);
+  }
+}
+
+@keyframes story-pulse {
+  50% {
+    transform: scale(1.4);
+  }
+}
+
+@keyframes story-scan {
+  from {
+    opacity: 0.9;
+    transform: scale(0.15);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes story-dim {
+  from {
+    opacity: 1;
+  }
+}
+
+@keyframes story-match {
+  from {
+    background-color: var(--color-panel-high);
+    color: var(--color-ink-muted);
+    outline-color: transparent;
+  }
+}
+
+@keyframes story-move {
+  from {
+    left: var(--from-x);
+    top: var(--from-y);
+    width: var(--from-w);
+  }
+}
+
+@keyframes story-ring {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-14deg);
+  }
+  40%,
+  80% {
+    transform: rotate(14deg);
+  }
+}
+
+@keyframes story-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-420%);
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes story-progress {
+  from {
+    transform: scaleX(0);
   }
 }
 
