@@ -341,7 +341,7 @@ export function ServiceLevels() {
             {tier.summary}
           </p>
 
-          <ul className="border-line mt-6 space-y-3 border-t pt-6">
+          <ul className="border-line mt-6 mb-8 space-y-3 border-t pt-6">
             {tier.points.map((point) => (
               <li key={point} className="flex gap-3">
                 <CircleCheck className="text-blue-pale mt-[3px] size-4 shrink-0" />
@@ -354,7 +354,10 @@ export function ServiceLevels() {
 
           {/*
             `mt-auto` is what keeps the three buttons on one line across the row
-            even though the three cards carry different amounts of copy.
+            even though the three cards carry different amounts of copy. When
+            the cards stack, `mt-auto` has no free space to give, so the
+            list's own bottom margin is what keeps the button off its last
+            line.
 
             The subject names the tier, so an enquiry arrives already routed.
             There is no form on this site and no endpoint to post one to — the
@@ -409,22 +412,34 @@ export function FeatureComparison() {
               {row.label}
             </p>
 
-            <dl className="mt-3 space-y-2">
+            {/*
+              The three tiers side by side, as three columns of the same width
+              in every row, so the stacked list keeps the table's rhythm: Lite,
+              Pro and Custom always sit in the same place. Pro carries the
+              same tint as its column on desktop.
+            */}
+            <dl className="mt-4 grid grid-cols-3 gap-1.5">
               {tiers.map((tier, index) => (
-                <div key={tier.name} className="flex items-baseline gap-3">
-                  <dt className="text-ink-dim w-14 shrink-0 text-[11.5px]">
+                <div
+                  key={tier.name}
+                  className={`flex flex-col items-center gap-1.5 rounded-md px-1.5 py-2.5 text-center ${
+                    tier.recommended ? "bg-panel-blue/70" : "bg-panel/60"
+                  }`}
+                >
+                  <dt className="text-ink-dim text-[11.5px] font-medium">
                     {tier.name}
                   </dt>
-                  <dd className="text-ink text-[14px] leading-[1.5]">
-                    {/* The check is centred inside a table cell; inline in a
-                        list it has to sit on the text baseline instead. */}
+                  <dd className="text-ink flex min-h-[2.6em] items-center justify-center text-[13px] leading-[1.3]">
                     {row.values[index] === true ? (
-                      <span className="text-blue-pale inline-flex items-center gap-2">
-                        <CircleCheck className="size-4" />
-                        Included
+                      <span className="text-blue-pale">
+                        <CircleCheck className="size-[18px]" />
+                        <span className="sr-only">Included</span>
                       </span>
                     ) : row.values[index] === false ? (
-                      <span className="text-ink-dim">Not included</span>
+                      <span className="text-ink-dim">
+                        <span aria-hidden>—</span>
+                        <span className="sr-only">Not included</span>
+                      </span>
                     ) : (
                       row.values[index]
                     )}

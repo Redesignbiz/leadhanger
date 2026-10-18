@@ -72,7 +72,7 @@ export default function OurSolution() {
                 </span>
                 .
               </h2>
-              <p className="text-ink-muted mt-6 text-[16px] leading-[1.65] sm:text-[17px]">
+              <p className="text-ink-muted mt-6 text-[15px] leading-[1.65] sm:text-[17px]">
                 Compare our Lite, Pro, and Custom packages to find the right
                 solution for your lead management needs — from basic contact
                 collection to advanced, AI-driven lead matching and fully
@@ -104,10 +104,17 @@ export default function OurSolution() {
           </div>
         </div>
 
-        {/* The close, so the page does not dead-end after the last answer. */}
+        {/* The close, so the page does not dead-end after the last answer.
+            Centred at every width, under the centred FAQ heading. */}
         <div className="border-line mx-auto w-full max-w-6xl lg:border-x">
           <div className="border-line border-t px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-            <div className="reveal flex flex-wrap items-center gap-x-5 gap-y-3">
+            <div className="reveal flex flex-col items-center gap-4 text-center">
+              <p className="text-ink-muted text-[14px] leading-[1.55] sm:text-[15px]">
+                Not sure which package fits?{" "}
+                <span className="block sm:inline">
+                  We will help you choose.
+                </span>
+              </p>
               <a
                 href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(
                   `${site.name} demo request`,
@@ -116,9 +123,6 @@ export default function OurSolution() {
               >
                 {site.cta}
               </a>
-              <p className="text-ink-muted text-[14px]">
-                We will tell you which package fits on the first call.
-              </p>
             </div>
           </div>
         </div>
