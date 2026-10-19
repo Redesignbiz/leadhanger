@@ -1,82 +1,112 @@
 @import "tailwindcss";
 
 /*
- * Design tokens, shared with the Yeni Müşterim landing project.
+ * LeadHanger design tokens, on the corporate palette.
  *
- * The colour values below are copied from that project's globals.css and must
- * stay identical to it. If one of them changes here, it changes there too. A
- * proper shared source (one small repo both sites install) is planned but not
- * built yet, so today the two files are kept in step by hand.
+ * Every value below without a note is a corporate value, copied verbatim. The
+ * few that are not (marked "derived") fill a role the corporate set has no
+ * value for, and each says why. Do not add to that list casually: the next
+ * person to touch this file should be able to trust that an unmarked hex is
+ * the brand's.
  *
- * Load-bearing rule, inherited with the values: NO SHADOWS. Depth comes from a
- * 1px border and tonal layering only, which is why no shadow scale is defined
- * here. A `shadow-*` utility in this codebase is a mistake, not a variation.
+ * Two rules are load-bearing:
+ *
+ * 1. NO SHADOWS. Depth comes from tonal layering, 1px rules, and exactly one
+ *    radial wash behind the hero. A `shadow-*` utility here is a mistake.
+ *
+ * 2. `blue` (#144EE4) is a fill, never type. On the ground it is 2.9:1, so any
+ *    blue text uses `blue-pale` (10.6:1) or `blue-bright` (5.4:1) instead.
+ *
+ * Contrast was checked against the ground each value actually sits on.
  */
 @theme {
-  --color-surface: #faf8ff;
-  --color-surface-lowest: #ffffff;
-  --color-surface-low: #f2f3fe;
-  --color-surface-container: #ecedf9;
-  --color-surface-high: #e6e7f3;
-  --color-surface-highest: #e1e2ed;
-
-  --color-ink: #191b23;
-  --color-ink-muted: #424654;
-
-  --color-outline: #727786;
-  --color-outline-variant: #c2c6d7;
-
-  --color-primary: #0056c9;
-  --color-primary-bright: #1b6ef3;
-  --color-primary-fixed: #d9e2ff;
-  --color-primary-fixed-dim: #b0c6ff;
-  --color-on-primary-fixed: #001945;
-
-  --color-inverse-surface: #2e3039;
-  --color-inverse-ink: #eff0fb;
+  /* One face, Inter, loaded in layout.tsx under `--ff-sans`. */
+  --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
 
   /*
-   * These two have no counterpart in Yeni Müşterim, because that site has no
-   * dark section and never needed them. This one does, for the Results panel.
-   *
-   * `inverse-ink-muted` is not a new colour: it is Yeni Müşterim's
-   * `outline-variant` (#c2c6d7), which lands at roughly 8:1 against the
-   * inverse surface and so is safe for body text.
-   *
-   * `inverse-surface-high` is the only value on this page not taken from that
-   * project. It is one step lighter than `inverse-surface` in the same hue,
-   * because in this system a divider sits away from its surface in the
-   * direction of contrast: darker than the ground in light mode, lighter than
-   * it in dark.
+   * Ground layers, darkest first. On a dark ground, raised means lighter.
+   * `ground-deep` sits below the page rather than on it, and is used for the
+   * footer only.
    */
-  --color-inverse-surface-high: #3f414b;
-  --color-inverse-ink-muted: #c2c6d7;
+  --color-ground-deep: #080b12;
+  --color-ground: #0b101b;
+  --color-panel: #151a24;
+  --color-panel-high: #21262f;
+  /* Derived: the panel with a blue cast, for the one card a section points at. */
+  --color-panel-blue: #121e3d;
+
+  /* Hairlines. `line` is the default rule, `line-strong` marks a live edge. */
+  --color-line: #282e3b;
+  /* Derived: one step brighter than `line`; the palette has a single border. */
+  --color-line-strong: #3a4253;
 
   /*
-   * Accent stays green rather than adopting Yeni Müşterim's #9f3e00, which is a
-   * burnt orange. On this site the accent marks two positive states: the
-   * "Consent captured" chip and the callback that came back in four minutes.
-   * In orange both read as a warning, which inverts what they say.
-   *
-   * Yeni Müşterim's three `danger` tokens are not copied either, because
-   * nothing here uses them. Add them if a page ever needs an error state.
+   * Ink. `ink-muted` is the corporate secondary text and lands at 12.4:1 on
+   * the ground, so it is safe for paragraphs.
    */
-  --color-accent: #0a6b4f;
-  --color-accent-fixed: #c6f0dd;
-  --color-on-accent-fixed: #00251a;
+  --color-ink: #f5f6f8;
+  --color-ink-muted: #c0d3ea;
+  /*
+   * Derived: labels and metadata need a third, quieter step the palette does
+   * not have. 6.1:1 on the ground, 4.8:1 on `panel-high`, so it stays legible
+   * on every surface it can land on. Never paragraphs.
+   */
+  --color-ink-dim: #8792a6;
 
-  /* Strict 4px geometric scale. Identical in both projects. */
-  --radius-sm: 4px;
-  --radius-DEFAULT: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --color-blue: #144ee4;
+  --color-blue-bright: #3686fe;
+  --color-blue-light: #579ee4;
+  --color-blue-pale: #85c8ff;
+  /*
+   * Derived: the hover state for a white-on-blue button. It goes darker, not
+   * brighter, because white on `blue-bright` is 3.5:1 and fails; this is 8.1:1.
+   */
+  --color-blue-hover: #0f42c4;
+
+  /*
+   * Derived: the ground of the Results section. Full `blue` across a whole
+   * section was too bright against the dark page, so the section sits on this
+   * deeper step of the same hue, with `blue` itself kept for buttons and small
+   * fills.
+   */
+  --color-blue-deep: #11389e;
+
+  /*
+   * Ink on `blue-deep`. `on-blue` is the corporate primary text at 9.3:1; the
+   * muted step is derived and lands at 8.1:1. The rule is a translucent ink
+   * rather than a blue, so it reads as a hairline rather than a stripe.
+   */
+  --color-on-blue: #f5f6f8;
+  --color-on-blue-muted: #dce8fa;
+  --color-on-blue-line: color-mix(in oklab, #f5f6f8 14%, transparent);
+
+  /*
+   * States. Not part of the corporate palette, kept from the previous system:
+   * they mark outcomes (consent captured, a lead gone cold), and a blue palette
+   * has no way to say "good" or "lost". The `-lift` variants are text-safe.
+   */
+  --color-sage: #78b082;
+  --color-sage-lift: #9ed4a8;
+  --color-rose: #c5598e;
+  --color-rose-lift: #e888b4;
+
+  /*
+   * Geometry: panels are close to square, and the only fully round things on
+   * the page are buttons and chips. That tension is deliberate — softening the
+   * panels removes it and the page goes generic.
+   */
+  --radius-sm: 2px;
+  --radius-DEFAULT: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
 }
 
 html {
   scroll-behavior: smooth;
   /* So the sticky header never clips an anchor target. */
   scroll-padding-top: 5rem;
+  background: var(--color-ground);
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -86,22 +116,983 @@ html {
 }
 
 body {
-  background: var(--color-surface);
+  background: var(--color-ground);
   color: var(--color-ink);
 }
 
+::selection {
+  background: var(--color-blue);
+  color: var(--color-on-blue);
+}
+
 /*
- * Section labels. This is the one rule that legitimately differs between the
- * two projects, and the reason is language, not taste.
+ * Micro-labels: eyebrows, step counters, table headers, anything that names a
+ * thing rather than saying something. Uppercased, in the body face.
  *
- * Yeni Müşterim bans `uppercase` outright: in Turkish, `i` uppercases to a
- * dotted `I` and collides with the dotless `ı`. This site is English-only
- * (`<html lang="en">`), so small caps are back on the table and are the idiom
- * US readers expect above a section heading.
+ * Caps are safe because this site is English-only (`<html lang="en">`); in
+ * Turkish a dotted `i` uppercases into a collision with the dotless `ı`. The
+ * open tracking is what keeps Inter caps at this size from reading as shouting.
  */
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  font-weight: 700;
-  font-size: 12px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/*
+ * The hero wash. One radial gradient, sitting behind the content, standing in
+ * for the elevation the no-shadow rule refuses. It is a background, not a
+ * layer: nothing is positioned against it.
+ */
+.hero-wash {
+  background-image:
+    radial-gradient(
+      62rem 38rem at 18% -12%,
+      color-mix(in oklab, var(--color-blue) 26%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      40rem 26rem at 92% 8%,
+      color-mix(in oklab, var(--color-blue) 12%, transparent),
+      transparent 60%
+    );
+}
+
+/*
+ * The partner box's backdrop (PartnerCta.tsx, via MapBackdrop). The grid is the ruled ground's
+ * rhythm halved, in the on-blue hairline, with one soft light in the top-right
+ * corner. A mask fades the whole backdrop out towards the left, so the
+ * headline sits on clean blue and the texture gathers where the box is empty.
+ */
+.partner-backdrop {
+  background-image: radial-gradient(
+    36rem 22rem at 92% 0%,
+    color-mix(in oklab, var(--color-blue-bright) 30%, transparent),
+    transparent 70%
+  );
+  mask-image: linear-gradient(90deg, transparent 8%, #000 62%);
+}
+
+/* On a phone the headline spans the box, so the texture retreats to the
+   bottom-right corner instead of the right half. */
+@media (max-width: 639px) {
+  .partner-backdrop {
+    mask-image: linear-gradient(150deg, transparent 45%, #000 95%);
+  }
+}
+
+/*
+ * The proof section's version: clear at the top, where the cover and the
+ * headline sit, and building towards the bottom, with the light low on the
+ * left, so the texture gathers under the figures.
+ */
+.proof-backdrop {
+  background-image: radial-gradient(
+    48rem 28rem at 12% 100%,
+    color-mix(in oklab, var(--color-blue-bright) 26%, transparent),
+    transparent 70%
+  );
+  mask-image: linear-gradient(180deg, transparent 12%, #000 80%);
+}
+
+/* The grid in both backdrops (MapBackdrop.tsx). */
+.map-grid {
+  background-image:
+    linear-gradient(to right, var(--color-on-blue-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-on-blue-line) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.6;
+}
+
+/*
+ * The ruled ground. A 1px grid at the measure's own rhythm, held at a few
+ * percent so it reads as paper texture rather than as a grid the layout is
+ * supposed to be snapped to.
+ */
+.ruled {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: var(--measure-cell) var(--measure-cell);
+  background-position: var(--measure-x) 0;
+  opacity: 0.34;
+}
+
+/*
+ * The measure grid. Every page grid is cut from the measure itself rather
+ * than from a fixed pixel size: the content width (the measure minus its side
+ * padding) divided into an even number of cells, with the first line on the
+ * content's left edge. So a line always falls on the content edges, on the
+ * centre, and on every column boundary of a two- or four-column row, at any
+ * viewport width.
+ *
+ * From `lg` the count (22) is also chosen so the measure's own side rules
+ * land on a line: at full width the cell is 48px, exactly the 3rem side
+ * padding, so the rule sits one cell outside the content edge. Between 64rem
+ * and 72rem, where the measure is narrower than its maximum, the padding stays
+ * 3rem while the cell shrinks a little, so the side rules can sit up to ~3px
+ * off a line; the content edges and columns stay exact.
+ *
+ * Set on a full-width `@container` section; `cqw` here is that section's
+ * width. Numbers mirror Section.tsx: px-5, sm:px-8, lg:px-12 inside a
+ * max-w-6xl measure.
+ */
+.measure-grid {
+  --measure-w: calc(100cqw - 2.5rem);
+  --measure-x: 1.25rem;
+  --measure-cell: calc(var(--measure-w) / 6);
+}
+@media (min-width: 40rem) {
+  .measure-grid {
+    --measure-w: calc(100cqw - 4rem);
+    --measure-x: 2rem;
+    --measure-cell: calc(var(--measure-w) / 10);
+  }
+}
+@media (min-width: 64rem) {
+  .measure-grid {
+    --measure-w: calc(min(100cqw, 72rem) - 6rem);
+    --measure-x: calc((100cqw - min(100cqw, 72rem)) / 2 + 3rem);
+    --measure-cell: calc(var(--measure-w) / 22);
+  }
+}
+
+/*
+ * The proof section's grid, cut from the figures row it sits behind (Results
+ * .tsx). Its container is the row itself, so the cell is the row's width over
+ * twice the measure grid's count: half the page grid's cell, on the same
+ * lines, including the measure's side rules (24px at full width). The layer reaches far past the row in every direction and is clipped
+ * by the section, so its origin, and therefore a line, sits exactly on the
+ * row's top rule and left edge. It fades out upwards, so the cover and the
+ * headline sit on clean blue.
+ */
+.proof-grid {
+  --cell: calc(100cqw / 12);
+  position: absolute;
+  inset: calc(-40 * var(--cell)) calc(-64 * var(--cell)) calc(-12 * var(--cell));
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--color-on-blue-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-on-blue-line) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  background-position: calc(64 * var(--cell)) calc(40 * var(--cell));
+  opacity: 0.6;
+  mask-image: linear-gradient(
+    180deg,
+    transparent calc(40 * var(--cell) - 34rem),
+    #000 calc(40 * var(--cell) - 2rem)
+  );
+}
+@media (min-width: 40rem) {
+  .proof-grid {
+    --cell: calc(100cqw / 20);
+  }
+}
+@media (min-width: 64rem) {
+  .proof-grid {
+    --cell: calc(100cqw / 44);
+  }
+}
+
+/* `details` markers are removed per-element in Faq; Safari needs this too. */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/*
+ * Film grain over the whole document.
+ *
+ * Large flat areas of a near-black ground band visibly on 8-bit displays, and
+ * this page has a lot of them. A few percent of noise breaks the bands up and
+ * is the cheapest texture available: one generated tile, no image request, no
+ * layout cost. It sits above the sticky header on purpose — grain that stopped
+ * at the header would draw a line across the top of the page — and takes no
+ * pointer events, so nothing under it changes behaviour.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+}
+
+/* ------------------------------------------------------------------ motion */
+
+/*
+ * Everything below is additive: the page is complete and correct with all of it
+ * switched off. Each block is gated on `prefers-reduced-motion: no-preference`,
+ * and the scroll-driven reveals are additionally gated on `@supports`, so a
+ * browser without scroll timelines renders the content plainly visible rather
+ * than stuck at `opacity: 0`. That direction of defaulting is the whole trick —
+ * hiding first and revealing with script is what breaks.
+ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /*
+     * `reveal` on a block, `reveal-stack` on a parent whose children should
+     * arrive one after another. The stagger is written as overlapping scroll
+     * ranges rather than as delays, because with a scroll timeline the reader's
+     * scrolling is the clock: `animation-delay` has no time to count.
+     */
+    .reveal,
+    .reveal-stack > * {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 2% entry 42%;
+    }
+
+    .reveal-stack > *:nth-child(2) {
+      animation-range: entry 6% entry 46%;
+    }
+    .reveal-stack > *:nth-child(3) {
+      animation-range: entry 10% entry 50%;
+    }
+    .reveal-stack > *:nth-child(4) {
+      animation-range: entry 14% entry 54%;
+    }
+    .reveal-stack > *:nth-child(5) {
+      animation-range: entry 18% entry 58%;
+    }
+    .reveal-stack > *:nth-child(6) {
+      animation-range: entry 22% entry 62%;
+    }
+    .reveal-stack > *:nth-child(n + 7) {
+      animation-range: entry 26% entry 66%;
+    }
+  }
+
+  /*
+   * The wash drifts. Very slowly, and only ever by a few percent of its own
+   * size: enough that the ground is not quite the same twice, not enough to
+   * notice while reading. Scaling and translating the layer is cheap; animating
+   * the gradient's own colour stops would not be.
+   */
+  .hero-wash {
+    animation: wash-drift 26s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  @keyframes wash-drift {
+    from {
+      transform: translate3d(-1.5%, -1%, 0) scale(1.04);
+    }
+    to {
+      transform: translate3d(2%, 1.5%, 0) scale(1.1);
+    }
+  }
+}
+
+/*
+ * The hero's claim. Above the fold there is no scroll to drive a reveal, so
+ * it arrives on a timer, headline first, a beat ahead of the story under it.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .intro > * {
+    animation: rise-in 700ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  }
+  .intro > *:nth-child(1) {
+    animation-delay: 60ms;
+  }
+  .intro > *:nth-child(2) {
+    animation-delay: 160ms;
+  }
+}
+
+/*
+ * The "Explore more" chevron under the hero nudges downward, slowly, as a hint
+ * rather than a call. It stops on hover so it is still while being aimed at.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .explore-bob {
+    animation: explore-bob 2.4s ease-in-out infinite;
+  }
+  .group:hover .explore-bob {
+    animation-play-state: paused;
+  }
+
+  @keyframes explore-bob {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(4px);
+    }
+  }
+}
+
+/*
+ * The hero story (HeroStory.tsx): three chapters on a loop, timed by the
+ * an invisible element in the current tab.
+ *
+ * Same rule as the rest of this file, applied hard: everything below the
+ * motion gate only ever animates FROM somewhere TO the state the markup
+ * already shows. With motion off, each chapter is its own finished frame —
+ * the camera already panned, the match already made, the call already landed.
+ * The few pieces that only exist in motion (the travelling dot, the search
+ * ring) default to invisible.
+ *
+ * Timing lives in the markup as `--d` on each piece, because the chapters are
+ * choreographed as a sequence and the sequence is easier to read in one place
+ * next to the content it moves.
+ */
+/* A soft patch of plain ground behind the steps and caption, so the page
+   grid fades out behind the text instead of running through it. */
+.story-band::before {
+  content: "";
+  position: absolute;
+  inset: -2rem -6rem;
+  z-index: -1;
+  background: radial-gradient(
+    closest-side,
+    var(--color-ground) 55%,
+    transparent
+  );
+  pointer-events: none;
+}
+.story-band {
+  isolation: isolate;
+}
+
+.story-scene {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 400ms ease,
+    visibility 0s linear 400ms;
+}
+
+.story-scene.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 400ms ease 120ms,
+    visibility 0s;
+}
+
+/* The camera's frame softens at the edges, so the site slides out of view
+   rather than being cut off by the stage. */
+.story-frame {
+  mask-image: linear-gradient(90deg, transparent, #000 12% 88%, transparent);
+}
+
+/* `--pan` is set per layout: the share of the track the camera travels. */
+.s-pan {
+  transform: translateX(var(--pan, -50%));
+}
+
+/* With `pathLength="1"`, one dash the length of the whole line. */
+.s-draw {
+  stroke-dasharray: 1;
+}
+
+/* A dash of zero length with a round cap is a dot; the offset walks it. */
+.s-travel {
+  stroke-dasharray: 0 2;
+  stroke-dashoffset: -1;
+  opacity: 0;
+}
+
+.s-scan {
+  opacity: 0;
+}
+
+.s-scan,
+.s-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.s-dim {
+  opacity: 0.38;
+}
+
+/* The matched dealer gets a ring of its own. An outline, not a shadow. */
+.s-match .story-badge {
+  outline: 1.5px solid var(--color-blue-pale);
+  outline-offset: 3px;
+}
+
+.story-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.story-progress.is-current {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .story-scene.is-active .s-pop {
+    animation: chip-in 520ms cubic-bezier(0.2, 1.4, 0.4, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-rise {
+    animation: rise-in 520ms cubic-bezier(0.22, 0.7, 0.28, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-fade {
+    animation: story-fade 600ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-draw {
+    animation: story-draw 800ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-travel {
+    animation: story-travel 900ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-pan {
+    animation: story-pan 1100ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-pulse {
+    animation: story-pulse 600ms ease-in-out var(--d, 0ms) 2 both;
+  }
+  .story-scene.is-active .s-scan {
+    animation: story-scan 1900ms cubic-bezier(0.2, 0.7, 0.3, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-dim {
+    animation: story-dim 500ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-match .story-badge {
+    animation: story-match 600ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-move {
+    animation: story-move 900ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-ring {
+    animation: story-ring 700ms ease-in-out var(--d, 0ms) 3 both;
+  }
+
+  /* The visitor walks in from the left at the top of every loop, and steps
+     aside in the last chapter to make room for the dealer. */
+  .story-visitor {
+    transition: left 900ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .story[data-chapter="0"] .story-visitor-dot {
+    animation: story-enter 1100ms cubic-bezier(0.22, 0.7, 0.28, 1) 500ms both;
+  }
+  /* In chapter 1 the visitor walks into the site at centre stage, then
+     crosses to their seat at the chat while the camera pans. */
+  .story[data-chapter="0"] .story-visitor {
+    animation: story-to-seat 3500ms linear both;
+  }
+
+
+
+  .story-progress.is-current {
+    animation: story-progress var(--chapter-ms) linear both;
+  }
+
+  .story-caption {
+    animation: rise-in 500ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  }
+
+  /*
+   * A fresh stage (a restart, or a tab click) fades in rather than cutting.
+   * `backwards`, not `both`: a fill that held after the fade-in would pin the
+   * stage's opacity, and the fade-out before the closing card would cut.
+   */
+  .story-stage {
+    animation: story-fade 500ms ease backwards;
+  }
+
+  /* The closing card rises in, and its clock holds while it is in use. */
+  /* It waits for the story's last frame to finish fading out first. */
+  .story-cta-in {
+    animation: rise-in 600ms cubic-bezier(0.22, 0.7, 0.28, 1) 550ms both;
+  }
+  .story-cta:hover .story-progress,
+  .story-cta:focus-within .story-progress {
+    animation-play-state: paused;
+  }
+
+  /* One switch stops the clock and the scene together. */
+  .story[data-paused] * {
+    animation-play-state: paused !important;
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+}
+
+@keyframes story-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes story-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes story-travel {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  12%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+
+@keyframes story-pan {
+  from {
+    transform: translateX(0);
+  }
+}
+
+@keyframes story-pulse {
+  50% {
+    transform: scale(1.4);
+  }
+}
+
+@keyframes story-scan {
+  from {
+    opacity: 0.9;
+    transform: scale(0.15);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes story-dim {
+  from {
+    opacity: 1;
+  }
+}
+
+@keyframes story-match {
+  from {
+    background-color: var(--color-panel-high);
+    color: var(--color-ink-muted);
+    outline-color: transparent;
+  }
+}
+
+@keyframes story-move {
+  from {
+    left: var(--from-x);
+    top: var(--from-y);
+    width: var(--from-w);
+  }
+}
+
+@keyframes story-ring {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-14deg);
+  }
+  40%,
+  80% {
+    transform: rotate(14deg);
+  }
+}
+
+@keyframes story-to-seat {
+  0%,
+  68% {
+    left: var(--center-x);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  100% {
+    left: var(--seat-x);
+  }
+}
+
+@keyframes story-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-420%);
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes story-progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/*
+ * The decline arriving with the scroll (Problem.tsx). Each box drops into
+ * place along the curve, from up and to the left, one after another, while
+ * the curve draws itself through them.
+ *
+ * From `lg` every box and the curve run on one shared timeline, the whole
+ * decline's passage through the viewport (`--decline`), with each box's
+ * range offset by its index, so they arrive in order even though they enter
+ * the viewport together. Stacked, each box simply uses its own entry.
+ */
+.decline-curve {
+  stroke-dasharray: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .decline-step {
+      animation: decline-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 55%;
+    }
+
+    @media (min-width: 64rem) {
+      .decline {
+        view-timeline-name: --decline;
+      }
+      .decline-step {
+        animation-timeline: --decline;
+        animation-range: cover calc(6% + var(--i) * 5%) cover calc(18% + var(--i) * 5%);
+      }
+      .decline-curve {
+        animation: decline-draw linear both;
+        animation-timeline: --decline;
+        animation-range: cover 4% cover 42%;
+      }
+    }
+  }
+}
+
+@keyframes decline-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-28px, -20px, 0);
+  }
+}
+
+@keyframes decline-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/*
+ * The decline track (Problem.tsx), stacked layout: the same pale blue as the
+ * curve it stands in for, fading out along its length, so the chain of
+ * failures reads as a lead draining away from the first step to the last.
+ */
+.loss-track-y {
+  background: linear-gradient(
+    180deg,
+    var(--color-blue-pale) 0%,
+    color-mix(in oklab, var(--color-blue-pale) 15%, transparent) 100%
+  );
+}
+
+/*
+ * The routing track: a line with four stops and a pulse running along it.
+ *
+ * Drawn in CSS rather than as an SVG so it can turn from a horizontal track
+ * into a vertical one at phone width without a second copy of the artwork. The
+ * pulse is a gradient segment translated across a clipped rail — no motion
+ * path, no SMIL, nothing that needs a polyfill.
+ */
+.route-rail {
+  position: absolute;
+  overflow: hidden;
+  /* Fades out before the end, so the track reads as continuing rather than as
+     stopping short of the last stop. */
+  background: linear-gradient(
+    var(--route-axis, 90deg),
+    var(--color-line) 0 82%,
+    transparent
+  );
+}
+
+.route-rail-y {
+  --route-axis: 180deg;
+}
+
+/*
+ * The pulse is exactly the size of its rail, and the bright band lives inside
+ * its gradient rather than in its box. That is what makes the sweep exact at
+ * any rail length: translating the element by 100% of itself carries the band
+ * from just off one end to just off the other, whatever the rail measures. A
+ * narrow box translated by some multiple of its own width cannot do that — the
+ * multiple only lands correctly at one specific rail size.
+ */
+.route-pulse {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0 42%,
+    var(--color-blue-pale) 50%,
+    transparent 58% 100%
+  );
+}
+
+.route-pulse-y {
+  background: linear-gradient(
+    180deg,
+    transparent 0 42%,
+    var(--color-blue-pale) 50%,
+    transparent 58% 100%
+  );
+}
+
+.route-icon {
+  color: var(--color-ink-dim);
+  transform-origin: 50% 100%;
+}
+
+/*
+ * The pulse rests on each stop, then moves on. One 10s cycle: in from off the
+ * start, a rest on each of the four stops, out past the last one along the
+ * fading tail. A rest is 16% of the cycle, a move 6%.
+ *
+ * Translating the pulse by `t` puts the band's centre at 50% + t of the rail,
+ * so the band sits on stop `i` at t = stop position − 50%. Across, the stops
+ * start each of four columns with a 2rem gutter, at i × (25% + 0.5rem). Down,
+ * the items are of uneven height, so the stops are taken as quarters; the band
+ * is wide enough that it still reads as resting on each one.
+ *
+ * Each icon lights for its stop's rest: same keyframes, delayed by its index
+ * times one rest-and-move (2.2s), so the pulse and the icons share one clock.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .route-pulse {
+    animation: route-run 10s infinite;
+  }
+
+  .route-pulse-y {
+    animation-name: route-run-vertical;
+  }
+
+  .route-icon {
+    animation: route-icon 10s calc(var(--i, 0) * 2.2s) infinite both;
+  }
+}
+
+@keyframes route-run {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  6%,
+  22% {
+    transform: translate3d(-50%, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  28%,
+  44% {
+    transform: translate3d(calc(-25% + 0.5rem), 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  50%,
+  66% {
+    transform: translate3d(1rem, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  72%,
+  88% {
+    transform: translate3d(calc(25% + 1.5rem), 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  94%,
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes route-run-vertical {
+  0% {
+    transform: translate3d(0, -100%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  6%,
+  22% {
+    transform: translate3d(0, -50%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  28%,
+  44% {
+    transform: translate3d(0, -25%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  50%,
+  66% {
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  72%,
+  88% {
+    transform: translate3d(0, 25%, 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  94%,
+  100% {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/*
+ * The lit icon also grows, and eases in and out of it with a slight
+ * overshoot on the way up, so the change in size reads as one continuous
+ * motion rather than a swap. It scales from its bottom edge, so it rises off
+ * the line instead of spreading into it.
+ */
+@keyframes route-icon {
+  0%,
+  4% {
+    color: var(--color-ink-dim);
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  9%,
+  20% {
+    color: var(--color-blue-pale);
+    transform: scale(1.4);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  25%,
+  100% {
+    color: var(--color-ink-dim);
+    transform: scale(1);
+  }
+}
+
+/*
+ * Typing indicator, for the conversation mockup. Three dots on one keyframe at
+ * staggered delays — the only loop on the page that runs regardless of scroll,
+ * because a conversation that has visibly stopped mid-thought is worse than no
+ * conversation at all.
+ */
+.typing > span {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--color-ink-dim);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .typing > span {
+    animation: typing-bob 1.3s ease-in-out infinite;
+  }
+  .typing > span:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+  .typing > span:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+
+  @keyframes typing-bob {
+    0%,
+    64%,
+    100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    32% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
+}
+
+/*
+ * Bars grow out of the baseline as the dashboard mockup scrolls into view.
+ *
+ * `width` is animated rather than `scaleX`, because these bars carry a 4px
+ * rounded data-end and scaling would squash that radius into an ellipse as the
+ * bar grew. Five bars animating width inside one small card is not a layout
+ * cost worth optimising away.
+ *
+ * The `from` keyframe is the only one declared: the implicit `to` is the
+ * element's own computed width, so each bar's length stays in the markup where
+ * it belongs instead of being duplicated into a keyframe.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .bar-grow {
+      animation: bar-grow cubic-bezier(0.2, 0.7, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 55%;
+    }
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    width: 0;
+  }
+}
+
+/*
+ * Counting figures.
+ *
+ * The number lives in `--to` on the element and is rendered through a counter,
+ * so with no animation at all the final value still prints — that is the
+ * fallback, and it needs no second copy of the number in the markup.
+ *
+ * The animation interpolates a registered integer property from zero up to that
+ * value. It is gated on scroll timelines rather than on `@property` because
+ * every engine that shipped `animation-timeline: view()` had registered
+ * properties years earlier, and testing for `@property` directly is not
+ * reliably supported itself.
+ */
+@property --tally {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.tally {
+  --tally: var(--to);
+  counter-reset: tally var(--tally);
+}
+
+.tally::after {
+  content: counter(tally);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .tally {
+      animation: tally-run cubic-bezier(0.15, 0.8, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 58%;
+    }
+
+    @keyframes tally-run {
+      from {
+        --tally: 0;
+      }
+    }
+  }
 }

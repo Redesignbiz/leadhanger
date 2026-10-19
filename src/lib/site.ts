@@ -19,7 +19,7 @@ export const site = {
   url: 'https://www.leadhanger.com',
 
   /** Shown in the nav and repeated in the closing section. */
-  cta: 'Book a demo',
+  cta: 'Book an Intro',
 
   contact: {
     /**
@@ -62,10 +62,19 @@ export const site = {
     },
   ],
 
-  /** Reference case study, hosted on the Redesign Business site. */
+  /**
+   * Reference case study, hosted on the Redesign Business site. The headline,
+   * summary and cover are the ones on that site's portfolio card, copied
+   * verbatim so the two never tell the story differently.
+   */
   caseStudy: {
     client: 'Bridgestone',
     href: 'https://www.redesignbiz.com/work/bridgestone/',
+    headline: 'Leads that actually close',
+    summary:
+      'A dealer platform that turned interest into action: 32% lead-to-sale, 40% faster response.',
+    cover: '/images/bridgestone-case-study.webp',
+    logo: '/images/bridgestone-logo.svg',
   },
 
   /**
@@ -86,6 +95,6 @@ export const site = {
   },
 
   /** TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md. */
-  privacyUpdatedAt: '2026-08-21',
-  privacyUpdatedLabel: 'August 21, 2026',
+  privacyUpdatedAt: '2026-10-04',
+  privacyUpdatedLabel: 'October 4, 2026',
 } as const;

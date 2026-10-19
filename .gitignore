@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Original photos for the industry cards; the site uses the resized copies in
+# public/images/industries (see docs/images.md).
+/industries/
