@@ -20,5 +20,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.3,
     },
+    ...["sms-terms", "sms-consent"].map((path) => ({
+      url: `${site.url}/${path}`,
+      lastModified: new Date(site.smsUpdatedAt),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    })),
   ];
 }

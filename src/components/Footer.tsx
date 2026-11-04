@@ -65,6 +65,18 @@ export function Footer() {
                 >
                   Privacy
                 </Link>
+                <Link
+                  href="/sms-terms"
+                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
+                >
+                  SMS terms
+                </Link>
+                <Link
+                  href="/sms-consent"
+                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
+                >
+                  SMS consent
+                </Link>
                 <a
                   href={`mailto:${site.contact.sales}`}
                   className="text-ink-muted hover:text-ink text-[14px] transition-colors"
