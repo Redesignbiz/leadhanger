@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { LegalPage } from "@/components/LegalPage";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -24,6 +23,11 @@ export const metadata: Metadata = {
  *      play (see components/Video.tsx); the notice says so.
  *   2. There is no form on the site. Contact happens by email. Adding a form
  *      means naming what it collects and where the submissions are stored.
+ *
+ * The "Text messages (SMS)" section is required for the Twilio A2P 10DLC
+ * campaign: carriers reject campaigns whose privacy notice lacks the sentence
+ * that mobile numbers and SMS consent are not shared with third parties. Keep
+ * it in step with /sms-terms and /sms-consent.
  */
 const sections = [
   {
@@ -67,6 +71,14 @@ const sections = [
     ],
   },
   {
+    heading: "Text messages (SMS)",
+    paragraphs: [
+      "When a consumer asks for a quote or appointment through a LeadHanger form or chat assistant on a brand's website and agrees to receive text messages, we send messages about that request on the brand's behalf: confirmation, the assigned dealer's name, appointment time and reminders.",
+      "Mobile phone numbers and SMS consent are not shared with or sold to third parties or affiliates for their marketing or promotional purposes. Information is shared only with the brand and the authorized dealer assigned to the request, and with service providers that deliver the messages, solely to provide the service.",
+      "You can opt out at any time by replying STOP, and get help by replying HELP. The full terms are on the SMS Terms page at leadhanger.com/sms-terms.",
+    ],
+  },
+  {
     heading: "Your rights",
     paragraphs: [
       "Depending on where you live, you may have the right to know what personal information we hold about you, to get a copy of it, to have it corrected, and to have it deleted. You also have the right not to be treated differently for exercising any of these rights.",
@@ -96,73 +108,10 @@ const sections = [
 
 export default function Privacy() {
   return (
-    <>
-      <Header />
-
-      {/*
-        Long-form legal copy, held to the same measure and the same side rules
-        as every section on the home page, so /privacy reads as part of the site
-        rather than as a document someone linked to. The measure inside is
-        narrower than the rules, because a 1150px line length is unreadable and
-        a privacy notice is the one page here that is genuinely read.
-      */}
-      <main className="flex-1">
-        <div className="border-line mx-auto w-full max-w-6xl lg:border-x">
-          <div className="px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-            <article className="w-full max-w-2xl">
-              <div className="flex items-center gap-4 sm:gap-6">
-                <span className="eyebrow text-blue-pale shrink-0">Legal</span>
-                <span className="bg-line h-px flex-1" aria-hidden />
-              </div>
-
-              <h1 className="text-ink mt-8 text-[30px] leading-[1.1] font-bold tracking-[-0.03em] sm:text-[40px]">
-                Privacy Notice
-              </h1>
-              <p className="text-ink-dim mt-4 text-[12.5px]">
-                Effective {site.privacyUpdatedLabel}
-              </p>
-
-              <div className="mt-12 space-y-10">
-                {sections.map((section) => (
-                  <section key={section.heading}>
-                    <h2 className="text-ink text-[19px] leading-snug font-bold tracking-[-0.015em]">
-                      {section.heading}
-                    </h2>
-                    {section.paragraphs.map((paragraph) => (
-                      <p
-                        key={paragraph.slice(0, 40)}
-                        className="text-ink-muted mt-4 text-[15.5px] leading-[1.75]"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </section>
-                ))}
-              </div>
-
-              <div className="border-line bg-panel mt-14 rounded-lg border p-6">
-                <h2 className="text-ink text-[17px] font-bold tracking-[-0.015em]">
-                  Contact
-                </h2>
-                <p className="text-ink-muted mt-3 text-[15px] leading-[1.7]">
-                  {site.company.legalName}
-                  <br />
-                  {site.offices.map((office) => office.city).join(" · ")}
-                  <br />
-                  <a
-                    href={`mailto:${site.contact.privacy}`}
-                    className="text-blue-pale decoration-blue/60 hover:decoration-blue-pale font-semibold underline underline-offset-[5px] transition-colors"
-                  >
-                    {site.contact.privacy}
-                  </a>
-                </p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </main>
-
-      <Footer />
-    </>
+    <LegalPage
+      title="Privacy Notice"
+      effective={site.privacyUpdatedLabel}
+      sections={sections}
+    />
   );
 }

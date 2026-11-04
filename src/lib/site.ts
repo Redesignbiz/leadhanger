@@ -91,10 +91,16 @@ export const site = {
   company: {
     legalName: 'Redesign Business LLC',
     shortName: 'Redesign Business',
+    /** As registered with D&B and Twilio (A2P 10DLC brand). */
+    address: '112 Capitol Trail, Suite A950, Newark, DE 19711',
     href: 'https://www.redesignbiz.com',
   },
 
   /** TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md. */
-  privacyUpdatedAt: '2026-10-04',
-  privacyUpdatedLabel: 'October 4, 2026',
+  privacyUpdatedAt: '2026-11-03',
+  privacyUpdatedLabel: 'November 3, 2026',
+
+  /** SMS Terms and the consent sample, published for the Twilio A2P 10DLC campaign. */
+  smsUpdatedAt: '2026-11-03',
+  smsUpdatedLabel: 'November 3, 2026',
 } as const;
