@@ -31,7 +31,7 @@ const sections = [
   {
     heading: "Related pages",
     paragraphs: [
-      "SMS Terms: leadhanger.com/sms-terms. Privacy Notice: leadhanger.com/privacy.",
+      "SMS Terms: leadhanger.com/sms-terms. Privacy Policy: leadhanger.com/privacy.",
     ],
   },
 ];
