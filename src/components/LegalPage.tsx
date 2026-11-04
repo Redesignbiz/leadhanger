@@ -6,12 +6,16 @@ import { site } from "@/lib/site";
 export type LegalSection = { heading: string; paragraphs: string[] };
 
 /**
- * Shared frame for /privacy, /sms-terms and /sms-consent. Long-form legal copy,
- * held to the same measure and the same side rules as every section on the
+ * Shared frame for /privacy, /sms-terms, /sms-consent and /support. Long-form
+ * copy, held to the same measure and the same side rules as every section on the
  * home page, so these pages read as part of the site rather than as documents
  * someone linked to. The measure inside is narrower than the rules, because a
  * 1150px line length is unreadable and these are the pages that are genuinely
- * read (by visitors, and by carrier reviewers checking SMS compliance).
+ * read (by visitors, by carrier reviewers checking SMS compliance, and by App
+ * Review checking the privacy and support URLs).
+ *
+ * /support is not a legal document, so it passes its own eyebrow and address
+ * and leaves out the effective date.
  */
 export function LegalPage({
   title,
@@ -19,12 +23,16 @@ export function LegalPage({
   intro,
   sections,
   children,
+  eyebrow = "Legal",
+  email = site.contact.privacy,
 }: {
   title: string;
-  effective: string;
+  effective?: string;
   intro?: string;
   sections: readonly LegalSection[];
   children?: ReactNode;
+  eyebrow?: string;
+  email?: string;
 }) {
   return (
     <>
@@ -35,16 +43,20 @@ export function LegalPage({
           <div className="px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
             <article className="w-full max-w-2xl">
               <div className="flex items-center gap-4 sm:gap-6">
-                <span className="eyebrow text-blue-pale shrink-0">Legal</span>
+                <span className="eyebrow text-blue-pale shrink-0">
+                  {eyebrow}
+                </span>
                 <span className="bg-line h-px flex-1" aria-hidden />
               </div>
 
               <h1 className="text-ink mt-8 text-[30px] leading-[1.1] font-bold tracking-[-0.03em] sm:text-[40px]">
                 {title}
               </h1>
-              <p className="text-ink-dim mt-4 text-[12.5px]">
-                Effective {effective}
-              </p>
+              {effective && (
+                <p className="text-ink-dim mt-4 text-[12.5px]">
+                  Effective {effective}
+                </p>
+              )}
               {intro && (
                 <p className="text-ink-muted mt-8 text-[15.5px] leading-[1.75]">
                   {intro}
@@ -83,10 +95,10 @@ export function LegalPage({
                   {site.offices.map((office) => office.city).join(" · ")}
                   <br />
                   <a
-                    href={`mailto:${site.contact.privacy}`}
+                    href={`mailto:${email}`}
                     className="text-blue-pale decoration-blue/60 hover:decoration-blue-pale font-semibold underline underline-offset-[5px] transition-colors"
                   >
-                    {site.contact.privacy}
+                    {email}
                   </a>
                 </p>
               </div>

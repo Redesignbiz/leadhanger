@@ -28,6 +28,12 @@ export const site = {
      */
     sales: 'newyork@redesignbiz.com',
     privacy: 'newyork@redesignbiz.com',
+    /**
+     * Printed on /support, which is the Support URL given to App Store Connect.
+     * Same inbox for now. If a dedicated support address is set up, change it
+     * here and nowhere else.
+     */
+    support: 'newyork@redesignbiz.com',
   },
 
   /**
@@ -96,9 +102,26 @@ export const site = {
     href: 'https://www.redesignbiz.com',
   },
 
-  /** TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md. */
-  privacyUpdatedAt: '2026-11-03',
-  privacyUpdatedLabel: 'November 3, 2026',
+  /**
+   * TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md.
+   * The app sections were added on November 4, 2026. Move both values to the
+   * day this version actually goes live.
+   */
+  privacyUpdatedAt: '2026-11-04',
+  privacyUpdatedLabel: 'November 4, 2026',
+
+  /**
+   * TODO: open item, not confirmed. See docs/leadhanger-us-brief.md.
+   * Printed on /privacy and /delete-account. `deletionDays` is how long a
+   * deletion request takes; there is no deletion job behind it yet, only a
+   * manual procedure. `backupDays` is how long database backups are kept
+   * (DB_RETAINED_BACKUPS in brisa-backend/deployment/config.sh) and must follow
+   * that setting if it changes.
+   */
+  retention: {
+    deletionDays: 30,
+    backupDays: 30,
+  },
 
   /** SMS Terms and the consent sample, published for the Twilio A2P 10DLC campaign. */
   smsUpdatedAt: '2026-11-03',
