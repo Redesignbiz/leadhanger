@@ -3,7 +3,7 @@ import { LegalPage } from "@/components/LegalPage";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Privacy Notice",
+  title: "Privacy Policy",
   description: `How ${site.company.legalName} handles personal information collected through the ${site.name} website.`,
   alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
@@ -25,8 +25,9 @@ export const metadata: Metadata = {
  *      means naming what it collects and where the submissions are stored.
  *
  * The "Text messages (SMS)" section is required for the Twilio A2P 10DLC
- * campaign: carriers reject campaigns whose privacy notice lacks the sentence
- * that mobile numbers and SMS consent are not shared with third parties. Keep
+ * campaign: Twilio requires a page titled "Privacy Policy" containing, verbatim,
+ * "We do not sell or share your SMS opt-in data or personal information with
+ * third parties for marketing purposes." Do not reword that sentence. Keep
  * it in step with /sms-terms and /sms-consent.
  */
 const sections = [
@@ -74,7 +75,7 @@ const sections = [
     heading: "Text messages (SMS)",
     paragraphs: [
       "When a consumer asks for a quote or appointment through a LeadHanger form or chat assistant on a brand's website and agrees to receive text messages, we send messages about that request on the brand's behalf: confirmation, the assigned dealer's name, appointment time and reminders.",
-      "Mobile phone numbers and SMS consent are not shared with or sold to third parties or affiliates for their marketing or promotional purposes. Information is shared only with the brand and the authorized dealer assigned to the request, and with service providers that deliver the messages, solely to provide the service.",
+      "We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes. Mobile phone numbers and SMS consent are not shared with or sold to third parties or affiliates for their marketing or promotional purposes. Information is shared only with the brand and the authorized dealer assigned to the request, and with service providers that deliver the messages, solely to provide the service.",
       "You can opt out at any time by replying STOP, and get help by replying HELP. The full terms are on the SMS Terms page at leadhanger.com/sms-terms.",
     ],
   },
@@ -109,7 +110,7 @@ const sections = [
 export default function Privacy() {
   return (
     <LegalPage
-      title="Privacy Notice"
+      title="Privacy Policy"
       effective={site.privacyUpdatedLabel}
       sections={sections}
     />

@@ -55,7 +55,7 @@ const sections = [
   {
     heading: "Privacy",
     paragraphs: [
-      "Mobile phone numbers and SMS consent are not shared with or sold to third parties or affiliates for their marketing or promotional purposes. How we handle personal information is described in our Privacy Notice at leadhanger.com/privacy.",
+      "Mobile phone numbers and SMS consent are not shared with or sold to third parties or affiliates for their marketing or promotional purposes. How we handle personal information is described in our Privacy Policy at leadhanger.com/privacy.",
     ],
   },
 ];
