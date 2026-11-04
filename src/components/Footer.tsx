@@ -60,6 +60,12 @@ export function Footer() {
                   Our solution
                 </Link>
                 <Link
+                  href="/support"
+                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
+                >
+                  Support
+                </Link>
+                <Link
                   href="/privacy"
                   className="text-ink-muted hover:text-ink text-[14px] transition-colors"
                 >
@@ -76,6 +82,12 @@ export function Footer() {
                   className="text-ink-muted hover:text-ink text-[14px] transition-colors"
                 >
                   SMS consent
+                </Link>
+                <Link
+                  href="/delete-account"
+                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
+                >
+                  Delete account
                 </Link>
                 <a
                   href={`mailto:${site.contact.sales}`}

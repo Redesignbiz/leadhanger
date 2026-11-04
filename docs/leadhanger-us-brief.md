@@ -71,27 +71,69 @@ Blocking, in the order they block:
    `RedesignBiz/assets/Product/` is empty. The mark on the site is a placeholder
    drawn for this build. See `docs/images.md`.
 2. **Legal review of the privacy notice.** `/privacy` is a draft written to match
-   what the site actually does. Two of its claims depend on the site staying as
-   built: no cookies or analytics, and no form. Both are called out in a comment
-   at the top of `src/app/privacy/page.tsx`.
-3. **Consent wording for US outbound calling.** The platform captures consent and
+   what the site and the app actually do. Several of its claims depend on both
+   staying as built (no cookies or analytics on the site, no form, no location or
+   analytics in the app). Each is called out in a comment at the top of
+   `src/app/privacy/page.tsx`.
+3. **Account deletion by request, as in Yeni Müşterim.** `/privacy`, `/support`
+   and `/delete-account` are the pages App Review reads (the first two are the
+   Privacy Policy and Support URLs in App Store Connect). The app has no
+   sign-up and no delete button; deletion is by email request, completed within
+   the period in item 4 (decided November 4, 2026). Two things to watch:
+   - Apple's guideline 5.1.1(v) asks for in-app deletion when an app supports
+     account creation, and owners can create staff accounts in the app. If App
+     Review reads that as account creation, the smallest fix is a link from the
+     Account tab to `/delete-account`.
+   - The deletion procedure is manual until the backend has a deletion job. It
+     must do what `/delete-account` says: delete the account, its push tokens
+     and location links, and anonymize the user in lead and phone-view records.
+4. **Deletion period. Open, not confirmed.** `/privacy` and `/delete-account`
+   promise that a deletion request is completed within 30 days and that backups
+   roll over within 30 days after that. Both figures live in `site.retention`
+   in `src/lib/site.ts`, and that is the only place to change them. The backup
+   figure matches today's database setting (`DB_RETAINED_BACKUPS` in
+   `brisa-backend/deployment/config.sh`). The 30-day completion has no
+   deletion job behind it, only a manual procedure. Confirm both with the
+   backend team before the pages go live.
+5. **Microsoft Clarity package in the app. Open.** The native SDK is switched
+   off since October 12, 2026 but still bundled in `brisa-frontend/dealer-mobile`,
+   so it ships in the App Store build. The decision:
+   - Remove it before the App Store build (recommended). No behaviour change,
+     since it never starts. The web build's Clarity script is separate and
+     unaffected. The store build needs a version bump, as every store build
+     does under that app's OTA setup.
+   - Or switch it on. Then it records sessions, and Apple's guideline 2.5.14
+     asks for explicit consent and a visible indication while recording.
+     `/privacy` and the App Privacy answers must say so, and masking must be
+     Strict, because screens show customers' names and phone numbers.
+
+   PostHog is planned to replace it. The same applies to PostHog's session
+   replay. Event analytics without replay needs only `/privacy` and the App
+   Privacy answers updated.
+6. **Before the App Store submission, in the app.** Give App Review a working
+   demo account, and make the App Privacy answers in App Store Connect match
+   the "What the app collects" section of `/privacy`. Use Apple's standard EULA
+   until there are terms of our own (decided November 4, 2026).
+7. **Consent wording for US outbound calling.** The platform captures consent and
    passes the record with the lead. What a US dealer needs before dialling is a
    different question, and it varies by state and by contact method. The FAQ
    answer stops at what the platform does and hands the wording to the client's
    counsel. Worth a proper answer before the first US deal, because it will be
    asked.
-4. **Demo CTA.** Today it is a `mailto:`. A scheduling link or a real form would
+8. **Demo CTA.** Today it is a `mailto:`. A scheduling link or a real form would
    convert better. One place to change: `src/components/Demo.tsx`.
 
 Not blocking, but wanted:
 
-5. **Real product imagery.** The hero visual is drawn in markup. There are three
+9. **Real product imagery.** The hero visual is drawn in markup. There are three
    demo videos in Drive, including a Mavis-branded one, and the live dashboard at
    `app.leadhanger.com` can be captured.
-6. **Named hosting provider** in the privacy notice, once deployment is settled.
-7. **Analytics decision.** Adding any invalidates the "no tracking" section.
-8. **The blog.** Twelve drafts exist. A `/insights` route would give the site
-   something to rank on beyond the one page.
+10. **Named hosting provider and region** in the privacy notice, once deployment
+   is settled. The current backend runs in Google Cloud europe-west3
+   (Frankfurt). A US region is the simpler answer for US brands.
+11. **Analytics decision.** Adding any invalidates the "no tracking" section.
+12. **The blog.** Twelve drafts exist. A `/insights` route would give the site
+    something to rank on beyond the one page.
 
 ## 5. Things to verify with the product team
 
