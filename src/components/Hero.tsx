@@ -1,3 +1,4 @@
+import { site } from "@/lib/site";
 import { Highlight } from "./Section";
 import { HeroStory } from "./HeroStory";
 
@@ -36,10 +37,20 @@ export function Hero() {
           */}
           <div className="flex min-h-[calc(100svh-6.5rem)] flex-col sm:min-h-[calc(100svh-7.5rem)]">
             <div className="intro grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-16">
-              <h1 className="text-ink text-[30px] leading-[1.06] font-bold tracking-[-0.03em] text-balance sm:text-[40px]">
-                Boost Your <br />
-                <Highlight>B2B2C Sell-outs.</Highlight>
-              </h1>
+              {/*
+                The category label and headline from the website brief (Drive,
+                November 3, 2026). The brief's subheadline is not used yet: it
+                promises texting and calling from the brand's number, which
+                launches with the US demo in December. The sentence on the
+                right says only what the product does today.
+              */}
+              <div>
+                <p className="eyebrow text-blue-pale">{site.category}</p>
+                <h1 className="text-ink mt-4 text-[30px] leading-[1.06] font-bold tracking-[-0.03em] text-balance sm:text-[40px]">
+                  Your brand creates the demand.{" "}
+                  <Highlight>Make sure it becomes an appointment.</Highlight>
+                </h1>
+              </div>
 
               <p className="text-ink-muted max-w-[17rem] lg:justify-self-end text-[13px] leading-[1.6] sm:text-[14px]">
                 LeadHanger qualifies the visitors on your website in real time

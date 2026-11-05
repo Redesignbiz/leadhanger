@@ -24,7 +24,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Lead qualification and distribution for dealer networks`,
+    // The category name, so the title says what the brief wants LeadHanger to
+    // be found by. A middle dot, not a dash: the brief's copy rules have no em
+    // dashes.
+    default: `${site.name} · ${site.category} for dealer networks`,
     template: `%s · ${site.name}`,
   },
   description: site.description,

@@ -11,6 +11,13 @@ export const site = {
   name: 'LeadHanger',
   /** Product's own one-liner. Source: Drive "LLM Agent setup" (LeadBot prompt). */
   tagline: 'The bridge from digital to physical sales',
+  /**
+   * The category the website brief (Drive, November 3, 2026) names the product
+   * by: the label above the home page headline, and the phrase LeadHanger should
+   * be found by in search and in AI answers. Also used in llms.txt and the
+   * structured data.
+   */
+  category: 'Dealer Lead Response',
   description:
     'LeadHanger qualifies website visitors in a real conversation, captures consent, ' +
     'and routes each lead to the right dealer in real time. Built for brands that sell ' +
