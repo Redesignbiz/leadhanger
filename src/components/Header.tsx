@@ -6,6 +6,9 @@ const nav = [
   { label: "How it works", href: "/#how-it-works" },
   { label: "Results", href: "/#results" },
   { label: "Our solution", href: "/our-solution" },
+  // The website brief puts Trust in the top menu: the buyer's IT, security and
+  // legal reviewer should not have to look for it.
+  { label: "Trust", href: "/trust" },
 ];
 
 /**
@@ -24,9 +27,9 @@ const nav = [
  * a full page load when jumping from another route back to a section. On a
  * static site of this size that is the cheaper of the two problems.
  *
- * "/our-solution" is a route rather than an anchor, so it is the one nav item
- * that does use `Link` — none of the above applies to it, and it gets the
- * prefetch.
+ * "/our-solution" and "/trust" are routes rather than anchors, so they are the
+ * nav items that do use `Link` — none of the above applies to them, and they
+ * get the prefetch.
  */
 export function Header() {
   return (

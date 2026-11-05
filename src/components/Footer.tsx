@@ -2,9 +2,29 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { Logo } from "./Logo";
 
+// The product: the home page's sections, /our-solution and /trust, the same
+// order as the header.
 const sections = [
   { label: "How it works", href: "/#how-it-works" },
   { label: "Results", href: "/#results" },
+  { label: "Our solution", href: "/our-solution" },
+  { label: "Trust", href: "/trust" },
+];
+
+// Privacy, support and an address.
+const more = [
+  // In the column, not only in the small legal line: people look for it here,
+  // and California (CalOPPA) expects a conspicuous privacy policy link.
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Support", href: "/support" },
+];
+
+// On every page, small, in the line under the columns, where Twilio's A2P
+// reviewers look for them. The Privacy Policy is in the column above, once.
+// /delete-account is not here; dealers reach it from /support and /privacy.
+const legal = [
+  { label: "SMS Terms", href: "/sms-terms" },
+  { label: "SMS Consent", href: "/sms-consent" },
 ];
 
 /**
@@ -37,64 +57,36 @@ export function Footer() {
             <div className="flex gap-12 sm:gap-20">
               <nav className="flex flex-col gap-3.5">
                 <p className="eyebrow text-ink-dim mb-1">Sections</p>
-                {sections.map((item) => (
-                  <a
+                {sections.map((item) => {
+                  const className =
+                    "text-ink-muted hover:text-ink text-[14px] transition-colors";
+                  // Same rule as the header: a "/#section" anchor stays a
+                  // plain `a`, a route gets `Link` (see Header.tsx).
+                  return item.href.includes("#") ? (
+                    <a key={item.href} href={item.href} className={className}>
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link key={item.href} href={item.href} className={className}>
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              <nav className="flex flex-col gap-3.5">
+                {/* Only what a buyer looks for besides the product; the SMS
+                    pages live in the line at the bottom. */}
+                <p className="eyebrow text-ink-dim mb-1">More</p>
+                {more.map((item) => (
+                  <Link
                     key={item.href}
                     href={item.href}
                     className="text-ink-muted hover:text-ink text-[14px] transition-colors"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 ))}
-              </nav>
-
-              <nav className="flex flex-col gap-3.5">
-                {/* Routes and an address, as against the anchors on the left.
-                    Hence "More" rather than "Contact": the column stopped being
-                    only contact details when /our-solution joined it. */}
-                <p className="eyebrow text-ink-dim mb-1">More</p>
-                <Link
-                  href="/our-solution"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  Our solution
-                </Link>
-                <Link
-                  href="/trust"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  Trust
-                </Link>
-                <Link
-                  href="/support"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  Support
-                </Link>
-                <Link
-                  href="/privacy"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  Privacy
-                </Link>
-                <Link
-                  href="/sms-terms"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  SMS terms
-                </Link>
-                <Link
-                  href="/sms-consent"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  SMS consent
-                </Link>
-                <Link
-                  href="/delete-account"
-                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                >
-                  Delete account
-                </Link>
                 <a
                   href={`mailto:${site.contact.sales}`}
                   className="text-ink-muted hover:text-ink text-[14px] transition-colors"
@@ -105,10 +97,23 @@ export function Footer() {
             </div>
           </div>
 
-          <p className="border-line text-ink-dim mt-12 border-t pt-6 text-[12px]">
-            © {new Date().getFullYear()} {site.company.legalName}. All rights
-            reserved.
-          </p>
+          <div className="border-line text-ink-dim mt-12 flex flex-col gap-3 border-t pt-6 text-[12px] sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {new Date().getFullYear()} {site.company.legalName}. All rights
+              reserved.
+            </p>
+            <nav aria-label="Legal" className="flex flex-wrap gap-x-5 gap-y-2">
+              {legal.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="hover:text-ink transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
         </div>
       </div>
     </footer>
