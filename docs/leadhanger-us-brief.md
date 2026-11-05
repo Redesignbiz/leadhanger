@@ -125,14 +125,46 @@ Blocking, in the order they block:
 
 Not blocking, but wanted:
 
-9. **Real product imagery.** The hero visual is drawn in markup. There are three
-   demo videos in Drive, including a Mavis-branded one, and the live dashboard at
-   `app.leadhanger.com` can be captured.
-10. **Named hosting provider and region** in the privacy notice, once deployment
-   is settled. The current backend runs in Google Cloud europe-west3
-   (Frankfurt). A US region is the simpler answer for US brands.
-11. **Analytics decision.** Adding any invalidates the "no tracking" section.
-12. **The blog.** Twelve drafts exist. A `/insights` route would give the site
+9. **Data region. Open, not decided.** The backend that exists today runs in
+   Google Cloud europe-west3 (Frankfurt). The growth plan and the website
+   brief in Drive expect a US region for US customers in Phase 1, and the
+   plan's Phase 0 architecture decision (November 13, 2026) is where it gets
+   settled. Until then `/trust` says nothing about the region:
+   `site.dataRegions` in `src/lib/site.ts` is empty, and the page leaves the
+   section out. Once decided, list the regions there (more can be added
+   later). The hosting provider is still unnamed, on `/privacy` and `/trust`.
+10. **Real product imagery.** The hero visual is drawn in markup. There are three
+    demo videos in Drive, including a Mavis-branded one, and the live dashboard
+    at `app.leadhanger.com` can be captured.
+11. **What `/trust` does not answer yet.** The page is written for the
+    buyer's IT, security and legal reviewer, and states only what the platform
+    does today. These are left out until they are true or decided, and this
+    reader will ask about each:
+    - **SOC 2.** No report and no roadmap yet. A target date and report type
+      (Type I first, then Type II) would let the page say something.
+    - **Encryption at rest.** State it once the hosting provider is named.
+    - **Consent record per lead (TCPA).** The chat asks for consent, but
+      `brisa-backend` stores no consent field with the request (checked
+      November 5, 2026). Item 7 assumes the record travels with the lead;
+      verify that before either claim is made. Once it is stored, rewrite the
+      "GDPR/KVKK-compliant consent" line in `src/components/HowItWorks.tsx`
+      for a US reader.
+    - **Data region.** See item 9.
+    - **Masked calling.** Not built yet; the website brief plans it for
+      Phase 1, with the US demo on December 4, 2026. Today the app hides the
+      number until it is opened and logs the opening, but the call goes out on
+      the real number.
+    - **CRM integrations.** Only the lead intake API is confirmed. The
+      comparison table's "Self-service" and "Fully integrated" CRM rows need
+      the product team (section 5).
+    - **SSO or multi-factor sign-in, and a DPA.** Neither exists that we know
+      of.
+    - **A downloadable security overview.** The persona's action is to
+      download a document. Generate it from the same content as `/trust`
+      so the two never drift, and keep it ungated: a form would change
+      `/privacy`.
+12. **Analytics decision.** Adding any invalidates the "no tracking" section.
+13. **The blog.** Twelve drafts exist. A `/insights` route would give the site
     something to rank on beyond the one page.
 
 ## 5. Things to verify with the product team

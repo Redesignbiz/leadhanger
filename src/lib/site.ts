@@ -34,7 +34,20 @@ export const site = {
      * here and nowhere else.
      */
     support: 'newyork@redesignbiz.com',
+    /** Printed on /trust, for questionnaires and vulnerability reports. Same inbox for now. */
+    security: 'newyork@redesignbiz.com',
   },
+
+  /**
+   * TODO: open item, not decided. See docs/leadhanger-us-brief.md.
+   * Where the platform's data is stored, for /trust. Empty on purpose: the
+   * backend that exists today runs in Google Cloud europe-west3 (Frankfurt),
+   * while the growth plan and the website brief expect a US region for US
+   * customers. /trust prints no data region while this list is empty. Once it
+   * is decided, list the regions here (more can be added later) and nowhere
+   * else.
+   */
+  dataRegions: [] as string[],
 
   /**
    * Published outcome metrics. These four, and only these four, are cleared for
@@ -104,11 +117,12 @@ export const site = {
 
   /**
    * TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md.
-   * The app sections were added on November 4, 2026. Move both values to the
-   * day this version actually goes live.
+   * Printed on /privacy and /delete-account. Move both values whenever either
+   * page's text changes, to the day that version goes live. Last change:
+   * November 5, 2026, the phone number log wording.
    */
-  privacyUpdatedAt: '2026-11-04',
-  privacyUpdatedLabel: 'November 4, 2026',
+  privacyUpdatedAt: '2026-11-05',
+  privacyUpdatedLabel: 'November 5, 2026',
 
   /**
    * TODO: open item, not confirmed. See docs/leadhanger-us-brief.md.

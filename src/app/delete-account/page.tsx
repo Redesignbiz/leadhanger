@@ -64,7 +64,7 @@ const sections = [
   {
     heading: "What is kept, without your name",
     paragraphs: [
-      "Leads and appointments you followed up are the brand's records, so they stay with the brand. The fields in them that identify you are anonymized. The same applies to the record of customer phone numbers opened from your account, which we keep for as long as security and audit needs require.",
+      "Leads and appointments you followed up are the brand's records, so they stay with the brand. The fields in them that identify you are anonymized. The record of customer phone numbers opened at your locations names the location, not you, and is kept for as long as security and audit needs require.",
     ],
   },
   {
