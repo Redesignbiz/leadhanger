@@ -132,6 +132,14 @@ export const site = {
     shortName: 'Redesign Business',
     /** As registered with D&B and Twilio (A2P 10DLC brand). */
     address: '112 Capitol Trail, Suite A950, Newark, DE 19711',
+    /** The same address in parts, for the Organization structured data. */
+    postalAddress: {
+      streetAddress: '112 Capitol Trail, Suite A950',
+      addressLocality: 'Newark',
+      addressRegion: 'DE',
+      postalCode: '19711',
+      addressCountry: 'US',
+    },
     href: 'https://www.redesignbiz.com',
   },
 

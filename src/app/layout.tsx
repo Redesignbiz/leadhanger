@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { site } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
 /**
@@ -49,6 +50,38 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+/**
+ * Who runs the site and what the product is, for search engines and AI
+ * assistants (website brief, "AI-ready and SEO"). The organization is the
+ * legal entity at its registered address; the brief asks for the New York
+ * address, which needs a street address the site does not have yet.
+ */
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${site.url}/#organization`,
+      name: site.company.legalName,
+      url: site.company.href,
+      email: site.contact.sales,
+      address: { "@type": "PostalAddress", ...site.company.postalAddress },
+      brand: { "@type": "Brand", name: site.name },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${site.url}/#software`,
+      name: site.name,
+      url: site.url,
+      description: site.description,
+      applicationCategory: "BusinessApplication",
+      applicationSubCategory: site.category,
+      operatingSystem: "Web, iOS, Android",
+      publisher: { "@id": `${site.url}/#organization` },
+    },
+  ],
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     /*
@@ -67,6 +100,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="bg-ground text-ink flex min-h-full flex-col font-sans">
+        <JsonLd data={structuredData} />
         {children}
       </body>
     </html>

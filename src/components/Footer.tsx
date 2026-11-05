@@ -112,6 +112,12 @@ export function Footer() {
                   {item.label}
                 </Link>
               ))}
+              {/* A plain `a`: /llms.txt is a text file for AI assistants, not
+                  a page, so there is nothing for `Link` to prefetch. The
+                  website brief puts the link in the footer. */}
+              <a href="/llms.txt" className="hover:text-ink transition-colors">
+                llms.txt
+              </a>
             </nav>
           </div>
         </div>
