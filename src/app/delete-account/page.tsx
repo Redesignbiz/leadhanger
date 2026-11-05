@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/LegalPage";
+import { LegalPage, mailLink } from "@/components/LegalPage";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -26,51 +26,51 @@ export const metadata: Metadata = {
  */
 const sections = [
   {
-    heading: "Why there is no delete button in the app",
+    heading: "Why we handle deletion by request",
     paragraphs: [
-      `${site.name} is a business app. Accounts are set up by the brand or by the owner of a dealer business, not by signing up, and deleting one affects the location it belongs to and any leads still assigned to it. So we delete accounts on request, once we have confirmed the request comes from the account holder.`,
+      `${site.name} is a business app. The brand or the owner of a location creates each account, and deleting an account affects that location and any leads still assigned to it. For this reason, we delete accounts on request, after we confirm the account holder's identity.`,
     ],
   },
   {
     heading: "1. Prepare your request",
     paragraphs: [
-      "Include your full name, the username you use in the app, the name of the dealer business you work for, and a clear statement such as: “Please delete my account and my personal information.”",
+      "Include your full name, the username you use in the app, the name of the location you work for, and a clear statement such as “Please delete my account and my personal information.”",
     ],
   },
   {
-    heading: "2. Send it",
+    heading: "2. Submit your request",
     paragraphs: [
-      `Email it to ${site.contact.privacy} with “Account deletion request” in the subject line.`,
+      `Email your request to ${mailLink(site.contact.privacy)} with “Account deletion request” in the subject line.`,
     ],
   },
   {
-    heading: "3. We confirm it is you",
+    heading: "3. Identity verification",
     paragraphs: [
-      "We check that the request comes from the account holder, and may ask for more information. This stops anyone else from deleting your account in your name.",
+      "We verify that the request comes from the account holder and may ask for additional information. This step prevents others from requesting deletion on your behalf.",
     ],
   },
   {
-    heading: "4. We delete the account and tell you",
+    heading: "4. Deletion and confirmation",
     paragraphs: [
-      `We complete the request within ${site.retention.deletionDays} days and confirm it by email to the address you wrote from. Copies in our backups are overwritten within ${site.retention.backupDays} days after that.`,
+      `We complete the request within ${site.retention.deletionDays} days and confirm it by email to the address the request came from. We overwrite the copies in our backups within ${site.retention.backupDays} days after that.`,
     ],
   },
   {
-    heading: "What is deleted",
+    heading: "Data we delete",
     paragraphs: [
-      "Your account record, name, username and password, the notification tokens of your phones, and your links to dealer locations.",
+      "Your account record, name, username and password, the notification tokens of your devices, and your links to locations.",
     ],
   },
   {
-    heading: "What is kept, without your name",
+    heading: "Data we retain",
     paragraphs: [
-      "Leads and appointments you followed up are the brand's records, so they stay with the brand. The fields in them that identify you are anonymized. The record of customer phone numbers opened at your locations names the location, not you, and is kept for as long as security and audit needs require.",
+      "Leads and appointments you followed up are the brand's records and remain with the brand. We anonymize the fields in them that identify you. The record of customer phone numbers opened at your locations identifies the location, not you, and we retain it for as long as security and audit requirements apply.",
     ],
   },
   {
     heading: "After deletion",
     paragraphs: [
-      "You can no longer sign in, and notifications stop. Deletion cannot be undone. If you need access again, the brand or the owner of your dealer business has to set up a new account, and nothing from the old account carries over.",
+      "Once we complete your request, your account cannot be restored. If you need access again, the brand or the owner of your location can create a new account.",
     ],
   },
 ];
@@ -79,9 +79,9 @@ export default function DeleteAccount() {
   return (
     <LegalPage
       eyebrow="Account"
-      title="Delete your account"
+      title="Delete Your Account"
       effective={site.privacyUpdatedLabel}
-      intro={`You can ask us to delete your ${site.name} account and the personal information linked to it, even if you have deleted the app or can no longer sign in.`}
+      intro={`You can request deletion of your ${site.name} account and the personal information linked to it, including after you have deleted the app or if you can no longer sign in.`}
       sections={sections}
     >
       <p className="text-ink-muted mt-6 text-[15.5px] leading-[1.75]">
@@ -92,7 +92,7 @@ export default function DeleteAccount() {
         >
           {site.contact.privacy}
         </a>
-        . The steps below say what to include.
+        . The steps below describe what to include.
       </p>
     </LegalPage>
   );

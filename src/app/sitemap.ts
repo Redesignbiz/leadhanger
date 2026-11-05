@@ -15,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${site.url}/trust`,
+      // The page's own "Last reviewed" date, from the same constant it prints.
+      lastModified: new Date(site.trustReviewedAt),
       changeFrequency: "monthly",
       priority: 0.5,
     },

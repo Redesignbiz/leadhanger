@@ -56,6 +56,13 @@ export const site = {
   dataRegions: [] as string[],
 
   /**
+   * Printed on /trust as "Last reviewed". A buyer's IT reviewer checks it, so
+   * move it whenever the page is checked against the platform again.
+   */
+  trustReviewedAt: '2026-11-05',
+  trustReviewedLabel: 'November 5, 2026',
+
+  /**
    * Published outcome metrics. These four, and only these four, are cleared for
    * external use — they are the numbers already live on the Redesign Business
    * Bridgestone case study.
