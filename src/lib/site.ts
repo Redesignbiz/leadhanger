@@ -27,15 +27,21 @@ export const site = {
      * so inbound mail keeps landing in the same inbox after this page replaces it.
      */
     sales: 'newyork@redesignbiz.com',
-    privacy: 'newyork@redesignbiz.com',
     /**
-     * Printed on /support, which is the Support URL given to App Store Connect.
-     * Same inbox for now. If a dedicated support address is set up, change it
-     * here and nowhere else.
+     * One role address on the product's own domain for support, privacy and
+     * security (decided November 5, 2026). A city inbox on the operator's
+     * domain read as a sales inbox to a buyer's IT reviewer.
+     *
+     * ⚠ The mailbox must exist before this ships: /support is the Support URL
+     * in App Store Connect, and /privacy and /delete-account tell people to
+     * write here. privacy@ or security@ can be added later as aliases of the
+     * same mailbox; change the matching line here and nowhere else.
      */
-    support: 'newyork@redesignbiz.com',
-    /** Printed on /trust, for questionnaires and vulnerability reports. Same inbox for now. */
-    security: 'newyork@redesignbiz.com',
+    support: 'support@leadhanger.com',
+    /** Printed on /privacy, /delete-account and the legal pages' contact box. */
+    privacy: 'support@leadhanger.com',
+    /** Printed on /trust, for questionnaires and vulnerability reports. */
+    security: 'support@leadhanger.com',
   },
 
   /**
