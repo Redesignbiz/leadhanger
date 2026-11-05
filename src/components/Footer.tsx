@@ -2,12 +2,12 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { Logo } from "./Logo";
 
-// The product: the home page's sections, /our-solution and /trust, the same
+// The product: the home page's sections, /plans and /trust, the same
 // order as the header.
 const sections = [
   { label: "How it works", href: "/#how-it-works" },
   { label: "Results", href: "/#results" },
-  { label: "Our solution", href: "/our-solution" },
+  { label: "Plans", href: "/plans" },
   { label: "Trust", href: "/trust" },
 ];
 

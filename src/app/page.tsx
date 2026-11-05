@@ -14,7 +14,7 @@ import { Footer } from "@/components/Footer";
  * the one ask, just above the footer. Surfaces, Results and
  * Industries keep their earlier places until the page is reviewed as a whole.
  *
- * /our-solution page shows a plan comparison for those interested in pricing and content of our solutions.
+ * /plans compares the three plans, without prices, for those who want them.
  */
 export default function Home() {
   return (

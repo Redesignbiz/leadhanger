@@ -9,9 +9,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${site.url}/our-solution`,
+      url: `${site.url}/plans`,
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    {
+      url: `${site.url}/integrations`,
+      changeFrequency: "monthly",
+      priority: 0.6,
     },
     {
       url: `${site.url}/trust`,

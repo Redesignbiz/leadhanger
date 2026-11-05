@@ -5,7 +5,7 @@ import { Logo } from "./Logo";
 const nav = [
   { label: "How it works", href: "/#how-it-works" },
   { label: "Results", href: "/#results" },
-  { label: "Our solution", href: "/our-solution" },
+  { label: "Plans", href: "/plans" },
   // The website brief puts Trust in the top menu: the buyer's IT, security and
   // legal reviewer should not have to look for it.
   { label: "Trust", href: "/trust" },
@@ -18,7 +18,7 @@ const nav = [
  * Anchor links use an absolute path ("/#results"), never a bare fragment.
  *
  * The header renders on every route. A bare "#results" is dead on /privacy and
- * on /our-solution, because that anchor only exists on the home page.
+ * on /plans, because that anchor only exists on the home page.
  *
  * They are also plain `a` elements rather than `Link`, on purpose: on the home
  * page a `Link` resolves to the current route with only the hash differing, the
@@ -27,7 +27,7 @@ const nav = [
  * a full page load when jumping from another route back to a section. On a
  * static site of this size that is the cheaper of the two problems.
  *
- * "/our-solution" and "/trust" are routes rather than anchors, so they are the
+ * "/plans" and "/trust" are routes rather than anchors, so they are the
  * nav items that do use `Link` — none of the above applies to them, and they
  * get the prefetch.
  */

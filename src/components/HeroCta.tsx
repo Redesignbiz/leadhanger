@@ -36,10 +36,10 @@ export function HeroCta({ clock }: { clock: ReactNode }) {
             {site.cta}
           </a>
           <Link
-            href="/our-solution"
+            href="/plans"
             className="text-ink hover:text-blue-pale text-[15px] font-semibold transition-colors"
           >
-            View pricing
+            View plans
           </Link>
         </div>
       </div>

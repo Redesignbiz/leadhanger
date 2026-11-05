@@ -172,10 +172,21 @@ Not blocking, but wanted:
 Claims on the site that read as fact and were taken from documents rather than
 from the running system:
 
-- "One line of script" for installation.
-- AI-assisted lead matching on the Custom tier, worded as the service-level sheet
-  words it.
-- Customer follow-up by text or email on Pro and Custom.
-- Self-service APIs on Pro for both CRM and CX operations.
-- That the reassignment-on-timeout behaviour is part of LeadHanger generally, not
-  only that one client's configuration.
+- "One line of script" for installation (the home page's How it works). The
+  website brief says the embeddable component ships in Phase 1.
+- On `/plans` (`src/lib/plans.ts`), values taken from the website brief (Drive,
+  November 3, 2026) rather than from the running system:
+  - onboarding times: Starter "Self-serve, 1 day", Business "10 days",
+    Enterprise "4 to 6 weeks";
+  - Business routing "by region, ZIP code, brand and tier";
+  - Enterprise "Full lead operations and dealer scorecard" and the white-label
+    app;
+  - a free 60-day pilot, and integrations "in place within 30 days" of an
+    annual contract (also on `/integrations`).
+
+  Features the brief itself marks as not live carry a label on the page
+  ("Planned", "Launching December", "January 2027").
+
+Settled since: reassignment on timeout is part of LeadHanger generally, not one
+client's configuration (website brief, November 3, 2026). The Lite, Pro and
+Custom claims went with `/our-solution`, which now redirects to `/plans`.
