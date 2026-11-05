@@ -81,7 +81,7 @@ const sections = [
     heading: "What the app collects",
     paragraphs: [
       "Your account. Accounts are set up by the brand or by the owner of your dealer business; there is no sign-up in the app. An account holds your name, your username and password, an email address if one was given for sending your sign-in details, your role (owner or staff), and the dealer locations you work for.",
-      "Your work in the app. The follow-up you record on each lead, such as call outcomes, appointments and notes, is saved with the time and the account that recorded it. We also record each time an account opens a customer's full phone number.",
+      "Your work in the app. The follow-up you record on each lead, such as call outcomes, appointments and notes, is saved with the time and the account that recorded it. We also record each time a customer's full phone number is opened, with the dealer location and the time.",
       "Sign-in and device information. We record when your account signs in, from which platform (iOS, Android or web), and failed sign-in attempts, to protect the account and to help when you are locked out. The app creates a random identifier for its installation and reports it with the app version it runs, so we can see which version each account is on and fix problems. This identifier is not your device's advertising identifier, and deleting the app removes it.",
       "Notifications. If you allow notifications, your phone gives the app a push token, an address for delivering notifications to that phone. We store it with your account so we can tell you when a new lead arrives. Signing out withdraws it, and that phone stops receiving your notifications.",
     ],
