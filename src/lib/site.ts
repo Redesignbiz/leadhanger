@@ -34,7 +34,20 @@ export const site = {
      * here and nowhere else.
      */
     support: 'newyork@redesignbiz.com',
+    /** Printed on /trust, for questionnaires and vulnerability reports. Same inbox for now. */
+    security: 'newyork@redesignbiz.com',
   },
+
+  /**
+   * TODO: open item, not decided. See docs/leadhanger-us-brief.md.
+   * Where the platform's data is stored, for /trust. Empty on purpose: the
+   * backend that exists today runs in Google Cloud europe-west3 (Frankfurt),
+   * while the growth plan and the website brief expect a US region for US
+   * customers. /trust prints no data region while this list is empty. Once it
+   * is decided, list the regions here (more can be added later) and nowhere
+   * else.
+   */
+  dataRegions: [] as string[],
 
   /**
    * Published outcome metrics. These four, and only these four, are cleared for

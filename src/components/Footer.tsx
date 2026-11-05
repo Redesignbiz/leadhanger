@@ -60,6 +60,12 @@ export function Footer() {
                   Our solution
                 </Link>
                 <Link
+                  href="/trust"
+                  className="text-ink-muted hover:text-ink text-[14px] transition-colors"
+                >
+                  Trust
+                </Link>
+                <Link
                   href="/support"
                   className="text-ink-muted hover:text-ink text-[14px] transition-colors"
                 >

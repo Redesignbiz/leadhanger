@@ -6,7 +6,8 @@ import { site } from "@/lib/site";
 export type LegalSection = { heading: string; paragraphs: string[] };
 
 /**
- * Shared frame for /privacy, /sms-terms, /sms-consent and /support. Long-form
+ * Shared frame for /privacy, /sms-terms, /sms-consent, /support, /trust and
+ * /delete-account. Long-form
  * copy, held to the same measure and the same side rules as every section on the
  * home page, so these pages read as part of the site rather than as documents
  * someone linked to. The measure inside is narrower than the rules, because a
@@ -14,8 +15,8 @@ export type LegalSection = { heading: string; paragraphs: string[] };
  * read (by visitors, by carrier reviewers checking SMS compliance, and by App
  * Review checking the privacy and support URLs).
  *
- * /support is not a legal document, so it passes its own eyebrow and address
- * and leaves out the effective date.
+ * /support and /trust are not legal documents, so they pass their own
+ * eyebrow and address and leave out the effective date.
  */
 export function LegalPage({
   title,
