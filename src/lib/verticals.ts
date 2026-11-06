@@ -21,6 +21,12 @@ import type { AuditIndustry, AuditRole } from "./audit";
  *
  * Also still placeholders: the product screens (real English screens are due
  * December 4) and the demo videos.
+ *
+ * FAQ: sector questions only, seven per page, within the brief's six to eight
+ * (p.26). The first two on each page are the brief's own examples (p.16); the
+ * rest were agreed with the team on November 6, 2026. Questions that apply to
+ * every sector belong on /plans (commercial) or /how-it-works (product), not
+ * here.
  */
 export type VerticalItem = { text: string; availability?: Availability };
 
@@ -147,6 +153,26 @@ export const verticals: readonly Vertical[] = [
         q: "How is consent recorded?",
         a: "The chat asks for consent in the brand's own words before the request is sent, and consent to calls and texts is a separate opt-in. A consent log for each lead, with the time and the wording shown, is planned.",
       },
+      {
+        q: "What do you ask a homeowner who wants new windows?",
+        a: "How many windows they need, what type, when they want them installed, and a photo. The dealer sees the answers before calling. These window questions launch in December.",
+      },
+      {
+        q: "How do you report on dealers?",
+        a: "In the brand dashboard. For every request, it shows which dealer received it, how fast the dealer responded and whether the request became an appointment. It adds these up by dealer and region.",
+      },
+      {
+        q: "How is this different from buying shared leads?",
+        a: "Lead marketplaces sell the same homeowner to several companies at once. LeadHanger handles the requests from your own website and sends each one to one of your dealers.",
+      },
+      {
+        q: "What happens if a dealer does not call back in time?",
+        a: "The request moves to the next dealer after the time you set, so the homeowner is not left waiting.",
+      },
+      {
+        q: "Do our dealers need new software?",
+        a: "Nothing to install at the showroom. Dealers receive and call each request from the LeadHanger app on their phone.",
+      },
     ],
   },
   {
@@ -236,6 +262,26 @@ export const verticals: readonly Vertical[] = [
       {
         q: "What if the store is busy today?",
         a: "If a store does not answer a request in time, the request moves to the next store, so another store can pick it up.",
+      },
+      {
+        q: "What do you ask a customer who needs tires?",
+        a: "The tire size, how many tires, the nearest store, and whether today works for a fitting. The store sees the answers before calling.",
+      },
+      {
+        q: "Who books the fitting?",
+        a: "The store calls the customer from the LeadHanger app and books the fitting. Letting the customer pick a slot online is planned.",
+      },
+      {
+        q: "How do you report on stores?",
+        a: "In the brand dashboard. For every request, it shows which store received it, how fast the store responded and whether the request became a booking. It adds these up by store and region, for the chain or the brand.",
+      },
+      {
+        q: "Does it work with our shop management system?",
+        a: "TireConnect, Tekmetric and AutoLeap connect on request. A pilot needs no connection.",
+      },
+      {
+        q: "Does it work for a tire brand as well as a chain?",
+        a: "Yes. A chain sends requests to its own stores; a tire brand sends them to the dealers that sell its tires.",
       },
     ],
   },
