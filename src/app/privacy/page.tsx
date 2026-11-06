@@ -19,7 +19,8 @@ export const metadata: Metadata = {
  * collects, how it is used, who it is shared with, how long it is kept, and how
  * a user revokes consent or deletes their account.
  *
- * It speaks to three readers: someone who emailed us from the website, someone
+ * It speaks to three readers: someone who emailed us or requested an audit on
+ * the website, someone
  * who uses the LeadHanger app at a location, and a brand's customer who gets
  * text messages. Their parts are grouped and listed at the top, so nobody
  * reads the others' to find their own. A buyer's legal reviewer reads it too,
@@ -38,8 +39,13 @@ export const metadata: Metadata = {
  *      and tracking" wrong and, in several US states, makes a consent banner
  *      necessary. The one exception is the product video, and only after a
  *      visitor presses play (see components/Video.tsx); the notice says so.
- *   2. There is no form on the website. Contact happens by email. Adding a form
- *      means naming what it collects and where the submissions are stored.
+ *   2. The website has one form, the free audit request on /audit
+ *      (components/AuditForm.tsx). It collects exactly the fields listed under
+ *      "This website › Information we collect", and no phone number. Adding a
+ *      field, or another form, means listing it there. Where requests go is
+ *      an open item: app/api/audit forwards them to AUDIT_FORWARD_URL, and
+ *      the service behind that address must be added to "Disclosure of
+ *      information" before it receives anything.
  *   3. The app uses no location, contacts, photos, camera or microphone, and
  *      runs no analytics, crash-reporting or session-recording service. The app
  *      code (brisa-frontend/dealer-mobile) still carries the Microsoft Clarity
@@ -118,6 +124,7 @@ const sections: LegalSection[] = [
     heading: "Information we collect",
     paragraphs: [
       "If you email us, we receive the information you include in your message, such as your name, email address, company and details about your business. We retain this correspondence to respond to you and to continue the conversation.",
+      "If you request a free Lead Response Audit through the form on this website, we collect your role, your industry, the number of dealer locations, the website you want us to audit and your work email address. We use this information to run the audit and to contact you about your request, and we retain it as business correspondence.",
       "Our hosting provider records standard technical information when someone requests a page, including IP address, user agent and the URL requested. It uses these logs to keep the site available and secure.",
     ],
   },
@@ -209,7 +216,7 @@ const sections: LegalSection[] = [
     group: SHARED,
     heading: "How we use information",
     paragraphs: [
-      "On the website, we use information to respond to you, to assess whether LeadHanger meets your needs, and to keep records of our business communications. We do not use messages sent to us for unrelated marketing.",
+      "On the website, we use information to respond to you, to run an audit you request, to assess whether LeadHanger meets your needs, and to keep records of our business communications. We do not use messages or audit requests sent to us for unrelated marketing.",
       "In the app, we use information to sign you in and secure your account, to deliver each lead to the right location and notify you of its arrival, to show the brand and the owner of your location the follow-up on each lead, and to keep the app working and up to date. We do not use it for anything else.",
     ],
   },

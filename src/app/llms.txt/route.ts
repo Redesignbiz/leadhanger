@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
 import { planFaqs } from "@/lib/plans";
+import { verticals } from "@/lib/verticals";
 
 /**
  * /llms.txt: a plain summary of LeadHanger for AI assistants, in the llms.txt
@@ -7,14 +8,21 @@ import { planFaqs } from "@/lib/plans";
  * brief asks for the product, the category, the page list and short FAQ
  * answers.
  *
- * Built from site.ts and lib/plans.ts, so it says nothing the site does not.
- * Add a page here when it ships (the brief's vertical pages, /insights, /audit),
+ * Built from site.ts, lib/verticals.ts and lib/plans.ts, so it says nothing the
+ * site does not.
+ * Add a page here when it ships (/insights, the product pages),
  * not before. Static: generated once at build time.
  */
 export const dynamic = "force-static";
 
 const pages: { name: string; path: string; about: string }[] = [
   { name: "Home", path: "/", about: "what LeadHanger does and how it works" },
+  ...verticals.map((vertical) => ({
+    name: vertical.name,
+    path: `/${vertical.slug}`,
+    about: vertical.description,
+  })),
+  { name: "Free Lead Response Audit", path: "/audit", about: "request a free audit: 3 test inquiries through the brand's site and dealers, and a one-page result within a week" },
   { name: "Plans", path: "/plans", about: "three plans compared, without prices" },
   { name: "Integrations", path: "/integrations", about: "what connects today and what is planned" },
   { name: "Security & Compliance", path: "/trust", about: "access control, authentication, encryption, consent capture, SMS compliance and subprocessors" },

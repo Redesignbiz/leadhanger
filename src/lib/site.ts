@@ -31,8 +31,10 @@ export const site = {
    */
   url: 'https://leadhanger.com',
 
-  /** Shown in the nav and repeated in the closing section. */
-  cta: 'Book an Intro',
+  /*
+   * The site's main action is the free Lead Response Audit; its labels live
+   * in lib/audit.ts, next to the form.
+   */
 
   contact: {
     /**
@@ -152,9 +154,9 @@ export const site = {
   /**
    * TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md.
    * Printed on /privacy and /delete-account. Move both values whenever either
-   * page's text changes, to the day that version goes live. Last change:
-   * November 6, 2026, the website address printed in "Scope" (leadhanger.com,
-   * without www).
+   * page's text changes, to the day that version goes live. Last changes,
+   * November 6, 2026: the website address printed in "Scope" (leadhanger.com,
+   * without www), and the audit request form under "This website".
    */
   privacyUpdatedAt: '2026-11-06',
   privacyUpdatedLabel: 'November 6, 2026',

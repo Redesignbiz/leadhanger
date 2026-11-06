@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
+import { verticals } from "@/lib/verticals";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -7,6 +8,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: site.url,
       changeFrequency: "monthly",
       priority: 1,
+    },
+    ...verticals.map((vertical) => ({
+      url: `${site.url}/${vertical.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+    {
+      url: `${site.url}/audit`,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       url: `${site.url}/plans`,

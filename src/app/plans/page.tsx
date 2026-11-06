@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PlanCards, PlanTable } from "@/components/PlanComparison";
 import { Faq } from "@/components/Faq";
 import { site } from "@/lib/site";
+import { audit } from "@/lib/audit";
 import { planFaqs } from "@/lib/plans";
 
 export const metadata: Metadata = {
@@ -106,14 +107,12 @@ export default function Plans() {
                   We will help you choose.
                 </span>
               </p>
-              <a
-                href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(
-                  `${site.name} demo request`,
-                )}`}
+              <Link
+                href="/audit"
                 className="bg-blue hover:bg-blue-hover rounded-full px-6 py-3 text-[15px] font-semibold text-white transition-colors"
               >
-                {site.cta}
-              </a>
+                {audit.cta}
+              </Link>
             </div>
           </div>
         </div>

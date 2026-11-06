@@ -1,4 +1,5 @@
-import { site } from "@/lib/site";
+import Link from "next/link";
+import { audit } from "@/lib/audit";
 import { STREETS } from "@/lib/streets";
 import { MapBackdrop } from "./MapBackdrop";
 import { Section } from "./Section";
@@ -7,11 +8,10 @@ import { StorePaths } from "./StageIcons";
 /**
  * The ask, carried over from the corporate site, and the page's close.
  *
- * It carries `id="demo"`, so every "Book an Intro" on the site (the header's
- * included) lands here. Its own button opens a mail to sales: there is no form
- * on this site and no backend to post one to, and a form that silently drops
- * submissions is worse than an address. When a scheduling link or a form
- * endpoint exists, this button is the one place that needs to change.
+ * Like every main action on the site, it leads to the free Lead Response
+ * Audit (/audit), with the brief's own description of it (lib/audit.ts). It
+ * keeps `id="demo"`, the anchor the old "Book an Intro" buttons pointed at,
+ * so links to /#demo still land on the ask.
  *
  * A contained box rather than a full-bleed band, so it reads as a pause in the
  * page and not as a section of its own. It sits on `blue-deep`, the same value
@@ -105,18 +105,14 @@ export function PartnerCta() {
           See how your demand becomes dealer appointments
         </h2>
         <p className="text-on-blue-muted mt-5 max-w-xl text-[16px] leading-[1.65] sm:text-[17px]">
-          In a short demo, we show how LeadHanger routes each inquiry to the
-          right dealer, moves late leads to the next one and reports the result
-          back to your brand.
+          {audit.intro}
         </p>
-        <a
-          href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(
-            "LeadHanger demo request",
-          )}`}
+        <Link
+          href="/audit"
           className="text-blue hover:bg-on-blue-muted mt-8 inline-flex rounded-full bg-white px-6 py-3 text-[15px] font-semibold transition-colors"
         >
-          {site.cta}
-        </a>
+          {audit.cta}
+        </Link>
       </div>
     </Section>
   );

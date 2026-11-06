@@ -36,8 +36,8 @@ const contract = planRows.find((row) => row.label === "Contract");
  * and how it is contracted, and leads to a conversation. Business is the
  * highlighted plan, as the brief asks.
  *
- * The buttons are mail links with the plan in the subject: there is no form on
- * this site yet (the reasoning is in PartnerCta.tsx and on /privacy).
+ * The buttons are mail links with the plan in the subject. The site's one form
+ * is the audit request on /audit; a plan enquiry stays an email.
  */
 export function PlanCards() {
   return (

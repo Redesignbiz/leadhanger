@@ -1,15 +1,22 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
+import { verticals } from "@/lib/verticals";
 import { Logo } from "./Logo";
 
-// The product: the header's items in the header's order, plus /integrations,
-// which has no place in the header until the website brief's Product menu
-// exists.
+// The website brief's "Solutions": one page per vertical, from lib/verticals.ts,
+// the same list as the header's Solutions menu.
+const solutions = verticals.map((vertical) => ({
+  label: vertical.name,
+  href: `/${vertical.slug}`,
+}));
+
+// The header's Product, Plans, Proof and Trust entries, in the header's order.
+// Proof is the home page's Results section for now (see Header.tsx).
 const sections = [
   { label: "How it works", href: "/#how-it-works" },
-  { label: "Results", href: "/#results" },
-  { label: "Plans", href: "/plans" },
   { label: "Integrations", href: "/integrations" },
+  { label: "Plans", href: "/plans" },
+  { label: "Results", href: "/#results" },
   { label: "Trust", href: "/trust" },
 ];
 
@@ -56,7 +63,20 @@ export function Footer() {
               </p>
             </div>
 
-            <div className="flex gap-12 sm:gap-20">
+            <div className="flex flex-wrap gap-x-12 gap-y-10 sm:gap-x-16 lg:gap-x-20">
+              <nav className="flex flex-col gap-3.5">
+                <p className="eyebrow text-ink-dim mb-1">Solutions</p>
+                {solutions.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-ink-muted hover:text-ink text-[14px] transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+
               <nav className="flex flex-col gap-3.5">
                 <p className="eyebrow text-ink-dim mb-1">Sections</p>
                 {sections.map((item) => {

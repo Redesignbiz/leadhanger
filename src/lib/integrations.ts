@@ -54,7 +54,7 @@ export const integrationGroups: readonly {
     name: "Dealer systems",
     items: [
       {
-        name: "Leap, MarketSharp, TireConnect, Tekmetric",
+        name: "Leap, MarketSharp, TireConnect, Tekmetric, AutoLeap",
         availability: "on-request",
       },
     ],

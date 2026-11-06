@@ -72,8 +72,8 @@ Blocking, in the order they block:
    drawn for this build. See `docs/images.md`.
 2. **Legal review of the privacy notice.** `/privacy` is a draft written to match
    what the site and the app actually do. Several of its claims depend on both
-   staying as built (no cookies or analytics on the site, no form, no location or
-   analytics in the app). Each is called out in a comment at the top of
+   staying as built (no cookies or analytics on the site, one form with the
+   fields it lists, no location or analytics in the app). Each is called out in a comment at the top of
    `src/app/privacy/page.tsx`.
 3. **Account deletion by request, as in Yeni Müşterim.** `/privacy`, `/support`
    and `/delete-account` are the pages App Review reads (the first two are the
@@ -120,8 +120,27 @@ Blocking, in the order they block:
    answer stops at what the platform does and hands the wording to the client's
    counsel. Worth a proper answer before the first US deal, because it will be
    asked.
-8. **Demo CTA.** Today it is a `mailto:`. A scheduling link or a real form would
-   convert better. One place to change: `src/components/Demo.tsx`.
+8. **The audit form's destination and calendar. Open.** `/audit`, the free
+   Lead Response Audit, is the site's main action since November 6, 2026:
+   the header, the vertical pages, the hero story's end card and the closing
+   sections of the home page, `/plans` and `/integrations` lead there. The form
+   posts each request to `/api/audit`, which forwards it as JSON to the
+   address in `AUDIT_FORWARD_URL`. Nothing is connected yet:
+   - Decide what receives the requests. The website brief's interim plan is
+     an email to the team and a row in a table, until the intake API on the
+     US demo account can take them as LeadHanger leads. Name that service in
+     `/privacy` under "Disclosure of information", then set
+     `AUDIT_FORWARD_URL` in Vercel.
+   - Until then, in production the form says it could not send the request
+     and offers the same details as an email to sales, so nothing is lost but
+     nothing is stored. In development the route logs the request and shows
+     the second step.
+   - The second step, open times for a 20-minute call, is a placeholder until
+     the booking tool is chosen.
+   - Every main action leads to `/audit` (November 6, 2026), and "Book an
+     Intro" is gone. Mail to sales remains only where the brief has its own
+     buttons: the plan cards' "Talk to sales" and "Ask about a free 60-day
+     pilot", and the pilot button on the vertical pages.
 
 Not blocking, but wanted:
 

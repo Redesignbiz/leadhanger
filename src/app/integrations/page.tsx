@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AvailabilityBadge } from "@/components/AvailabilityBadge";
 import { site } from "@/lib/site";
+import { audit } from "@/lib/audit";
 import { integrationGroups } from "@/lib/integrations";
 
 export const metadata: Metadata = {
@@ -176,14 +177,12 @@ export default function Integrations() {
                   We will map the connection with you.
                 </span>
               </p>
-              <a
-                href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(
-                  `${site.name} integration question`,
-                )}`}
+              <Link
+                href="/audit"
                 className="bg-blue hover:bg-blue-hover rounded-full px-6 py-3 text-[15px] font-semibold text-white transition-colors"
               >
-                {site.cta}
-              </a>
+                {audit.cta}
+              </Link>
             </div>
           </div>
         </div>
