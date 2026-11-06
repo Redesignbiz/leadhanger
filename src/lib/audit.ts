@@ -44,12 +44,32 @@ export type AuditRole = (typeof auditRoles)[number]["value"];
 export type AuditIndustry = (typeof auditIndustries)[number]["value"];
 export type AuditLocations = (typeof auditLocations)[number]["value"];
 
+/**
+ * Where a request came from, sent with it so the lead record shows which
+ * channel produced the audit (website brief, p.12 and p.18): the cold email's
+ * `ref`, the ad's UTM parameters and Google Ads click ID, read from the link
+ * the visitor arrived on, and the page the form was on. Nothing else.
+ */
+export const auditSourceKeys = [
+  "ref",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "page",
+] as const;
+
+export type AuditSource = Partial<Record<(typeof auditSourceKeys)[number], string>>;
+
 export type AuditRequest = {
   role: AuditRole;
   industry: AuditIndustry;
   locations: AuditLocations;
   website: string;
   email: string;
+  source?: AuditSource;
 };
 
 /** A link to /audit with the role and industry already chosen. */
@@ -94,6 +114,18 @@ function oneOf<T extends string>(options: readonly { value: T }[], value: unknow
   return options.find((option) => option.value === value)?.value ?? null;
 }
 
+/** Keeps only the known source fields, as short strings. */
+export function parseAuditSource(input: unknown): AuditSource | undefined {
+  if (typeof input !== "object" || input === null) return undefined;
+  const raw = input as Record<string, unknown>;
+  const source: AuditSource = {};
+  for (const key of auditSourceKeys) {
+    const value = raw[key];
+    if (typeof value === "string" && value.trim()) source[key] = value.trim().slice(0, 200);
+  }
+  return Object.keys(source).length ? source : undefined;
+}
+
 /** Checks a submission. Returns the cleaned request, or null if anything is missing or malformed. */
 export function parseAuditRequest(input: unknown): AuditRequest | null {
   if (typeof input !== "object" || input === null) return null;
@@ -109,7 +141,8 @@ export function parseAuditRequest(input: unknown): AuditRequest | null {
   if (website.length < 4 || website.length > 200 || !website.includes(".")) return null;
   if (email.length > 254 || !emailPattern.test(email)) return null;
 
-  return { role, industry, locations, website, email };
+  const source = parseAuditSource(body.source);
+  return { role, industry, locations, website, email, ...(source ? { source } : {}) };
 }
 
 export function labelOf(

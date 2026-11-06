@@ -39,10 +39,19 @@ export const metadata: Metadata = {
  *      and tracking" wrong and, in several US states, makes a consent banner
  *      necessary. The one exception is the product video, and only after a
  *      visitor presses play (see components/Video.tsx); the notice says so.
- *   2. The website has one form, the free audit request on /audit
- *      (components/AuditForm.tsx). It collects exactly the fields listed under
- *      "This website › Information we collect", and no phone number. Adding a
- *      field, or another form, means listing it there. Where requests go is
+ *   2. The website has one form, the free audit request on /audit and on the
+ *      ad landing pages (components/AuditForm.tsx). It collects exactly the
+ *      fields listed under "This website › Information we collect", and no
+ *      phone number, and sends where the visitor came from (the page, and the
+ *      link's ref, UTM and gclid parameters; lib/audit.ts). Adding a field, or
+ *      another form, means listing it there. "Disclosure of information" says
+ *      we send Google the ad's click ID when a click leads to a request (an
+ *      offline conversion, website brief p.18), and nothing else from the
+ *      form. The upload itself is not built yet (November 6, 2026); when it
+ *      is, it must send only the click ID and the conversion. Counsel should
+ *      confirm that this fits "we do not share it for cross-context
+ *      behavioral advertising", for example with Google's restricted data
+ *      processing switched on. Where requests go is
  *      an open item: app/api/audit forwards them to AUDIT_FORWARD_URL, and
  *      the service behind that address must be added to "Disclosure of
  *      information" before it receives anything.
@@ -125,6 +134,7 @@ const sections: LegalSection[] = [
     paragraphs: [
       "If you email us, we receive the information you include in your message, such as your name, email address, company and details about your business. We retain this correspondence to respond to you and to continue the conversation.",
       "If you request a free Lead Response Audit through the form on this website, we collect your role, your industry, the number of dealer locations, the website you want us to audit and your work email address. We use this information to run the audit and to contact you about your request, and we retain it as business correspondence.",
+      "The form also records where the request came from: the page you used and, when the link that brought you carries them, its campaign details, such as UTM parameters, a Google Ads click ID or a reference from one of our emails. We use them to see which of our campaigns lead to audit requests.",
       "Our hosting provider records standard technical information when someone requests a page, including IP address, user agent and the URL requested. It uses these logs to keep the site available and secure.",
     ],
   },
@@ -216,7 +226,7 @@ const sections: LegalSection[] = [
     group: SHARED,
     heading: "How we use information",
     paragraphs: [
-      "On the website, we use information to respond to you, to run an audit you request, to assess whether LeadHanger meets your needs, and to keep records of our business communications. We do not use messages or audit requests sent to us for unrelated marketing.",
+      "On the website, we use information to respond to you, to run an audit you request, to see which of our campaigns lead to audit requests, to assess whether LeadHanger meets your needs, and to keep records of our business communications. We do not use messages or audit requests sent to us for unrelated marketing.",
       "In the app, we use information to sign you in and secure your account, to deliver each lead to the right location and notify you of its arrival, to show the brand and the owner of your location the follow-up on each lead, and to keep the app working and up to date. We do not use it for anything else.",
     ],
   },
@@ -235,6 +245,7 @@ const sections: LegalSection[] = [
           "Twilio, which delivers text messages",
         ],
       },
+      "If you arrive from one of our Google Ads ads and then request an audit, we send Google the click ID from that ad and the fact that the click led to a request, so we can measure which ads work. We send Google nothing else from the form, such as your email address or the website you want audited. Google's privacy policy governs how Google handles the click ID.",
       "We may also disclose information where the law requires it or to protect our rights.",
       "We do not sell personal information, and we do not share it for cross-context behavioral advertising.",
     ],

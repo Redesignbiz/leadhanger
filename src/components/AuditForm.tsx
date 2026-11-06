@@ -10,6 +10,8 @@ import {
   isPersonalEmail,
   labelOf,
   parseAuditRequest,
+  parseAuditSource,
+  type AuditIndustry,
   type AuditRequest,
 } from "@/lib/audit";
 import { MediaPlaceholder } from "./MediaPlaceholder";
@@ -25,8 +27,14 @@ import { MediaPlaceholder } from "./MediaPlaceholder";
  * by email, so a request is never silently lost.
  *
  * A link from a vertical page can choose the role and industry in advance
- * (`/audit?role=brand&industry=tires`, built by `auditHref`). The query is
- * read after hydration, so the page itself stays static.
+ * (`/audit?role=brand&industry=tires`, built by `auditHref`); an ad landing
+ * page chooses the industry with the `industry` prop. The query is read after
+ * hydration, so the page itself stays static. The same query gives the
+ * request its source: a cold email's `ref`, an ad's UTM parameters and
+ * Google Ads click ID (lib/audit.ts).
+ *
+ * `variant="embedded"` is for a page with its own headline, the ad landing
+ * pages: the form's title becomes a heading inside that page.
  */
 
 type Field = "role" | "industry" | "locations" | "website" | "email";
@@ -49,12 +57,10 @@ function prefilled(search: string): Choices {
   const query = new URLSearchParams(search);
   const role = query.get("role");
   const industry = query.get("industry");
-  return {
-    role: auditRoles.some((option) => option.value === role) ? role! : undefined,
-    industry: auditIndustries.some((option) => option.value === industry)
-      ? industry!
-      : undefined,
-  };
+  const choices: Choices = {};
+  if (auditRoles.some((option) => option.value === role)) choices.role = role!;
+  if (auditIndustries.some((option) => option.value === industry)) choices.industry = industry!;
+  return choices;
 }
 
 function mailBody(request: Partial<AuditRequest>) {
@@ -126,7 +132,14 @@ function Choice({
 const inputClass =
   "border-line-strong bg-panel text-ink placeholder:text-ink-dim focus:border-blue-pale mt-3 block w-full rounded-md border px-4 py-3 text-[16px] outline-none transition-colors aria-invalid:border-rose";
 
-export function AuditForm() {
+export function AuditForm({
+  variant = "page",
+  industry,
+}: {
+  variant?: "page" | "embedded";
+  industry?: AuditIndustry;
+}) {
+  const embedded = variant === "embedded";
   const search = useSearch();
   const [choices, setChoices] = useState<Choices>({});
   const [website, setWebsite] = useState("");
@@ -135,8 +148,9 @@ export function AuditForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "failed">("idle");
   const [sent, setSent] = useState<AuditRequest | null>(null);
 
-  // A choice the visitor makes wins over the one the link brought.
-  const chosen: Choices = { ...prefilled(search), ...choices };
+  // A choice the visitor makes wins over the one the link brought, and the
+  // link's over the page's.
+  const chosen: Choices = { ...(industry ? { industry } : {}), ...prefilled(search), ...choices };
   const draft = { ...chosen, website: website.trim(), email: email.trim() } as Partial<AuditRequest> & {
     website: string;
     email: string;
@@ -173,11 +187,15 @@ export function AuditForm() {
 
     setStatus("sending");
     const fax = new FormData(event.currentTarget).get("fax");
+    const source = parseAuditSource({
+      ...Object.fromEntries(new URLSearchParams(search)),
+      page: window.location.pathname,
+    });
     try {
       const response = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...request, fax }),
+        body: JSON.stringify({ ...request, source, fax }),
       });
       if (!response.ok) throw new Error(String(response.status));
       setSent(request);
@@ -189,7 +207,7 @@ export function AuditForm() {
 
   return (
     <div className="max-w-2xl">
-      <div className="reveal">
+      <div className={embedded ? "" : "reveal"}>
         <div className="flex items-center gap-4 sm:gap-6">
           <span className="eyebrow text-blue-pale shrink-0">
             Step {sent ? 2 : 1} of 2
@@ -197,16 +215,24 @@ export function AuditForm() {
           <span className="bg-line h-px flex-1" aria-hidden />
         </div>
 
-        <h1 className="text-ink mt-8 text-[30px] leading-[1.08] font-bold tracking-[-0.03em] text-balance sm:text-[42px]">
-          {audit.title}
-        </h1>
-        <p className="text-ink-muted mt-6 text-[15px] leading-[1.65] sm:text-[17px]">
+        {embedded ? (
+          <h2 className="text-ink mt-6 text-[24px] leading-[1.12] font-bold tracking-[-0.025em] text-balance sm:text-[28px]">
+            {audit.title}
+          </h2>
+        ) : (
+          <h1 className="text-ink mt-8 text-[30px] leading-[1.08] font-bold tracking-[-0.03em] text-balance sm:text-[42px]">
+            {audit.title}
+          </h1>
+        )}
+        <p
+          className={`text-ink-muted text-[15px] leading-[1.65] ${embedded ? "mt-4" : "mt-6 sm:text-[17px]"}`}
+        >
           {audit.intro}
         </p>
       </div>
 
       {sent ? (
-        <div className="mt-12">
+        <div className={embedded ? "mt-8" : "mt-12"}>
           <h2
             ref={focusOnMount}
             tabIndex={-1}
@@ -228,7 +254,11 @@ export function AuditForm() {
           </p>
         </div>
       ) : (
-        <form noValidate onSubmit={submit} className="mt-12 space-y-9">
+        <form
+          noValidate
+          onSubmit={submit}
+          className={`space-y-9 ${embedded ? "mt-8" : "mt-12"}`}
+        >
           <Choice
             name="role"
             legend="I am a"
