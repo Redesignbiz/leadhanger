@@ -39,7 +39,7 @@ const industries = [
   },
   {
     name: "Appliances and home improvement",
-    photo: "/images/industries/appliances.webp",
+    photo: "/images/industries/home-improvement.webp",
     detail: "Delivery and install",
   },
 ];

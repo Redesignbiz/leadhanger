@@ -55,7 +55,7 @@ Real material that could replace it:
 ## Industry photos
 
 Six Unsplash photos, one per industry card, resized to 1200px wide and saved as
-WebP (15–80 KB each). The originals are in `industries/` at the project root;
+WebP (15–90 KB each). The originals are in `industries/` at the project root;
 that folder is source material, not served, and is not imported anywhere.
 
 | File | Unsplash original |
@@ -65,7 +65,7 @@ that folder is source material, not served, and is not imported anywhere.
 | `kitchen-bath.webp` | Aaron Huber, `G7sE2S4Lab4` |
 | `insurance.webp` | Igor Lolatto, `TdwYsTmA2Bc` |
 | `batteries.webp` | Wesley Tingey, `E4Oz0TZUDe8` |
-| `appliances.webp` | Josh Lemmon, `0t6fkXvg9hs` |
+| `home-improvement.webp` | Meg, `YldJ2NIz1Yo` (November 6, 2026; replaces Josh Lemmon's `0t6fkXvg9hs`) |
 
 The Unsplash licence does not require credit. Two photos show a brand: the
 heat pumps carry the alpha innotec mark and the battery is an Energizer.
