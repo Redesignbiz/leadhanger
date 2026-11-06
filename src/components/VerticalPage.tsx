@@ -4,6 +4,7 @@ import { Footer } from "./Footer";
 import { Section, SectionHeading } from "./Section";
 import { AvailabilityBadge } from "./AvailabilityBadge";
 import { MediaPlaceholder } from "./MediaPlaceholder";
+import { ProductScreen } from "./ProductScreen";
 import { Faq } from "./Faq";
 import { site } from "@/lib/site";
 import { audit, auditHref } from "@/lib/audit";
@@ -70,7 +71,7 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             </div>
 
             <div className="reveal flex justify-center lg:justify-end">
-              <MediaPlaceholder label={vertical.screenLabel} />
+              <ProductScreen screen={vertical.screen} />
             </div>
           </div>
         </Section>

@@ -7,7 +7,7 @@ import { Logo } from "./Logo";
 import { Section } from "./Section";
 import { AuditForm } from "./AuditForm";
 import { AvailabilityBadge } from "./AvailabilityBadge";
-import { MediaPlaceholder } from "./MediaPlaceholder";
+import { ProductScreen } from "./ProductScreen";
 import { UnverifiedFigure } from "./DraftNote";
 import { referenceLine } from "./ProductPage";
 
@@ -27,7 +27,7 @@ import { referenceLine } from "./ProductPage";
  * 20 regions · New York", with the client named anonymously
  * (`site.reference`) until its written permission (decided November 6, 2026)
  * and the dealer count marked to verify (the network is passing 100). The
- * screen is a placeholder until the English screens.
+ * screen is an English mockup (lib/screens.ts) until the English screens.
  */
 export function LandingPage({ landing }: { landing: Landing }) {
   const vertical = verticalBySlug(landing.industry);
@@ -99,7 +99,7 @@ export function LandingPage({ landing }: { landing: Landing }) {
             ))}
           </ol>
           <div className="mt-12 flex justify-center">
-            <MediaPlaceholder label={landing.screen.label} kind={landing.screen.kind} />
+            <ProductScreen screen={landing.screen} />
           </div>
         </Section>
 

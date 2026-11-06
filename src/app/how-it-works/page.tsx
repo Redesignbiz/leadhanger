@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
-import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import { ProductScreen } from "@/components/ProductScreen";
 import { FeatureList, type Feature } from "@/components/FeatureList";
 import { ProductHero, referenceLine } from "@/components/ProductPage";
 import { Proof, type ProofLine } from "@/components/Proof";
@@ -11,6 +11,7 @@ import { Faq } from "@/components/Faq";
 import { productFaqs } from "@/lib/product";
 import { site } from "@/lib/site";
 import { homeShareImage } from "@/lib/share";
+import type { Screen } from "@/lib/screens";
 
 export const metadata: Metadata = {
   title: "How it works",
@@ -31,9 +32,9 @@ export const metadata: Metadata = {
  * strip name (p.15), each with what it covers and a screen, then short notes
  * on how the metrics are defined.
  *
- * Labels follow the brief's confirmation list (p.31). The screens are
- * placeholders until the English screens from the US demo account (December
- * 4, 2026). The metric definitions are ours and need the product team's
+ * Labels follow the brief's confirmation list (p.31). The screens are English
+ * mockups (lib/screens.ts) until the English screens from the US demo account
+ * (December 4, 2026). The metric definitions are ours and need the product team's
  * confirmation (docs/leadhanger-us-brief.md, section 5).
  *
  * Each step opens with its claim and a proof (brief p.25), naming the client
@@ -47,7 +48,7 @@ const steps: {
   body: string;
   proof: ProofLine;
   items: readonly Feature[];
-  screen: { label: string; kind: "screen" | "desktop" };
+  screen: Screen;
 }[] = [
   {
     title: "Capture",
@@ -58,7 +59,7 @@ const steps: {
       { text: "Window question set: number of windows, type, timing and a photo" },
       { text: "Consent captured in your brand's own words" },
     ],
-    screen: { label: "The chat on a brand's site", kind: "screen" },
+    screen: { label: "The chat on a brand's site", kind: "screen", image: "chatTires" },
   },
   {
     title: "Route",
@@ -72,7 +73,7 @@ const steps: {
       { text: "By region, ZIP code, brand and tier" },
       { text: "AI-assisted matching", availability: "planned" },
     ],
-    screen: { label: "Routing rules in the brand dashboard", kind: "desktop" },
+    screen: { label: "Routing rules in the brand dashboard", kind: "desktop", image: "dashboardRules" },
   },
   {
     title: "Respond and book",
@@ -89,7 +90,7 @@ const steps: {
       { text: "One brand number and one conversation thread", availability: "december" },
       { text: "Masked calling: the customer's number stays hidden", availability: "december" },
     ],
-    screen: { label: "A lead in the dealer app", kind: "screen" },
+    screen: { label: "A lead in the dealer app", kind: "screen", image: "dealerAppLeadTire" },
   },
   {
     title: "Report",
@@ -104,7 +105,7 @@ const steps: {
       { text: "Dealer scorecard" },
       { text: "A customer satisfaction question after the visit", availability: "december" },
     ],
-    screen: { label: "The dealer scorecard in the brand dashboard", kind: "desktop" },
+    screen: { label: "The dealer scorecard in the brand dashboard", kind: "desktop", image: "dashboardScorecard" },
   },
 ];
 
@@ -159,7 +160,7 @@ export default function HowItWorks() {
                 </div>
               </div>
               <div className="reveal flex justify-center">
-                <MediaPlaceholder label={step.screen.label} kind={step.screen.kind} />
+                <ProductScreen screen={step.screen} />
               </div>
             </div>
           </Section>

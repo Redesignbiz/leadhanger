@@ -1,6 +1,7 @@
 import type { Feature } from "@/components/FeatureList";
 import type { ProofLine } from "@/components/Proof";
 import { site } from "./site";
+import type { Screen } from "./screens";
 
 const ref = site.reference.name;
 const [leadToSale, fasterResponse] = site.metrics;
@@ -18,9 +19,9 @@ const [leadToSale, fasterResponse] = site.metrics;
  *     list in docs/leadhanger-us-brief.md: the dealer scorecard and the
  *     regional manager view.
  *
- * Screens are placeholders until the English screens from the US demo
- * account (December 4, 2026). The store badges wait for the US app's
- * approval.
+ * Screens are English mockups (lib/screens.ts) until the English screens
+ * from the US demo account (December 4, 2026). The store badges wait for the
+ * US app's approval.
  *
  * Proof (brief p.25: every section opens with a claim and a proof), naming
  * the client anonymously (`site.reference`): the published metrics in
@@ -34,9 +35,9 @@ export type ProductSurface = {
   description: string;
   title: string;
   lead: string;
-  screen: { label: string; kind: "screen" | "desktop" };
+  screen: Screen;
   /** A second screen, further down the page. */
-  secondScreen?: { label: string; kind: "tablet" | "desktop" };
+  secondScreen?: Screen;
   sections: readonly { title: string; proof?: ProofLine; items: readonly Feature[] }[];
   /** The other surface, linked from the end of the page. */
   other: { lead: string; label: string; href: string };
@@ -49,8 +50,8 @@ export const dealerApp: ProductSurface = {
     "The LeadHanger dealer app: each lead with the customer's answers, one-touch calling, outcome capture, multi-location accounts and owner and staff roles.",
   title: "Leads arrive in the dealer's app, ready to call",
   lead: "Dealers and stores receive each lead in the LeadHanger app with the customer's answers, call with one touch and record what happened. Owners see every location they run.",
-  screen: { label: "Today's leads in the dealer app", kind: "screen" },
-  secondScreen: { label: "The dealer app on a tablet", kind: "tablet" },
+  screen: { label: "Today's leads in the dealer app", kind: "screen", image: "dealerAppRequests" },
+  secondScreen: { label: "The dealer app on a tablet", kind: "tablet", image: "dealerAppTablet" },
   sections: [
     {
       title: "Ready to call",
@@ -99,7 +100,7 @@ export const brandDashboard: ProductSurface = {
     "The LeadHanger brand dashboard: every lead from the brand's site, the dealer it went to, response time and appointments by dealer and region, and the dealer scorecard.",
   title: "Which dealer answered, how fast, and what it became",
   lead: "The brand dashboard shows every lead from your site, the dealer it went to and what the dealer did with it, by dealer and region.",
-  screen: { label: "The dealer scorecard in the brand dashboard", kind: "desktop" },
+  screen: { label: "The dealer scorecard in the brand dashboard", kind: "desktop", image: "dashboardScorecard" },
   sections: [
     {
       title: "By dealer and region",

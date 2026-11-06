@@ -13,6 +13,7 @@ is decided in code, so the table below is the map.
 | — | Social share card | generated, see below |
 | — | Hero visual | drawn in markup, see below |
 | `public/images/industries/*.webp` | `src/components/Industries.tsx`, one per card | Unsplash, see below |
+| `public/images/screens/*.webp` | `src/lib/screens.ts`, product pages, vertical and ad pages | generated mockups, see below |
 
 ## Logo and favicon
 
@@ -92,3 +93,44 @@ the thing to change.
 - Lowercase filenames, hyphens instead of spaces, no accented characters.
 - An image displayed at 100px should be at least 200px wide.
 - Compress before committing. A 1024×1024 PNG has no business being over 200 KB.
+
+## Product screens (mockups)
+
+Nine WebP images in `public/images/screens/`, listed with their alt text in
+`src/lib/screens.ts`, which also says where each one appears. They stand in for
+the English screens from the US demo account (website brief p.29, due December
+4, 2026); replace each with the real screen when it exists, then delete the
+mockup and its entry.
+
+They are drawn, not captured. `scripts/screens/` redraws the product's own
+screens from brisa-frontend in English (decided November 6, 2026):
+
+- **Layout:** the dealer app's request list, request detail and wide (tablet)
+  layout; the brand dashboard's routing rules and performance view; the chat
+  widget's default tire flow. Type scale, spacing and icons are the product's
+  (Nunito Sans, MaterialIcons).
+- **Whole screens:** each image is the whole device or window, nothing
+  cropped. Phones are 640×1348 and shown at most 17rem wide.
+- **Colour:** the site's dark palette instead of the product's light one, so
+  the screens sit on the page. The mapping is in `scripts/screens/kit.mjs`.
+- **Logo:** the dashboard sidebar shows `public/images/leadhanger-logo.svg`
+  where the product shows the client's logo. Its wordmark is drawn in the
+  site's ink colour instead of `#161A25` so it reads on the dark screen; the
+  mark's two blues are unchanged.
+- **Data:** made-up US dealers, towns and figures; the customers are Maria
+  Garcia, John Smith, Jane Doe, David Miller and Emily Johnson (the user's
+  list, November 6, 2026). "Sample Tires" stands in for a brand. No client
+  name, logo or brand appears.
+- **December features:** the conversation thread (`dealer-app-thread`) and the
+  window request (`dealer-app-lead-window`) show features that ship with the
+  US demo. The thread sits under /lp/tires's "Respond and book" step, which is
+  labelled "Launching December"; the window question set carries no label,
+  as in the brief.
+
+To redraw: `node scripts/screens/render.mjs` (or name some, e.g. `render.mjs
+chat rules`). It needs `../brisa-frontend` with its `node_modules` installed,
+for the Nunito Sans, Inter and MaterialIcons font files; set `BRISA_FRONTEND`
+if it lives elsewhere. It renders with the satori copy inside `next/og` and
+never goes to the network: a character missing from those fonts stops it
+instead of fetching a fallback font. `PREVIEW_DIR=<dir>` also writes a JPEG of
+each for checking by eye.

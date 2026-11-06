@@ -1,5 +1,6 @@
 import type { Availability } from "./availability";
 import type { AuditIndustry, AuditRole } from "./audit";
+import type { Screen } from "./screens";
 
 /**
  * The two vertical pages, /windows-and-doors and /tires, from the website brief
@@ -21,8 +22,8 @@ import type { AuditIndustry, AuditRole } from "./audit";
  * Add the figures with their sources when they are; until then the cards state
  * the problem without numbers. Tracked in the growth plan tracker.
  *
- * Also still placeholders: the product screens (real English screens are due
- * December 4) and the demo videos.
+ * The product screens are English mockups (lib/screens.ts) until the real
+ * English screens (December 4). The demo videos are still placeholders.
  *
  * FAQ: sector questions only, seven per page, within the brief's six to eight
  * (p.26). The first two on each page are the brief's own examples (p.16); the
@@ -45,7 +46,7 @@ export type Vertical = {
    * industry already chosen, where the role maps onto the form's options.
    */
   roles: readonly { label: string; audit: { role?: AuditRole; industry: AuditIndustry } }[];
-  screenLabel: string;
+  screen: Screen;
   problemsTitle: string;
   problems: readonly { title: string; body: string }[];
   stepsTitle: string;
@@ -75,7 +76,7 @@ export const verticals: readonly Vertical[] = [
       // The form's roles have no franchise system, so only the industry is chosen.
       { label: "I run a franchise system", audit: { industry: "windows-and-doors" } },
     ],
-    screenLabel: "A window request in the dealer app",
+    screen: { label: "A window request in the dealer app", kind: "screen", image: "dealerAppLeadWindow" },
     problemsTitle: "Where window requests are lost",
     problems: [
       {
@@ -186,7 +187,7 @@ export const verticals: readonly Vertical[] = [
       { label: "I run a tire chain", audit: { role: "retail-chain", industry: "tires" } },
       { label: "I'm a tire brand", audit: { role: "brand", industry: "tires" } },
     ],
-    screenLabel: "A tire request in the store app",
+    screen: { label: "A tire request in the store app", kind: "screen", image: "dealerAppLeadTire" },
     problemsTitle: "Where tire requests are lost",
     problems: [
       {

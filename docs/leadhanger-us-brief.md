@@ -154,10 +154,13 @@ Not blocking, but wanted:
    later). The hosting provider is still unnamed, on `/privacy` and `/trust`.
 10. **Real product imagery.** The hero visual is drawn in markup. There are three
     demo videos in Drive, including a Mavis-branded one, and the live dashboard
-    at `app.leadhanger.com` can be captured. Every product screen on the site
-    is a dashed placeholder until the English screens from the US demo account
-    (December 4, 2026): the vertical pages, `/how-it-works`, `/dealer-app`,
-    `/brand-dashboard` and the ad landing pages. The dealer app's App Store and
+    at `app.leadhanger.com` can be captured. Until the English screens from
+    the US demo account (December 4, 2026), the product screens on the
+    vertical pages, `/how-it-works`, `/dealer-app`, `/brand-dashboard` and the
+    ad landing pages are English mockups drawn from the product's own layout
+    (since November 6, 2026; `src/lib/screens.ts`, `docs/images.md`). The
+    case study's three screens stay placeholders until the client's
+    permission. The dealer app's App Store and
     Google Play badges wait for the US app's approval. "See a 2-minute demo"
     in the hero goes to the home page's video until the 2-minute demo exists.
 11. **What `/trust` does not answer yet.** The page is written for the

@@ -1,5 +1,6 @@
 import type { Availability } from "./availability";
 import type { AuditIndustry } from "./audit";
+import type { Screen } from "./screens";
 
 /**
  * The two ad landing pages, /lp/windows and /lp/tires, from the website brief
@@ -13,7 +14,7 @@ export type Landing = {
   industry: Extract<AuditIndustry, "windows-and-doors" | "tires">;
   headline: string;
   /** The brief's "one screen": the conversation thread or the brand dashboard. */
-  screen: { label: string; kind: "screen" | "desktop" };
+  screen: Screen;
 };
 
 export const landings: readonly Landing[] = [
@@ -21,13 +22,13 @@ export const landings: readonly Landing[] = [
     slug: "windows",
     industry: "windows-and-doors",
     headline: "Dealer lead routing for window brands",
-    screen: { label: "The brand dashboard", kind: "desktop" },
+    screen: { label: "The brand dashboard", kind: "desktop", image: "dashboardOverviewWindows" },
   },
   {
     slug: "tires",
     industry: "tires",
     headline: "Appointment routing for tire chains",
-    screen: { label: "One conversation thread in the store app", kind: "screen" },
+    screen: { label: "One conversation thread in the store app", kind: "screen", image: "dealerAppThread" },
   },
 ];
 

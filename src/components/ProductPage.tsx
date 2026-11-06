@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Section } from "./Section";
-import { MediaPlaceholder } from "./MediaPlaceholder";
+import { ProductScreen } from "./ProductScreen";
 import { FeatureList } from "./FeatureList";
 import { AuditCall } from "./AuditCall";
 import { TextPlaceholder } from "./DraftNote";
@@ -81,7 +81,7 @@ export function ProductPage({ surface }: { surface: ProductSurface }) {
           eyebrow={surface.name}
           title={surface.title}
           lead={surface.lead}
-          media={<MediaPlaceholder label={surface.screen.label} kind={surface.screen.kind} />}
+          media={<ProductScreen screen={surface.screen} />}
           proof={referenceLine}
         >
           {surface.slug === "dealer-app" && (
@@ -110,10 +110,7 @@ export function ProductPage({ surface }: { surface: ProductSurface }) {
 
           {surface.secondScreen && (
             <div className="reveal mt-12 flex justify-center">
-              <MediaPlaceholder
-                label={surface.secondScreen.label}
-                kind={surface.secondScreen.kind}
-              />
+              <ProductScreen screen={surface.secondScreen} />
             </div>
           )}
 
