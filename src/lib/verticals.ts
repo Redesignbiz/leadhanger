@@ -7,10 +7,12 @@ import type { AuditIndustry, AuditRole } from "./audit";
  * language. The pages, llms.txt and the sitemap all read this list.
  *
  * Copy follows the brief as written (decided November 6, 2026: ask before any
- * deviation). Features that ship with the US demo in December stay, with the
- * "Launching December" label the brief's confirmation list asks for: the window
- * question set, texting and masked calling, the satisfaction question. The tire
- * question set runs today.
+ * deviation). Features that ship with the US demo in December stay. The
+ * "Launching December" label goes only where the brief's confirmation list
+ * (p.31) asks for it: texting and masked calling, the one conversation thread,
+ * the satisfaction question. The window question set is shown as the brief
+ * lists it, without a label (decided November 6, 2026). The tire question set
+ * runs today.
  *
  * MISSING, on purpose for now: the problem cards carry no figures. The brief
  * wants each card backed by a figure with its source and date, from the two
@@ -37,8 +39,6 @@ export type Vertical = {
   audience: string;
   description: string;
   headline: string;
-  /** A December feature the headline names, shown with its label under the lead. */
-  headlineNote?: VerticalItem;
   lead: string;
   /**
    * The hero's buttons, one per buyer role. Each opens /audit with the role and
@@ -96,7 +96,6 @@ export const verticals: readonly Vertical[] = [
       {
         title: "Capture",
         body: "A form or chat on your site asks what the homeowner needs: how many windows, which type, when, and a photo.",
-        availability: "december",
       },
       {
         title: "Route",
@@ -182,7 +181,6 @@ export const verticals: readonly Vertical[] = [
     description:
       "Dealer Lead Response for tire chains and tire brands: take the request on your site, send it to the store that can fit the tires, and see which store answered and how fast.",
     headline: "Right store, booked today, by text or call.",
-    headlineNote: { text: "Texting from the brand's number", availability: "december" },
     lead: "LeadHanger takes the tire request on your website, sends it to the store that can fit the tires, and shows the chain or the brand which store answered, and how fast.",
     roles: [
       { label: "I run a tire chain", audit: { role: "retail-chain", industry: "tires" } },

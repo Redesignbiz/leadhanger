@@ -25,9 +25,11 @@ export const metadata: Metadata = {
  * here by hand.
  *
  * Features that ship with the US demo in December appear as the website brief
- * lists them, each marked "launching December" (decided November 6, 2026): the
- * consent log for each lead, and masked calling with SHAKEN/STIR, Voice
- * Integrity and CNAM. Remove the marking when they ship.
+ * lists them: the consent log for each lead, and masked calling with
+ * SHAKEN/STIR, Voice Integrity and CNAM. Only masked calling is marked
+ * "launching December": the brief's confirmation list (p.31) asks for the
+ * label on texting and masked calling, not on the consent log (decided
+ * November 6, 2026). Remove the marking when it ships.
  *
  * Still absent until they are true or decided, and listed in the brief: SOC 2
  * status, encryption at rest (state it once the hosting provider is named),
@@ -82,7 +84,7 @@ const sections: LegalSection[] = [
     paragraphs: [
       "The chat shows the brand's own consent language and can link to the brand's privacy notice. The wording names one brand and the one dealer assigned to the request. The visitor must accept it before sending the request. Consent to calls and texts is a separate, optional opt-in.",
       {
-        lead: "Consent log, launching December.",
+        lead: "Consent log.",
         text: "Each lead keeps a record of its consent: the time, the version of the wording shown and the IP address.",
       },
     ],

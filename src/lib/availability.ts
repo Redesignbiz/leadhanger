@@ -4,10 +4,11 @@
  * nothing planned reads as live (a website brief rule).
  *
  * The two dated labels come from the website brief's confirmation list (Drive,
- * November 3, 2026): text messages, masked calling, the satisfaction question
- * and the window question set launch with the US demo in December; the REST
- * API, webhooks and Salesforce arrive with the integration guide in January
- * 2027. When one ships, change its label to "live" where it is used and nowhere
+ * November 3, 2026, p.31): texting and masked calling from the brand's number,
+ * the one conversation thread and the satisfaction question launch with the
+ * US demo in December; the REST API, webhooks and Salesforce arrive with the
+ * integration guide in January 2027. Use "december" for those and nothing
+ * else. When one ships, change its label to "live" where it is used and nowhere
  * else.
  */
 export type Availability =

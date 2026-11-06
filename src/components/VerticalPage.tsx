@@ -52,11 +52,6 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
               <p className="text-ink-muted mt-6 max-w-xl text-[15px] leading-[1.65] sm:text-[17px]">
                 {vertical.lead}
               </p>
-              {vertical.headlineNote && (
-                <p className="text-ink-muted mt-4 text-[14px]">
-                  <Item item={vertical.headlineNote} />
-                </p>
-              )}
               <div className="mt-8 flex flex-wrap gap-3">
                 {vertical.roles.map((role, index) => (
                   <Link

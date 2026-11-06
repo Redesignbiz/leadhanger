@@ -55,10 +55,7 @@ const steps: {
     proof: { value: qualified.value, text: "qualified lead ratio across the platform" },
     items: [
       { text: "Tire question set: tire size, quantity, store and same-day fitting" },
-      {
-        text: "Window question set: number of windows, type, timing and a photo",
-        availability: "december",
-      },
+      { text: "Window question set: number of windows, type, timing and a photo" },
       { text: "Consent captured in your brand's own words" },
     ],
     screen: { label: "The chat on a brand's site", kind: "screen" },

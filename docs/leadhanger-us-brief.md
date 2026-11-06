@@ -175,11 +175,12 @@ Not blocking, but wanted:
       so the two never drift, and keep it ungated: a form would change
       `/privacy`.
 
-    Shown since November 6, 2026 as the brief lists them, marked "launching
-    December" (the US demo): the consent log for each lead and masked calling
-    with SHAKEN/STIR, Voice Integrity and CNAM. The site follows the website
-    brief as written, and keeps December features with that label rather than
-    leaving them out. Neither exists in `brisa-backend` yet (checked November
+    Shown since November 6, 2026 as the brief lists them: the consent log for
+    each lead, and masked calling with SHAKEN/STIR, Voice Integrity and CNAM,
+    marked "launching December" (the US demo). The site follows the website
+    brief as written and keeps December features rather than leaving them
+    out; the label goes only where the brief's confirmation list (p.31) asks
+    for it, so the consent log carries none. Neither exists in `brisa-backend` yet (checked November
     5, 2026): the chat asks for consent but stores no consent field with the
     request, and calls go out on the dealer's own number. Once the consent log
     is stored, rewrite the "GDPR/KVKK-compliant consent" line in
