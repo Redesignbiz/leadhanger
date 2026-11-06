@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AuditForm } from "@/components/AuditForm";
 import { site } from "@/lib/site";
+import { homeShareImage } from "@/lib/share";
 import { audit } from "@/lib/audit";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${site.url}/audit`,
     title: `${audit.title} · ${site.name}`,
+    images: [homeShareImage],
   },
   robots: { index: true, follow: true },
 };

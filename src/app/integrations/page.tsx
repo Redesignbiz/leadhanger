@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AvailabilityBadge } from "@/components/AvailabilityBadge";
 import { site } from "@/lib/site";
+import { homeShareImage } from "@/lib/share";
 import { audit } from "@/lib/audit";
 import { integrationGroups } from "@/lib/integrations";
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${site.url}/integrations`,
     title: `Integrations · ${site.name}`,
+    images: [homeShareImage],
   },
   robots: { index: true, follow: true },
 };

@@ -110,6 +110,19 @@ export const site = {
   ],
 
   /**
+   * The reference client as the product pages, the case study and the ad
+   * landing pages name it: anonymously, until its written permission
+   * (decided November 6, 2026). With permission, the website brief's wording
+   * is "Brisa, a Bridgestone company"; change `name` here and nowhere else.
+   * `since` is checked against the client's data, which starts in August
+   * 2023 (Redesign-Team/05-Lead-Hanger).
+   */
+  reference: {
+    name: 'a leading tire manufacturer',
+    since: 2023,
+  },
+
+  /**
    * Reference case study, hosted on the Redesign Business site. The headline,
    * summary and cover are the ones on that site's portfolio card, copied
    * verbatim so the two never tell the story differently.

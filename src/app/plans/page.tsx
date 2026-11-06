@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PlanCards, PlanTable } from "@/components/PlanComparison";
 import { Faq } from "@/components/Faq";
 import { site } from "@/lib/site";
+import { homeShareImage } from "@/lib/share";
 import { audit } from "@/lib/audit";
 import { planFaqs } from "@/lib/plans";
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${site.url}/plans`,
     title: `Plans · ${site.name}`,
+    images: [homeShareImage],
   },
   robots: { index: true, follow: true },
 };
