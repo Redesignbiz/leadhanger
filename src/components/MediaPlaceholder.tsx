@@ -11,10 +11,12 @@ export function MediaPlaceholder({
   kind = "screen",
 }: {
   label: string;
-  kind?: "screen" | "video" | "calendar";
+  kind?: "screen" | "tablet" | "desktop" | "video" | "calendar";
 }) {
   const shape = {
     screen: "aspect-[4/5] max-w-sm",
+    tablet: "aspect-[4/3] max-w-xl",
+    desktop: "aspect-[16/10]",
     video: "aspect-video",
     calendar: "aspect-[16/9]",
   }[kind];
@@ -45,6 +47,16 @@ export function MediaPlaceholder({
             <>
               <rect x="3" y="4.5" width="18" height="16" rx="2" />
               <path d="M3 9.5h18M8 2.5v4M16 2.5v4" />
+            </>
+          ) : kind === "tablet" ? (
+            <>
+              <rect x="3" y="4" width="18" height="16" rx="2" />
+              <path d="M11 17h2" />
+            </>
+          ) : kind === "desktop" ? (
+            <>
+              <rect x="2.5" y="4" width="19" height="12.5" rx="1.5" />
+              <path d="M8.5 20h7M12 16.5V20" />
             </>
           ) : (
             <>

@@ -1,23 +1,18 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
-import { verticals } from "@/lib/verticals";
+import { isGroup, nav, navAction, type NavGroup, type NavLink } from "@/lib/navigation";
 import { Logo } from "./Logo";
 
-// The website brief's "Solutions": one page per vertical, from lib/verticals.ts,
-// the same list as the header's Solutions menu.
-const solutions = verticals.map((vertical) => ({
-  label: vertical.name,
-  href: `/${vertical.slug}`,
-}));
-
-// The header's Product, Plans, Proof and Trust entries, in the header's order.
-// Proof is the home page's Results section for now (see Header.tsx).
-const sections = [
-  { label: "How it works", href: "/#how-it-works" },
-  { label: "Integrations", href: "/integrations" },
-  { label: "Plans", href: "/plans" },
-  { label: "Results", href: "/#results" },
-  { label: "Trust", href: "/trust" },
+// The header's menu, as columns: each drop-down (Solutions, Product, Proof)
+// is a column under its own name, and the menu's single links (Plans, Trust)
+// and its main action are gathered under Company. One list
+// (lib/navigation.ts), so the footer always says what the header says.
+const columns: NavGroup[] = [
+  ...nav.filter(isGroup),
+  {
+    label: "Company",
+    items: [...nav.filter((item): item is NavLink => !isGroup(item)), navAction],
+  },
 ];
 
 // Privacy, support and an address.
@@ -49,7 +44,7 @@ export function Footer() {
           <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <Logo />
-              <p className="text-ink-muted mt-4 max-w-xs text-[14px] leading-[1.5]">
+              <p className="text-ink-muted mt-4 max-w-[14rem] text-[14px] leading-[1.5]">
                 {site.tagline}
               </p>
               <p className="text-ink-dim mt-5 text-[13px] leading-[1.5]">
@@ -63,38 +58,27 @@ export function Footer() {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-x-12 gap-y-10 sm:gap-x-16 lg:gap-x-20">
-              <nav className="flex flex-col gap-3.5">
-                <p className="eyebrow text-ink-dim mb-1">Solutions</p>
-                {solutions.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-ink-muted hover:text-ink text-[14px] transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <nav className="flex flex-col gap-3.5">
-                <p className="eyebrow text-ink-dim mb-1">Sections</p>
-                {sections.map((item) => {
-                  const className =
-                    "text-ink-muted hover:text-ink text-[14px] transition-colors";
-                  // Same rule as the header: a "/#section" anchor stays a
-                  // plain `a`, a route gets `Link` (see Header.tsx).
-                  return item.href.includes("#") ? (
-                    <a key={item.href} href={item.href} className={className}>
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link key={item.href} href={item.href} className={className}>
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
+            <div className="flex flex-wrap gap-x-12 gap-y-10">
+              {columns.map((column) => (
+                <nav key={column.label} className="flex flex-col gap-3.5">
+                  <p className="eyebrow text-ink-dim mb-1">{column.label}</p>
+                  {column.items.map((item) => {
+                    const className =
+                      "text-ink-muted hover:text-ink text-[14px] transition-colors";
+                    // Same rule as the header: a "/#section" anchor stays a
+                    // plain `a`, a route gets `Link` (see Header.tsx).
+                    return item.href.includes("#") ? (
+                      <a key={item.href} href={item.href} className={className}>
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link key={item.href} href={item.href} className={className}>
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              ))}
 
               <nav className="flex flex-col gap-3.5">
                 {/* Only what a buyer looks for besides the product; the SMS

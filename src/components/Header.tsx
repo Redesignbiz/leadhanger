@@ -1,51 +1,12 @@
 import Link from "next/link";
-import { verticals } from "@/lib/verticals";
-import { audit } from "@/lib/audit";
+import { nav, navAction } from "@/lib/navigation";
 import { Logo } from "./Logo";
-import { HeaderNav, type NavItem } from "./HeaderNav";
+import { HeaderNav } from "./HeaderNav";
 
 /**
- * The top menu as the website brief (Drive, November 3, 2026, p.11) lays it
- * out: Solutions · Product · Plans · Proof · Trust, with the main action on
- * the right. Only pages that exist are linked:
- *   - Solutions lists the vertical pages from lib/verticals.ts.
- *   - Product has How it works (a home page section) and Integrations. The
- *     brief's Dealer app and Brand dashboard pages join it when they exist.
- *   - Proof goes to the home page's Results section until /insights and the
- *     Brisa case study exist.
- *   - The main action is the brief's "Get a free audit", to /audit.
- */
-const nav: NavItem[] = [
-  {
-    label: "Solutions",
-    items: verticals.map((vertical) => ({
-      label: vertical.name,
-      href: `/${vertical.slug}`,
-      note: vertical.audience,
-    })),
-  },
-  {
-    label: "Product",
-    items: [
-      {
-        label: "How it works",
-        href: "/#how-it-works",
-        note: "From the brand's website to the dealer, step by step",
-      },
-      {
-        label: "Integrations",
-        href: "/integrations",
-        note: "What connects today and what is planned",
-      },
-    ],
-  },
-  { label: "Plans", href: "/plans" },
-  { label: "Proof", href: "/#results" },
-  // The buyer's IT, security and legal reviewer should not have to look for it.
-  { label: "Trust", href: "/trust" },
-];
-
-/**
+ * The menu itself, the website brief's, is in lib/navigation.ts, shared with
+ * the footer.
+ *
  * The header carries the same side rules as every Section, so the ruled column
  * starts at the top of the viewport rather than below the fold of the header.
  * The menus themselves are in HeaderNav, a client component, because the
@@ -72,7 +33,7 @@ export function Header() {
             <Logo />
           </Link>
 
-          <HeaderNav items={nav} cta={{ label: audit.cta, href: "/audit" }} />
+          <HeaderNav items={nav} cta={navAction} />
         </div>
       </div>
     </header>

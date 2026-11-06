@@ -14,6 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
+    // The product pages. /insights, the case study and the ad landing pages
+    // are not here: the first two are drafts and the last are not indexed.
+    ...["how-it-works", "dealer-app", "brand-dashboard"].map((path) => ({
+      url: `${site.url}/${path}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       url: `${site.url}/audit`,
       changeFrequency: "monthly",

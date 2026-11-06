@@ -154,7 +154,12 @@ Not blocking, but wanted:
    later). The hosting provider is still unnamed, on `/privacy` and `/trust`.
 10. **Real product imagery.** The hero visual is drawn in markup. There are three
     demo videos in Drive, including a Mavis-branded one, and the live dashboard
-    at `app.leadhanger.com` can be captured.
+    at `app.leadhanger.com` can be captured. Every product screen on the site
+    is a dashed placeholder until the English screens from the US demo account
+    (December 4, 2026): the vertical pages, `/how-it-works`, `/dealer-app`,
+    `/brand-dashboard` and the ad landing pages. The dealer app's App Store and
+    Google Play badges wait for the US app's approval. "See a 2-minute demo"
+    in the hero goes to the home page's video until the 2-minute demo exists.
 11. **What `/trust` does not answer yet.** The page is written for the
     buyer's IT, security and legal reviewer, and states only what the platform
     does today. These are left out until they are true or decided, and this
@@ -181,8 +186,26 @@ Not blocking, but wanted:
     `src/components/HowItWorks.tsx` for a US reader. Integrations moved to
     `/integrations` (the product team confirms the labels; section 5).
 12. **Analytics decision.** Adding any invalidates the "no tracking" section.
-13. **The blog.** Twelve drafts exist. A `/insights` route would give the site
-    something to rank on beyond the one page.
+13. **Pages built ahead of their content** (November 6, 2026; kept on their
+    branch until the content is in, as decided that day):
+    - `/insights` is a skeleton marked "Work in progress", not indexed and not
+      in the sitemap. The first two pieces (the LinkedIn article "Half of your
+      dealer leads never get a phone call" and the routing test findings) are
+      due December 11, 2026. Twelve archived drafts can follow once their
+      unsourced figures are removed.
+    - `/case-studies/brisa` follows the brief's outline in an anonymous
+      version ("a leading tire manufacturer"), not indexed, until Brisa's
+      written permission. Its figures are the brief's, marked "to verify";
+      what the local data confirms and what it does not is in the page's
+      comment. The address still carries the client's name.
+    - `/lp/windows` and `/lp/tires` are complete. Their proof lines name the
+      client anonymously, and the dealer count ("47 dealers in 20 regions") is
+      marked "to verify". Google Ads is planned to start November 9,
+      2026. The form records the ad's UTM parameters and click ID. `/privacy`
+      says the click ID goes back to Google when a click leads to a request
+      (an offline conversion), and nothing else from the form; the upload
+      itself is not built. Counsel should confirm this against the notice's
+      "we do not share it for cross-context behavioral advertising" (item 2).
 
 ## 5. Things to verify with the product team
 
@@ -203,6 +226,20 @@ from the running system:
 
   Features the brief itself marks as not live carry a label on the page
   ("Planned", "Launching December", "January 2027").
+- On the product pages (`src/lib/product.ts`, `src/app/how-it-works`), taken
+  from the website brief's outline (p.20) and not from the running system:
+  the dealer scorecard and a regional manager view in the brand dashboard;
+  and the four metric definitions under "How we measure" on
+  `/how-it-works` (response time, follow-up rate, appointment rate, reassigned
+  lead), which are ours, with the answers to the three general questions on
+  the same page (`productFaqs`). The brief's confirmation list (p.31) already
+  confirms multi-location dealer accounts with roles, and call center entry.
+- Proof lines (brief p.25: every section opens with a claim and a proof), on
+  the product pages, the ad landing pages and the case study. The client is
+  named anonymously through `site.reference` in `src/lib/site.ts`, one place
+  to change when permission arrives. They use the four published metrics as
+  they are, and the brief's October 2026 figures framed as "to verify" until
+  checked against the client's monthly reports.
 
 Settled since: reassignment on timeout is part of LeadHanger generally, not one
 client's configuration (website brief, November 3, 2026). The Lite, Pro and

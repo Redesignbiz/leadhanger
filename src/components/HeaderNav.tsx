@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-
-export type NavLink = { label: string; href: string; note?: string };
-export type NavGroup = { label: string; items: readonly NavLink[] };
-export type NavItem = NavLink | NavGroup;
-
-function isGroup(item: NavItem): item is NavGroup {
-  return "items" in item;
-}
+import { isGroup, type NavItem, type NavLink } from "@/lib/navigation";
 
 /**
  * A "/#section" anchor stays a plain `a`; a route gets `Link`, for the prefetch.
@@ -72,7 +65,7 @@ export function HeaderNav({
   cta,
 }: {
   items: readonly NavItem[];
-  cta: { label: string; href: string };
+  cta: NavLink;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState<{ key: string; path: string } | null>(null);

@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
 import { planFaqs } from "@/lib/plans";
+import { productFaqs } from "@/lib/product";
 import { verticals } from "@/lib/verticals";
 
 /**
@@ -8,10 +9,10 @@ import { verticals } from "@/lib/verticals";
  * brief asks for the product, the category, the page list and short FAQ
  * answers.
  *
- * Built from site.ts, lib/verticals.ts and lib/plans.ts, so it says nothing the
- * site does not.
- * Add a page here when it ships (/insights, the product pages),
- * not before. Static: generated once at build time.
+ * Built from site.ts, lib/verticals.ts, lib/product.ts and lib/plans.ts, so it
+ * says nothing the site does not.
+ * Add a page here when it ships (/insights, the case study), not before. The
+ * ad landing pages stay out: they are not indexed. Static: generated once at build time.
  */
 export const dynamic = "force-static";
 
@@ -23,6 +24,9 @@ const pages: { name: string; path: string; about: string }[] = [
     about: vertical.description,
   })),
   { name: "Free Lead Response Audit", path: "/audit", about: "request a free audit: 3 test inquiries through the brand's site and dealers, and a one-page result within a week" },
+  { name: "How it works", path: "/how-it-works", about: "the four steps: capture, route, respond and book, report, and how the metrics are defined" },
+  { name: "Dealer app", path: "/dealer-app", about: "the app dealers and stores receive, call and record leads in" },
+  { name: "Brand dashboard", path: "/brand-dashboard", about: "response time and appointments by dealer and region, and the dealer scorecard" },
   { name: "Plans", path: "/plans", about: "three plans compared, without prices" },
   { name: "Integrations", path: "/integrations", about: "what connects today and what is planned" },
   { name: "Security & Compliance", path: "/trust", about: "access control, authentication, encryption, consent capture, SMS compliance and subprocessors" },
@@ -55,7 +59,7 @@ function body() {
     "",
     "## FAQ",
     "",
-    ...planFaqs.map((faq) => `- ${faq.q} ${faq.a}`),
+    ...[...productFaqs, ...planFaqs].map((faq) => `- ${faq.q} ${faq.a}`),
     "",
     "## Contact",
     "",
