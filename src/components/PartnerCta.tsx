@@ -102,12 +102,12 @@ export function PartnerCta() {
         </svg>
 
         <h2 className="text-on-blue max-w-xl text-[28px] leading-[1.12] font-bold tracking-[-0.025em] text-balance sm:text-[38px]">
-          Partner with us for smarter lead management
+          See how your demand becomes dealer appointments
         </h2>
         <p className="text-on-blue-muted mt-5 max-w-xl text-[16px] leading-[1.65] sm:text-[17px]">
-          Discover how LeadHanger can streamline your B2B2C lead generation.
-          See our platform in action and unlock growth with a personalized
-          demo.
+          In a short demo, we show how LeadHanger routes each inquiry to the
+          right dealer, moves late leads to the next one and reports the result
+          back to your brand.
         </p>
         <a
           href={`mailto:${site.contact.sales}?subject=${encodeURIComponent(
