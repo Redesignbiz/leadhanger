@@ -143,26 +143,24 @@ Not blocking, but wanted:
     - **SOC 2.** No report and no roadmap yet. A target date and report type
       (Type I first, then Type II) would let the page say something.
     - **Encryption at rest.** State it once the hosting provider is named.
-    - **Consent record per lead (TCPA).** The chat asks for consent, but
-      `brisa-backend` stores no consent field with the request (checked
-      November 5, 2026). Item 7 assumes the record travels with the lead;
-      verify that before either claim is made. Once it is stored, rewrite the
-      "GDPR/KVKK-compliant consent" line in `src/components/HowItWorks.tsx`
-      for a US reader.
     - **Data region.** See item 9.
-    - **Masked calling.** Not built yet; the website brief plans it for
-      Phase 1, with the US demo on December 4, 2026. Today the app hides the
-      number until it is opened and logs the opening, but the call goes out on
-      the real number.
-    - **CRM integrations.** Only the lead intake API is confirmed. The
-      comparison table's "Self-service" and "Fully integrated" CRM rows need
-      the product team (section 5).
     - **SSO or multi-factor sign-in, and a DPA.** Neither exists that we know
       of.
     - **A downloadable security overview.** The persona's action is to
       download a document. Generate it from the same content as `/trust`
       so the two never drift, and keep it ungated: a form would change
       `/privacy`.
+
+    Shown since November 6, 2026 as the brief lists them, marked "launching
+    December" (the US demo): the consent log for each lead and masked calling
+    with SHAKEN/STIR, Voice Integrity and CNAM. The site follows the website
+    brief as written, and keeps December features with that label rather than
+    leaving them out. Neither exists in `brisa-backend` yet (checked November
+    5, 2026): the chat asks for consent but stores no consent field with the
+    request, and calls go out on the dealer's own number. Once the consent log
+    is stored, rewrite the "GDPR/KVKK-compliant consent" line in
+    `src/components/HowItWorks.tsx` for a US reader. Integrations moved to
+    `/integrations` (the product team confirms the labels; section 5).
 12. **Analytics decision.** Adding any invalidates the "no tracking" section.
 13. **The blog.** Twelve drafts exist. A `/insights` route would give the site
     something to rank on beyond the one page.

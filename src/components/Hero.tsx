@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
 import { Highlight } from "./Section";
+import { AvailabilityBadge } from "./AvailabilityBadge";
 import { HeroStory } from "./HeroStory";
 
 /**
@@ -38,11 +39,11 @@ export function Hero() {
           <div className="flex min-h-[calc(100svh-6.5rem)] flex-col sm:min-h-[calc(100svh-7.5rem)]">
             <div className="intro grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-16">
               {/*
-                The category label and headline from the website brief (Drive,
-                November 3, 2026). The brief's subheadline is not used yet: it
-                promises texting and calling from the brand's number, which
-                launches with the US demo in December. The sentence on the
-                right says only what the product does today.
+                The category label, headline and subheadline from the website
+                brief (Drive, November 3, 2026), as written. Texting and calling
+                from the brand's number ship with the US demo in December, so
+                the line under the subheadline carries the brief's "Launching
+                December" label until then.
               */}
               <div>
                 <p className="eyebrow text-blue-pale">{site.category}</p>
@@ -52,10 +53,18 @@ export function Hero() {
                 </h1>
               </div>
 
-              <p className="text-ink-muted max-w-[17rem] lg:justify-self-end text-[13px] leading-[1.6] sm:text-[14px]">
-                LeadHanger qualifies the visitors on your website in real time
-                and connects each one to the right dealer.
-              </p>
+              <div className="max-w-[22rem] lg:justify-self-end">
+                <p className="text-ink-muted text-[13px] leading-[1.6] sm:text-[14px]">
+                  LeadHanger routes every inquiry to the right dealer, lets the
+                  dealer text or call from your brand&apos;s number, moves late
+                  leads to the next dealer, and reports what happened back to
+                  the brand.
+                </p>
+                <p className="text-ink-dim mt-3 flex flex-wrap items-center gap-2 text-[12.5px]">
+                  Texting and calling from your brand&apos;s number
+                  <AvailabilityBadge value="december" />
+                </p>
+              </div>
             </div>
 
             <div className="flex flex-1 flex-col justify-start pt-6 sm:pt-8">

@@ -24,10 +24,14 @@ export const metadata: Metadata = {
  * points the reader to us instead of naming a region. Do not write a region
  * here by hand.
  *
- * Deliberately absent until they are true or decided, and listed in the brief:
- * SOC 2 status, encryption at rest (state it once the hosting provider is
- * named), a consent record stored with each lead (TCPA), CRM integrations,
- * SSO or multi-factor sign-in, and a DPA. Do not add any of them before then.
+ * Features that ship with the US demo in December appear as the website brief
+ * lists them, each marked "launching December" (decided November 6, 2026): the
+ * consent log for each lead, and masked calling with SHAKEN/STIR, Voice
+ * Integrity and CNAM. Remove the marking when they ship.
+ *
+ * Still absent until they are true or decided, and listed in the brief: SOC 2
+ * status, encryption at rest (state it once the hosting provider is named),
+ * SSO or multi-factor sign-in, and a DPA.
  *
  * Keep the subprocessor list and the retention figures in step with /privacy.
  * The phone number log stores the location and the time, not the account; say
@@ -76,13 +80,21 @@ const sections: LegalSection[] = [
   {
     heading: "Consent capture",
     paragraphs: [
-      "The chat shows the brand's own consent language and can link to the brand's privacy notice. The visitor must accept it before sending the request. Consent to calls and texts is a separate, optional opt-in.",
+      "The chat shows the brand's own consent language and can link to the brand's privacy notice. The wording names one brand and the one dealer assigned to the request. The visitor must accept it before sending the request. Consent to calls and texts is a separate, optional opt-in.",
+      {
+        lead: "Consent log, launching December.",
+        text: "Each lead keeps a record of its consent: the time, the version of the wording shown and the IP address.",
+      },
     ],
   },
   {
-    heading: "SMS compliance (A2P 10DLC)",
+    heading: "SMS and calling (A2P 10DLC)",
     paragraphs: [
       "We send text messages about a request through Twilio, under a registered A2P 10DLC brand. Recipients can reply STOP to opt out or HELP for help. We never share SMS opt-in data for marketing. The [SMS Terms](/sms-terms) and [SMS Consent](/sms-consent) pages set out the program terms and the opt-in wording.",
+      {
+        lead: "Masked calling, launching December.",
+        text: "Dealers call and text customers from one brand number, and the customer's number stays hidden. Calls carry SHAKEN/STIR attestation, Voice Integrity registration and the brand's caller name (CNAM).",
+      },
     ],
   },
   {
