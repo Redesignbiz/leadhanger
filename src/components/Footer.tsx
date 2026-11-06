@@ -2,12 +2,14 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { Logo } from "./Logo";
 
-// The product: the home page's sections, /plans and /trust, the same
-// order as the header.
+// The product: the header's items in the header's order, plus /integrations,
+// which has no place in the header until the website brief's Product menu
+// exists.
 const sections = [
   { label: "How it works", href: "/#how-it-works" },
   { label: "Results", href: "/#results" },
   { label: "Plans", href: "/plans" },
+  { label: "Integrations", href: "/integrations" },
   { label: "Trust", href: "/trust" },
 ];
 

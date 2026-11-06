@@ -88,7 +88,7 @@ const sections: LegalSection[] = [
   {
     heading: "Lead intake API",
     paragraphs: [
-      "Leads reach LeadHanger from the chat on the brand's website or from the brand's own systems through our lead intake API. The API accepts requests over HTTPS and authenticates them with an API key we issue.",
+      "Leads reach LeadHanger from the chat on the brand's website or from the brand's own systems through our lead intake API. The API accepts requests over HTTPS and authenticates them with an API key we issue. The [Integrations](/integrations) page lists what connects today and what is planned.",
     ],
   },
   {

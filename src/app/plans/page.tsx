@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PlanCards, PlanTable } from "@/components/PlanComparison";
@@ -64,7 +65,14 @@ export default function Plans() {
               </h2>
               <p className="text-ink-muted mt-5 text-[15px] leading-[1.65] sm:text-[17px]">
                 Features that are not live yet carry their label, the same
-                labels the Integrations page uses.
+                labels the{" "}
+                <Link
+                  href="/integrations"
+                  className="text-blue-pale decoration-blue/60 hover:decoration-blue-pale font-medium underline underline-offset-[4px] transition-colors"
+                >
+                  Integrations
+                </Link>{" "}
+                page uses.
               </p>
             </div>
 
