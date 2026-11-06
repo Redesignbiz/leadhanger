@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { STREETS } from "@/lib/streets";
 import { HeroCta } from "./HeroCta";
 import { BotIcon, PersonIcon, StoreIcon } from "./StageIcons";
 
@@ -28,16 +27,21 @@ import { BotIcon, PersonIcon, StoreIcon } from "./StageIcons";
  *   - Every animation lives behind `prefers-reduced-motion: no-preference` and
  *     defaults to its finished state. With motion off nothing advances on its
  *     own: each chapter shows complete, and the tabs still switch.
- *   - The scene is drawn twice, from two layouts: a near-square one for phones
- *     and tablets and a wide one from `lg` up, so the desktop picture spreads
- *     across the hero instead of being a phone picture scaled up. CSS shows
- *     one and removes the other, so there is no layout guess at hydration and
- *     the hidden copy costs nothing to animate.
- *   - Within a layout, geometry is one coordinate space, its viewBox. HTML
- *     pieces are placed by percentage of that same box, so lines and labels
- *     stay joined at every width. Each layout sets one base type size in
- *     container units (`cqw`) with a floor and a ceiling, and everything on
- *     stage is sized in `em` against it, so the picture scales as one.
+ *   - The scene is drawn from one near-square layout. From `lg` it stands to
+ *     the right of the claim, as the website brief's hero lays it out (p.15),
+ *     and below `lg` it follows the claim. A wide layout that spread the scene
+ *     across the hero under the claim was dropped on November 6, 2026, when
+ *     the claim moved beside it; it is in the git history.
+ *   - Geometry is one coordinate space, the layout's viewBox. HTML pieces are
+ *     placed by percentage of that same box, so lines and labels stay joined
+ *     at every width. The layout sets one base type size in container units
+ *     (`cqw`) with a floor and a ceiling, and everything on stage is sized in
+ *     `em` against it, so the picture scales as one.
+ *   - The four steps run under both, across the full width, each under a
+ *     rule as in the brief's step strip. The rule is the progress bar: the
+ *     current step's fills as its chapter plays, the steps already shown stay
+ *     filled in a quieter tone. Each step is a button that replays its
+ *     chapter.
  */
 
 type Point = { x: number; y: number };
@@ -79,8 +83,6 @@ type Layout = {
   site: Point;
   chat: Point[];
   consent: Point;
-  /** The lead card, in the dealer's hands in chapter 3. Wide layout only. */
-  received?: Point;
   dealers: Dealer[];
   streets: string[];
   scan: number;
@@ -92,11 +94,11 @@ type Layout = {
   called: Point;
   /**
    * Chapter 4. The visitor and the dealer side by side with the booking, and
-   * the brand's report the booking goes into. The report hangs below the pair
-   * on the compact layout (`edge: "top"`: `panel.p` is the middle of its top
-   * edge) and stands to their right on the wide one (`edge: "left"`: the
-   * middle of its left edge). The arrow runs from `from` to `to`, just short
-   * of that edge.
+   * the brand's report the booking goes into. `panel.p` is the middle of the
+   * report's anchoring edge: its top edge when it hangs below the pair
+   * (`edge: "top"`), its left edge when it stands to their right
+   * (`edge: "left"`). The arrow runs from `from` to `to`, just short of that
+   * edge.
    */
   report: {
     visitor: Point;
@@ -117,8 +119,8 @@ const BR: Dealer = {
   match: true,
 };
 
-const compact: Layout = {
-  id: "compact",
+const layout: Layout = {
+  id: "story",
   W: 440,
   H: 400,
   center: { x: 220, y: 190 },
@@ -165,62 +167,6 @@ const compact: Layout = {
     to: { x: 168, y: 150 },
     panel: { p: { x: 220, y: 160 }, width: 400, edge: "top" },
     rows: 3,
-  },
-};
-
-/*
- * The wide layout uses the extra width for things that belong at the edges:
- * the arrow trailing back to the site, a chat with room between its two
- * sides, a wider map with more dealers on it, and the lead card in chapter
- * 3, on the dealer's side.
- */
-const wide: Layout = {
-  id: "wide",
-  W: 960,
-  H: 400,
-  center: { x: 480, y: 195 },
-  chatSeat: { x: 300, y: 195 },
-  side: { x: 220, y: 195 },
-  bot: { x: 660, y: 195 },
-  avatar: 68,
-  dealer: 44,
-  type: "text-[clamp(12px,1.5cqw,17px)]",
-  pan: 640,
-  site: { x: 380, y: 115 },
-  chat: [
-    { x: 614, y: 70 },
-    { x: 346, y: 112 },
-    { x: 614, y: 154 },
-    { x: 346, y: 196 },
-    { x: 614, y: 238 },
-    { x: 346, y: 280 },
-  ],
-  consent: { x: 480, y: 345 },
-  dealers: [
-    { p: { x: 160, y: 100 }, name: "Fort Hamilton Tires", note: "No stock", d: 2100 },
-    { p: { x: 110, y: 290 }, name: "Gravesend Auto", note: "9.1 mi", d: 2300 },
-    { p: { x: 320, y: 300 }, name: "Sunset Park Auto", note: "6.3 mi", d: 2500 },
-    { p: { x: 690, y: 80 }, name: "Park Slope Auto", note: "8.4 mi", d: 2700 },
-    { p: { x: 850, y: 260 }, name: "Dyker Beach Tires", note: "Closed today", d: 2900 },
-    { ...BR, p: { x: 650, y: 290 } },
-  ],
-  streets: STREETS.paths,
-  scan: 520,
-  qualified: { x: 480, y: 258 },
-  dealerSpot: { x: 560, y: 195 },
-  notified: { x: 390, y: 165 },
-  message: { x: 390, y: 295 },
-  messageWidth: "w-[17em]",
-  called: { x: 390, y: 355 },
-  received: { x: 664, y: 195 },
-  report: {
-    visitor: { x: 150, y: 195 },
-    dealer: { x: 262, y: 195 },
-    booked: { x: 206, y: 280 },
-    from: { x: 308, y: 195 },
-    to: { x: 398, y: 195 },
-    panel: { p: { x: 410, y: 195 }, width: 500, edge: "left" },
-    rows: 4,
   },
 };
 
@@ -424,44 +370,6 @@ function Chip({ icon, children }: { icon: ReactNode; children: ReactNode }) {
       {icon}
       {children}
     </span>
-  );
-}
-
-/**
- * The lead record, as it arrives on the dealer's side of the hand-over in
- * chapter 3: the visitor's answers from the chat, with consent attached.
- */
-function LeadCard({ title }: { title: string }) {
-  const rows: [string, string][] = [
-    ["Size", "4 × 235/55R19"],
-    ["Area", "Brooklyn 11209"],
-    ["Timing", "This week"],
-  ];
-
-  return (
-    <div className="border-line bg-panel w-[15em] rounded-md border">
-      <div className="border-line flex items-center justify-between gap-[1em] border-b px-[1em] py-[0.65em]">
-        <span className="eyebrow text-ink-dim whitespace-nowrap" style={{ fontSize: "0.72em" }}>
-          {title}
-        </span>
-        <span className="text-ink-dim text-[0.8em]">brand.com/tires</span>
-      </div>
-      <dl className="divide-line divide-y text-[0.88em]">
-        {rows.map(([label, value]) => (
-          <div key={label} className="flex items-baseline gap-[0.8em] px-[1.15em] py-[0.55em]">
-            <dt className="text-ink-dim w-[4.6em] shrink-0 text-[0.92em]">{label}</dt>
-            <dd className="text-ink font-medium">{value}</dd>
-          </div>
-        ))}
-        <div className="flex items-baseline gap-[0.8em] px-[1.15em] py-[0.55em]">
-          <dt className="text-ink-dim w-[4.6em] shrink-0 text-[0.92em]">Consent</dt>
-          <dd className="text-sage-lift inline-flex items-center gap-[0.4em] font-medium">
-            <Check className="size-[0.9em]" />
-            Captured
-          </dd>
-        </div>
-      </dl>
-    </div>
   );
 }
 
@@ -764,12 +672,6 @@ function Connect({ L }: { L: Layout }) {
         </p>
       </Piece>
 
-      {L.received && (
-        <Piece L={L} p={L.received} anchor="left" d={2300}>
-          <LeadCard title="Lead received" />
-        </Piece>
-      )}
-
       <Piece L={L} p={L.called} d={4000}>
         <Chip icon={<Phone className="size-[0.9em]" />}>Called back 12:08</Chip>
       </Piece>
@@ -955,7 +857,12 @@ function Stage({ L, chapter, className }: { L: Layout; chapter: number; classNam
   );
 }
 
-export function HeroStory() {
+/**
+ * `intro` is the claim, written in Hero.tsx: the category, the headline, the
+ * subheadline and the two buttons. It takes the left column so the story and
+ * the claim share one grid, and the steps can run under both.
+ */
+export function HeroStory({ intro }: { intro: ReactNode }) {
   const [chapter, setChapter] = useState(0);
   /** Bumped on every tab click, so a click replays its scene from the start. */
   const [run, setRun] = useState(0);
@@ -992,122 +899,141 @@ export function HeroStory() {
       data-chapter={chapter}
       data-paused={paused || undefined}
     >
-      <p className="sr-only">
-        How a lead moves through LeadHanger: a visitor arrives on the
-        brand&apos;s site and answers a few questions in a chat, gives consent,
-        is matched to the nearest dealer with their tires in stock, and that
-        dealer calls them back four minutes after being notified. The visitor
-        books a fitting, and the brand&apos;s report shows each dealer&apos;s
-        response time and appointments.
-      </p>
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-12">
+        {intro}
+
+        <div>
+          <p className="sr-only">
+            How a lead moves through LeadHanger: a visitor arrives on the
+            brand&apos;s site and answers a few questions in a chat, gives
+            consent, is matched to the nearest dealer with their tires in stock,
+            and that dealer calls them back four minutes after being notified.
+            The visitor books a fitting, and the brand&apos;s report shows each
+            dealer&apos;s response time and appointments.
+          </p>
+
+          {/*
+            The stage, and over it the closing card. When the story ends, the
+            last frame fades out completely and only then does the card rise
+            in, centred on the same area, so the ask appears where the story
+            was rather than below it. From `lg` the stage keeps to the right
+            edge of its column.
+          */}
+          <div className="relative">
+            <div
+              key={run}
+              className={`story-stage transition-opacity duration-500 ease-out ${ending ? "opacity-0" : ""}`}
+            >
+              <Stage
+                L={layout}
+                chapter={scene}
+                className="w-[min(100%,40rem,max(20rem,calc((100svh-28rem)*1.1)))] lg:mr-0 lg:w-[min(100%,max(22rem,calc((100svh-21rem)*1.1)))]"
+              />
+            </div>
+
+            {ending && (
+              <div className="story-cta-in absolute inset-0 flex items-center justify-center">
+                <HeroCta
+                  clock={
+                    <span
+                      className="story-progress is-current absolute inset-0 -z-10 opacity-0"
+                      style={{ "--chapter-ms": `${CTA_MS}ms` } as CSSProperties}
+                      onAnimationEnd={(event) => {
+                        if (event.target !== event.currentTarget) return;
+                        // Restart on a fresh stage. Reusing the old one would
+                        // cross-fade the last scene out as the first fades in,
+                        // and slide the visitor back across, so a frame of the
+                        // ending showed between the card and the opening.
+                        setChapter(0);
+                        setRun((n) => n + 1);
+                      }}
+                      aria-hidden
+                    />
+                  }
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/*
-        The stage, and over it the closing card. When the story ends, the last
-        frame fades out completely and only then does the card rise in, centred on the same
-        area, so the ask appears where the story was rather than below it.
-      */}
-      <div className="relative">
-        <div
-          key={run}
-          className={`story-stage transition-opacity duration-500 ease-out ${ending ? "opacity-0" : ""}`}
-        >
-          <Stage
-            L={compact}
-            chapter={scene}
-            className="w-[min(100%,40rem,max(20rem,calc((100svh-28rem)*1.1)))] lg:hidden"
-          />
-          <Stage
-            L={wide}
-            chapter={scene}
-            className="hidden w-[min(100%,calc((100svh-28rem)*2.4))] lg:block"
-          />
-        </div>
+        The four steps, one per chapter, across the full width under the claim
+        and the story, each under its own rule. A click replays that chapter.
+        From `lg` each step carries its own line of narration; below `lg` only
+        the labels fit, and the current step's line sits under them. The band
+        sits on a soft patch of plain ground that hides the page grid behind
+        the text.
 
-        {ending && (
-          <div className="story-cta-in absolute inset-0 flex items-center justify-center">
-            <HeroCta
-              clock={
+        The rule over the current step is the story's clock: it fills over the
+        chapter's length, and when it is full the story moves on. Pausing the
+        story (off screen, tab hidden) pauses it with everything else.
+      */}
+      <div className="story-band relative mt-10 pt-2 pb-1 sm:mt-12">
+        <div className="grid grid-cols-4 gap-3 sm:gap-6">
+          {chapters.map((c, index) => {
+            const current = index === chapter;
+            return (
+              <button
+                key={c.tab}
+                type="button"
+                onClick={() => {
+                  setChapter(index);
+                  setRun((n) => n + 1);
+                }}
+                aria-pressed={current}
+                className={`group focus-visible:outline-blue-pale relative flex cursor-pointer flex-col items-center pt-3 text-center transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 sm:pt-4 lg:items-start lg:text-left ${
+                  current ? "text-ink" : "text-ink-dim hover:text-ink"
+                }`}
+              >
+                {/* The track, the part already shown, and the clock. */}
+                <span className="bg-line-strong absolute inset-x-0 top-0 h-px" aria-hidden />
+                {index < chapter && (
+                  <span className="bg-blue-pale/40 absolute inset-x-0 top-0 h-0.5" aria-hidden />
+                )}
                 <span
-                  className="story-progress is-current absolute inset-0 -z-10 opacity-0"
-                  style={{ "--chapter-ms": `${CTA_MS}ms` } as CSSProperties}
+                  key={current ? run : undefined}
+                  className={`story-progress bg-blue-pale absolute inset-x-0 top-0 h-0.5 ${
+                    current ? "is-current" : ""
+                  }`}
+                  style={{ "--chapter-ms": `${c.ms}ms` } as CSSProperties}
                   onAnimationEnd={(event) => {
                     if (event.target !== event.currentTarget) return;
-                    // Restart on a fresh stage. Reusing the old one would
-                    // cross-fade the last scene out as the first fades in,
-                    // and slide the visitor back across, so a frame of the
-                    // ending showed between the card and the opening.
-                    setChapter(0);
-                    setRun((n) => n + 1);
+                    setChapter((now) => now + 1);
                   }}
                   aria-hidden
                 />
-              }
-            />
-          </div>
-        )}
-      </div>
+                <span className="relative text-[12px] font-medium sm:text-[12.5px] lg:text-[14px] lg:font-semibold">
+                  {/* Four steps fit a phone's width only without their numbers. */}
+                  <span
+                    className={`mr-1.5 hidden tabular-nums transition-colors sm:inline ${
+                      current ? "text-blue-pale" : ""
+                    }`}
+                    aria-hidden
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  {c.tab}
+                </span>
+                <span
+                  className={`relative mt-1.5 hidden text-[13.5px] leading-[1.5] transition-colors lg:block ${
+                    current ? "text-ink-muted" : "text-ink-dim/50 group-hover:text-ink-muted"
+                  }`}
+                >
+                  {c.caption}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-      {/*
-        Four steps, one per chapter, and the caption under them. The band
-        sits on a soft patch of plain ground that hides the page grid behind
-        the text. Only the current step is framed, as a pill that hugs its
-        label; the others are plain text. The clock is still here but never shown: an
-        invisible element inside the current step runs for the chapter's
-        length, and when it ends the story moves on.
-      */}
-      <div className="story-band relative mx-auto mt-8 max-w-[44rem] pt-2 pb-1 sm:mt-10">
-      <div className="flex items-center justify-center gap-1 sm:gap-6">
-        {chapters.map((c, index) => {
-          const current = index === chapter;
-          return (
-            <button
-              key={c.tab}
-              type="button"
-              onClick={() => {
-                setChapter(index);
-                setRun((n) => n + 1);
-              }}
-              aria-pressed={current}
-              className={`relative cursor-pointer rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-colors duration-300 sm:px-4 sm:text-[12.5px] ${
-                current
-                  ? "border-blue-pale/50 bg-panel-blue/60 text-ink"
-                  : "text-ink-dim hover:border-line-strong hover:text-ink border-transparent"
-              }`}
-            >
-              <span
-                key={current ? run : undefined}
-                className={`story-progress absolute inset-0 opacity-0 ${
-                  current ? "is-current" : ""
-                }`}
-                style={{ "--chapter-ms": `${c.ms}ms` } as CSSProperties}
-                onAnimationEnd={(event) => {
-                  if (event.target !== event.currentTarget) return;
-                  setChapter((now) => now + 1);
-                }}
-                aria-hidden
-              />
-              {/* Four steps fit a phone's width only without their numbers. */}
-              <span
-                className={`relative mr-1.5 hidden tabular-nums transition-colors sm:inline ${
-                  current ? "text-blue-pale" : ""
-                }`}
-                aria-hidden
-              >
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <span className="relative">{c.tab}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Keyed by chapter, so the line replays its entrance on every change. */}
-      <p
-        key={chapter}
-        className="story-caption text-ink mx-auto mt-6 min-h-[3em] max-w-[34rem] text-center text-[16px] leading-[1.5] text-balance sm:mt-8 sm:text-[18px]"
-      >
-        {ending ? "" : chapters[chapter].caption}
-      </p>
+        {/* Keyed by chapter, so the line replays its entrance on every change. */}
+        <p
+          key={chapter}
+          className="story-caption text-ink mx-auto mt-6 min-h-[3em] max-w-[34rem] text-center text-[16px] leading-[1.5] text-balance sm:mt-8 sm:text-[18px] lg:hidden"
+        >
+          {ending ? "" : chapters[chapter].caption}
+        </p>
       </div>
     </div>
   );

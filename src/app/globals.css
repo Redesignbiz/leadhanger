@@ -401,7 +401,7 @@ body::after {
 
 /*
  * The hero's claim. Above the fold there is no scroll to drive a reveal, so
- * it arrives on a timer, headline first, a beat ahead of the story under it.
+ * it arrives on a timer, headline first, then the subheadline and buttons.
  */
 @media (prefers-reduced-motion: no-preference) {
   .intro > * {
@@ -440,8 +440,8 @@ body::after {
 }
 
 /*
- * The hero story (HeroStory.tsx): four chapters on a loop, timed by an
- * invisible element in the current tab.
+ * The hero story (HeroStory.tsx): four chapters on a loop, timed by the rule
+ * over the current step, which fills as its chapter plays.
  *
  * Same rule as the rest of this file, applied hard: everything below the
  * motion gate only ever animates FROM somewhere TO the state the markup
