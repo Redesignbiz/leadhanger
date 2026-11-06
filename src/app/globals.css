@@ -440,13 +440,14 @@ body::after {
 }
 
 /*
- * The hero story (HeroStory.tsx): three chapters on a loop, timed by the
- * an invisible element in the current tab.
+ * The hero story (HeroStory.tsx): four chapters on a loop, timed by an
+ * invisible element in the current tab.
  *
  * Same rule as the rest of this file, applied hard: everything below the
  * motion gate only ever animates FROM somewhere TO the state the markup
  * already shows. With motion off, each chapter is its own finished frame —
- * the camera already panned, the match already made, the call already landed.
+ * the camera already panned, the match already made, the call already landed,
+ * the report already counting the booking.
  * The few pieces that only exist in motion (the travelling dot, the search
  * ring) default to invisible.
  *
@@ -525,6 +526,11 @@ body::after {
   opacity: 0.38;
 }
 
+/* The count a booking replaces: gone in the finished frame. */
+.s-out {
+  opacity: 0;
+}
+
 /* The matched dealer gets a ring of its own. An outline, not a shadow. */
 .s-match .story-badge {
   outline: 1.5px solid var(--color-blue-pale);
@@ -577,11 +583,20 @@ body::after {
   .story-scene.is-active .s-ring {
     animation: story-ring 700ms ease-in-out var(--d, 0ms) 3 both;
   }
+  .story-scene.is-active .s-row {
+    animation: story-row 600ms ease var(--d, 0ms) both;
+  }
+  .story-scene.is-active .s-out {
+    animation: story-out 250ms ease var(--d, 0ms) both;
+  }
 
-  /* The visitor walks in from the left at the top of every loop, and steps
-     aside in the last chapter to make room for the dealer. */
+  /* The visitor walks in from the left at the top of every loop, steps
+     aside in chapter 3 to make room for the dealer, and moves with the
+     dealer in chapter 4 to make room for the report. */
   .story-visitor {
-    transition: left 900ms cubic-bezier(0.65, 0, 0.35, 1);
+    transition:
+      left 900ms cubic-bezier(0.65, 0, 0.35, 1),
+      top 900ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .story[data-chapter="0"] .story-visitor-dot {
     animation: story-enter 1100ms cubic-bezier(0.22, 0.7, 0.28, 1) 500ms both;
@@ -718,6 +733,18 @@ body::after {
   40%,
   80% {
     transform: rotate(14deg);
+  }
+}
+
+@keyframes story-row {
+  from {
+    background-color: transparent;
+  }
+}
+
+@keyframes story-out {
+  from {
+    opacity: 1;
   }
 }
 

@@ -7,14 +7,17 @@ import { BotIcon, PersonIcon, StoreIcon } from "./StageIcons";
 
 /**
  * The hero itself: one visitor becoming one dealer's customer, told in
- * three chapters that play on a loop.
+ * four chapters that play on a loop. The four follow the website brief's four
+ * steps (p.15), the last of them "Report: response time and appointments by
+ * dealer".
  *
  * Modelled on the Mosey hero — a scene that builds itself under the page's
  * claim, and chapter tabs that follow it, one framed at a time. The visitor
  * is the one constant: they stay at the centre of the frame and the world moves
  * around them. They arrive on the brand's site and the camera follows them
  * into a chat; dealers appear around them and one matches; that dealer comes
- * to stand beside them and gets in touch.
+ * to stand beside them and gets in touch; the booking they make goes into the
+ * brand's report, on that dealer's row.
  *
  * How it stays honest:
  *
@@ -87,6 +90,23 @@ type Layout = {
   message: Point;
   messageWidth: string;
   called: Point;
+  /**
+   * Chapter 4. The visitor and the dealer side by side with the booking, and
+   * the brand's report the booking goes into. The report hangs below the pair
+   * on the compact layout (`edge: "top"`: `panel.p` is the middle of its top
+   * edge) and stands to their right on the wide one (`edge: "left"`: the
+   * middle of its left edge). The arrow runs from `from` to `to`, just short
+   * of that edge.
+   */
+  report: {
+    visitor: Point;
+    dealer: Point;
+    booked: Point;
+    from: Point;
+    to: Point;
+    panel: { p: Point; width: number; edge: "top" | "left" };
+    rows: number;
+  };
 };
 
 const BR: Dealer = {
@@ -137,6 +157,15 @@ const compact: Layout = {
   message: { x: 220, y: 290 },
   messageWidth: "w-[15em]",
   called: { x: 220, y: 350 },
+  report: {
+    visitor: { x: 78, y: 70 },
+    dealer: { x: 168, y: 70 },
+    booked: { x: 312, y: 70 },
+    from: { x: 168, y: 106 },
+    to: { x: 168, y: 150 },
+    panel: { p: { x: 220, y: 160 }, width: 400, edge: "top" },
+    rows: 3,
+  },
 };
 
 /*
@@ -184,6 +213,15 @@ const wide: Layout = {
   messageWidth: "w-[17em]",
   called: { x: 390, y: 355 },
   received: { x: 664, y: 195 },
+  report: {
+    visitor: { x: 150, y: 195 },
+    dealer: { x: 262, y: 195 },
+    booked: { x: 206, y: 280 },
+    from: { x: 308, y: 195 },
+    to: { x: 398, y: 195 },
+    panel: { p: { x: 410, y: 195 }, width: 500, edge: "left" },
+    rows: 4,
+  },
 };
 
 /** How long the closing card holds the stage before the story restarts. */
@@ -211,6 +249,30 @@ const chapters = [
     ms: 7500,
     caption: "That dealer receives the full lead and calls the visitor back.",
   },
+  {
+    tab: "Report",
+    ms: 7500,
+    caption: "The visitor books a fitting, and the brand's report shows response time and appointments by dealer.",
+  },
+];
+
+/**
+ * The brand's report in chapter 4, one row per dealer, for the week. The
+ * figures are the scene's own, like the times in chapter 3: Bay Ridge's
+ * response time is the four minutes from "Notified 12:04" to "Called back
+ * 12:08", and its count goes up by the one booking the story just made.
+ */
+const reportRows: {
+  name: string;
+  response: string;
+  appointments: string;
+  /** The count before this story's booking, on the matched dealer's row. */
+  before?: string;
+}[] = [
+  { name: "Bay Ridge Tire & Auto", response: "4 min", appointments: "12", before: "11" },
+  { name: "Park Slope Auto", response: "9 min", appointments: "7" },
+  { name: "Sunset Park Auto", response: "17 min", appointments: "5" },
+  { name: "Fort Hamilton Tires", response: "32 min", appointments: "2" },
 ];
 
 const chat: { text: string; from: "bot" | "visitor"; d: number }[] = [
@@ -322,6 +384,24 @@ function Phone({ className = "size-3" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
       <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" />
+    </svg>
+  );
+}
+
+function CalendarIcon({ className = "size-3" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="4" y="5.5" width="16" height="14.5" rx="2" />
+      <path d="M4 10.5h16M9 3.5v4M15 3.5v4" />
     </svg>
   );
 }
@@ -697,12 +777,144 @@ function Connect({ L }: { L: Layout }) {
   );
 }
 
+/* --------------------------------------------- chapter 4 · Report */
+
+/**
+ * The brand's dashboard, drawn like the lead card: one table, a row per
+ * dealer. The matched dealer's row lights up when the booking arrives, and
+ * its count of appointments goes up by one.
+ */
+function ReportPanel({ rows }: { rows: number }) {
+  const columns = "grid grid-cols-[1fr_7em_7em] items-baseline gap-[0.8em] px-[1.15em]";
+
+  return (
+    <div className="border-line bg-panel rounded-md border">
+      <div className="border-line flex items-center justify-between gap-[1em] border-b px-[1em] py-[0.65em]">
+        <span className="eyebrow text-ink-dim whitespace-nowrap" style={{ fontSize: "0.72em" }}>
+          Brand dashboard
+        </span>
+        <span className="text-ink-dim text-[0.8em]">This week</span>
+      </div>
+      <div className="text-[0.88em] tabular-nums">
+        <div className={`${columns} text-ink-dim pt-[0.7em] pb-[0.35em]`}>
+          <span className="text-[0.92em]">Dealer</span>
+          <span className="text-right text-[0.92em]">Response time</span>
+          <span className="text-right text-[0.92em]">Appointments</span>
+        </div>
+        <div className="divide-line divide-y">
+          {reportRows.slice(0, rows).map((row, index) => (
+            <div key={row.name} className="s-rise" style={delay(1450 + index * 100)}>
+              <div
+                className={`${columns} py-[0.55em] ${row.before ? "s-row bg-panel-blue/70" : ""}`}
+                style={delay(3500)}
+              >
+                <span
+                  className={`truncate ${row.before ? "text-ink font-semibold" : "text-ink-muted"}`}
+                >
+                  {row.name}
+                </span>
+                <span className={`text-right ${row.before ? "text-ink font-medium" : "text-ink-muted"}`}>
+                  {row.response}
+                </span>
+                {row.before ? (
+                  <span className="text-ink flex items-baseline justify-end gap-[0.5em] font-medium">
+                    <span className="s-pop text-sage-lift text-[0.88em] font-semibold" style={delay(3800)}>
+                      +1
+                    </span>
+                    <span className="inline-grid justify-items-end">
+                      <span className="s-out col-start-1 row-start-1" style={delay(3600)}>
+                        {row.before}
+                      </span>
+                      <span className="s-pop col-start-1 row-start-1" style={delay(3700)}>
+                        {row.appointments}
+                      </span>
+                    </span>
+                  </span>
+                ) : (
+                  <span className="text-ink-muted text-right">{row.appointments}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Report({ L }: { L: Layout }) {
+  const R = L.report;
+  const arrow = sCurve(R.from, R.to, 6);
+  const panel: CSSProperties = {
+    left: pct(R.panel.p.x, L.W),
+    top: pct(R.panel.p.y, L.H),
+    width: pct(R.panel.width, L.W),
+    transform: R.panel.edge === "top" ? "translateX(-50%)" : "translateY(-50%)",
+  };
+
+  return (
+    <>
+      <svg viewBox={`0 0 ${L.W} ${L.H}`} className="absolute inset-0 size-full overflow-visible">
+        {/* The booking, carried from the dealer into the brand's report. */}
+        <g className="stroke-blue-pale" fill="none" strokeWidth="1.5">
+          <path d={arrow.d} pathLength={1} className="s-draw" style={delay(2300)} />
+          <path
+            d={arrowhead(R.to, arrow.end, 7)}
+            className="s-fade"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={delay(3000)}
+          />
+        </g>
+        <path
+          d={arrow.d}
+          pathLength={1}
+          className="s-travel stroke-blue-pale"
+          strokeWidth="7"
+          strokeLinecap="round"
+          fill="none"
+          style={delay(2700)}
+        />
+      </svg>
+
+      {/*
+        The dealer, stepping in beside the visitor from where it stood in
+        chapter 3, the same way it walked in from the map then.
+      */}
+      <div
+        className="s-move absolute"
+        style={
+          {
+            ...at(L, R.dealer),
+            width: pct(L.avatar, L.W),
+            "--from-x": pct(L.dealerSpot.x, L.W),
+            "--from-y": pct(L.dealerSpot.y, L.H),
+            "--from-w": pct(L.avatar, L.W),
+          } as CSSProperties
+        }
+      >
+        <Badge match />
+      </div>
+
+      <Piece L={L} p={R.booked} d={1000}>
+        <Chip icon={<CalendarIcon className="size-[0.9em]" />}>Booked Thu 10:00</Chip>
+      </Piece>
+
+      <div className="absolute" style={panel}>
+        <div className="s-rise" style={delay(1300)}>
+          <ReportPanel rows={R.rows} />
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ stage */
 
-const scenes = [Engage, Qualify, Connect];
+const scenes = [Engage, Qualify, Connect, Report];
 
 function Stage({ L, chapter, className }: { L: Layout; chapter: number; className: string }) {
-  const visitor = [L.chatSeat, L.center, L.side][chapter];
+  const visitor = [L.chatSeat, L.center, L.side, L.report.visitor][chapter];
 
   return (
     <div
@@ -769,7 +981,7 @@ export function HeroStory() {
   }, []);
 
   const paused = !onScreen || !pageShown;
-  /** After the three chapters, the ask takes the stage; then the story restarts. */
+  /** After the four chapters, the ask takes the stage; then the story restarts. */
   const ending = chapter === chapters.length;
   const scene = ending ? chapters.length - 1 : chapter;
 
@@ -784,7 +996,9 @@ export function HeroStory() {
         How a lead moves through LeadHanger: a visitor arrives on the
         brand&apos;s site and answers a few questions in a chat, gives consent,
         is matched to the nearest dealer with their tires in stock, and that
-        dealer calls them back four minutes after being notified.
+        dealer calls them back four minutes after being notified. The visitor
+        books a fitting, and the brand&apos;s report shows each dealer&apos;s
+        response time and appointments.
       </p>
 
       {/*
@@ -834,7 +1048,7 @@ export function HeroStory() {
       </div>
 
       {/*
-        Three steps, one per chapter, and the caption under them. The band
+        Four steps, one per chapter, and the caption under them. The band
         sits on a soft patch of plain ground that hides the page grid behind
         the text. Only the current step is framed, as a pill that hugs its
         label; the others are plain text. The clock is still here but never shown: an
@@ -872,8 +1086,9 @@ export function HeroStory() {
                 }}
                 aria-hidden
               />
+              {/* Four steps fit a phone's width only without their numbers. */}
               <span
-                className={`relative mr-1.5 tabular-nums transition-colors ${
+                className={`relative mr-1.5 hidden tabular-nums transition-colors sm:inline ${
                   current ? "text-blue-pale" : ""
                 }`}
                 aria-hidden
