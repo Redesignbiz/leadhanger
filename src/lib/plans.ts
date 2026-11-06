@@ -56,10 +56,7 @@ export const planRows: readonly {
     values: [
       [{ text: "By ZIP code" }],
       [{ text: "Rules by region, ZIP code, brand and tier" }],
-      [
-        { text: "Everything in Business" },
-        { text: "AI-assisted matching", availability: "planned" },
-      ],
+      [{ text: "AI-assisted matching", availability: "planned" }],
     ],
   },
   {
