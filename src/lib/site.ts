@@ -23,7 +23,13 @@ export const site = {
     'and routes each lead to the right dealer in real time. Built for brands that sell ' +
     'through a dealer, agent, or service network.',
 
-  url: 'https://www.leadhanger.com',
+  /**
+   * The primary address, as Vercel serves it: www.leadhanger.com redirects here
+   * with a 308. Canonical URLs, the sitemap, robots.txt, llms.txt, the
+   * structured data and the Privacy Policy all read it, so it must be the
+   * address that answers, not one that redirects.
+   */
+  url: 'https://leadhanger.com',
 
   /** Shown in the nav and repeated in the closing section. */
   cta: 'Book an Intro',
@@ -147,10 +153,11 @@ export const site = {
    * TODO: confirm with counsel before launch. See docs/leadhanger-us-brief.md.
    * Printed on /privacy and /delete-account. Move both values whenever either
    * page's text changes, to the day that version goes live. Last change:
-   * November 5, 2026, the phone number log wording.
+   * November 6, 2026, the website address printed in "Scope" (leadhanger.com,
+   * without www).
    */
-  privacyUpdatedAt: '2026-11-05',
-  privacyUpdatedLabel: 'November 5, 2026',
+  privacyUpdatedAt: '2026-11-06',
+  privacyUpdatedLabel: 'November 6, 2026',
 
   /**
    * TODO: open item, not confirmed. See docs/leadhanger-us-brief.md.
